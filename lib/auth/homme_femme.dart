@@ -1,0 +1,217 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:gym_app/auth/def.dart';
+import 'package:gym_app/auth/taille.dart';
+// import 'package:pfe/auth/taille.dart';
+// import 'package:pfe/def.dart';
+
+class h_f extends StatefulWidget {
+  const h_f({super.key});
+
+  @override
+  State<h_f> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<h_f> with TickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation<Offset> positionAnimation;
+  late Animation<double> scaleAnimation;
+  late Animation<double> scaleAnimation1;
+  late AnimationController controller1;
+  late Animation<Offset> positionAnimation1;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    controller1 =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+
+    positionAnimation = Tween<Offset>(
+      begin: Offset(-0.1, 0.0), // Start from the right
+      end: Offset(0.4, 0.0), // Move towards the left
+    ).animate(controller);
+    positionAnimation1 = Tween<Offset>(
+      begin: Offset(0.1, 0.0), // Start from the right
+      end: Offset(-0.4, 0.0), // Move towards the left
+    ).animate(controller1);
+    // Use Tween for scaling animation
+    scaleAnimation = Tween<double>(
+      begin: 1.4, // Start with the original size
+      end: 2.0, // Scale to double the size
+    ).animate(controller);
+    scaleAnimation1 = Tween<double>(
+      begin: 1.4, // Start with the original size
+      end: 2.2, // Scale to double the size
+    ).animate(controller1);
+  }
+
+  final List<String> sexe = ["", " Homme ", " Femme "];
+  int i = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFFf1faee),
+      body: SafeArea(
+          child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  // SizedBox(
+                  //   height: 20,
+                  // ),
+                  Text(
+                    "Quel est votre sexe ?",
+                    style: TextStyle(
+                      color: Color(0xFF1d3557),
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // SizedBox(
+                      //   width: 22,
+                      // ),
+                      Expanded(
+                        child: Container(
+                          // width: MediaQuery.of(context).size.width * 0.4,
+                          child: CupertinoButton(
+                            onPressed: () {
+                              controller.forward();
+                              setState(() {
+                                controller1.reverse();
+                                i = 1;
+                                c = Color(0xff457b9d);
+                                gender = true;
+                              });
+                            },
+                            child: ScaleTransition(
+                                scale: scaleAnimation,
+                                child: SlideTransition(
+                                    position: positionAnimation,
+                                    child: Container(
+                                        height: 200,
+                                        child: Image(
+                                            image: AssetImage(
+                                                "assets/images/homme.png"))))),
+                          ),
+                        ),
+                      ),
+                      // SizedBox(
+                      //   width: 30,
+                      // ),
+                      Expanded(
+                        child: Container(
+                          //    width: MediaQuery.of(context).size.width * 0.4,
+                          child: CupertinoButton(
+                            onPressed: () {
+                              controller1.forward();
+                              setState(() {
+                                controller.reverse();
+                                i = 2;
+                                c = Color(0xffe63946);
+                                gender = false;
+                              });
+                            },
+                            child: ScaleTransition(
+                                scale: scaleAnimation1,
+                                child: SlideTransition(
+                                    position: positionAnimation1,
+                                    child: Container(
+                                        height: 200,
+                                        child: Image(
+                                            image: AssetImage(
+                                                "assets/images/femme.png"))))),
+                          ),
+                        ),
+                      ),
+                      // SizedBox(
+                      //   width: 22,
+                      // ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 90,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 30,
+                  ),
+                  i == 0
+                      ? Text(
+                          sexe[1],
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xff1d3557)),
+                        )
+                      : Text(sexe[0]),
+                  Spacer(),
+                  i == 0
+                      ? Text(
+                          sexe[2],
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xff1d3557)),
+                        )
+                      : Text(sexe[0]),
+                  SizedBox(
+                    width: 30,
+                  ),
+                ],
+              ),
+            ),
+            Text(sexe[i],
+                style: TextStyle(
+                  color: c,
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                )),
+            // Spacer(),
+            CupertinoButton(
+              borderRadius: BorderRadius.circular(25),
+              color: c,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Continuer",
+                    style: TextStyle(
+                        color: Color(0xff1d3557),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => taille()),
+                );
+              },
+            ),
+            SizedBox(
+              height: 30,
+            )
+          ],
+        ),
+      )),
+    );
+  }
+}
