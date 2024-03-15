@@ -20,7 +20,7 @@ class _RapportScreenState extends State<RapportScreen> {
         centerTitle: true,
       ),
       body: Center(
-        child: Text("Rapport screen for assing rapports"),
+        child: Text("Rapport screen"),
       ),
     );
   }
