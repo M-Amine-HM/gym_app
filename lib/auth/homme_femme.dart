@@ -24,17 +24,17 @@ class _MyWidgetState extends State<h_f> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
     controller1 =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     positionAnimation = Tween<Offset>(
-      begin: Offset(-0.1, 0.0), // Start from the right
-      end: Offset(0.4, 0.0), // Move towards the left
+      begin: const Offset(-0.1, 0.0), // Start from the right
+      end: const Offset(0.4, 0.0), // Move towards the left
     ).animate(controller);
     positionAnimation1 = Tween<Offset>(
-      begin: Offset(0.1, 0.0), // Start from the right
-      end: Offset(-0.4, 0.0), // Move towards the left
+      begin: const Offset(0.1, 0.0), // Start from the right
+      end: const Offset(-0.4, 0.0), // Move towards the left
     ).animate(controller1);
     // Use Tween for scaling animation
     scaleAnimation = Tween<double>(
@@ -53,163 +53,166 @@ class _MyWidgetState extends State<h_f> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFf1faee),
+      backgroundColor: const Color(0xFFf1faee),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              width: double.infinity,
-              child: Column(
-                children: [
-                  // SizedBox(
-                  //   height: 20,
-                  // ),
-                  Text(
-                    "Quel est votre sexe ?",
-                    style: TextStyle(
-                      color: Color(0xFF1d3557),
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    const Text(
+                      "Quel est votre sexe ?",
+                      style: TextStyle(
+                        color: Color(0xFF1d3557),
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 100,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // SizedBox(
-                      //   width: 22,
-                      // ),
-                      Expanded(
-                        child: Container(
-                          // width: MediaQuery.of(context).size.width * 0.4,
-                          child: CupertinoButton(
-                            onPressed: () {
-                              controller.forward();
-                              setState(() {
-                                controller1.reverse();
-                                i = 1;
-                                c = Color(0xff457b9d);
-                                gender = true;
-                              });
-                            },
-                            child: ScaleTransition(
-                                scale: scaleAnimation,
-                                child: SlideTransition(
-                                    position: positionAnimation,
-                                    child: Container(
-                                        height: 200,
-                                        child: Image(
-                                            image: AssetImage(
-                                                "assets/images/homme.png"))))),
+                    const SizedBox(
+                      height: 100,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // SizedBox(
+                        //   width: 22,
+                        // ),
+                        Expanded(
+                          child: Container(
+                            // width: MediaQuery.of(context).size.width * 0.4,
+                            child: CupertinoButton(
+                              onPressed: () {
+                                controller.forward();
+                                setState(() {
+                                  controller1.reverse();
+                                  i = 1;
+                                  c = const Color(0xff457b9d);
+                                  gender = true;
+                                });
+                              },
+                              child: ScaleTransition(
+                                  scale: scaleAnimation,
+                                  child: SlideTransition(
+                                      position: positionAnimation,
+                                      child: Container(
+                                          height: 200,
+                                          child: const Image(
+                                              image: AssetImage(
+                                                  "assets/images/homme.png"))))),
+                            ),
                           ),
                         ),
-                      ),
-                      // SizedBox(
-                      //   width: 30,
-                      // ),
-                      Expanded(
-                        child: Container(
-                          //    width: MediaQuery.of(context).size.width * 0.4,
-                          child: CupertinoButton(
-                            onPressed: () {
-                              controller1.forward();
-                              setState(() {
-                                controller.reverse();
-                                i = 2;
-                                c = Color(0xffe63946);
-                                gender = false;
-                              });
-                            },
-                            child: ScaleTransition(
-                                scale: scaleAnimation1,
-                                child: SlideTransition(
-                                    position: positionAnimation1,
-                                    child: Container(
-                                        height: 200,
-                                        child: Image(
-                                            image: AssetImage(
-                                                "assets/images/femme.png"))))),
+                        // SizedBox(
+                        //   width: 30,
+                        // ),
+                        Expanded(
+                          // ignore: avoid_unnecessary_containers
+                          child: Container(
+                            //    width: MediaQuery.of(context).size.width * 0.4,
+                            child: CupertinoButton(
+                              onPressed: () {
+                                controller1.forward();
+                                setState(() {
+                                  controller.reverse();
+                                  i = 2;
+                                  c = const Color(0xffe63946);
+                                  gender = false;
+                                });
+                              },
+                              child: ScaleTransition(
+                                  scale: scaleAnimation1,
+                                  child: SlideTransition(
+                                      position: positionAnimation1,
+                                      child: Container(
+                                          height: 200,
+                                          child: const Image(
+                                              image: AssetImage(
+                                                  "assets/images/femme.png"))))),
+                            ),
                           ),
                         ),
-                      ),
-                      // SizedBox(
-                      //   width: 22,
-                      // ),
-                    ],
-                  )
-                ],
+                        // SizedBox(
+                        //   width: 22,
+                        // ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 90,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 30,
-                  ),
-                  i == 0
-                      ? Text(
-                          sexe[1],
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff1d3557)),
-                        )
-                      : Text(sexe[0]),
-                  Spacer(),
-                  i == 0
-                      ? Text(
-                          sexe[2],
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xff1d3557)),
-                        )
-                      : Text(sexe[0]),
-                  SizedBox(
-                    width: 30,
-                  ),
-                ],
+              SizedBox(
+                height: 90,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    i == 0
+                        ? Text(
+                            sexe[1],
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xff1d3557)),
+                          )
+                        : Text(sexe[0]),
+                    const Spacer(),
+                    i == 0
+                        ? Text(
+                            sexe[2],
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xff1d3557)),
+                          )
+                        : Text(sexe[0]),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Text(sexe[i],
-                style: TextStyle(
-                  color: c,
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
-                )),
-            // Spacer(),
-            CupertinoButton(
-              borderRadius: BorderRadius.circular(25),
-              color: c,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Continuer",
-                    style: TextStyle(
-                        color: Color(0xff1d3557),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
+              Text(sexe[i],
+                  style: TextStyle(
+                    color: c,
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                  )),
+              // Spacer(),
+              CupertinoButton(
+                borderRadius: BorderRadius.circular(25),
+                color: c,
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Continuer",
+                      style: TextStyle(
+                          color: Color(0xff1d3557),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => taille()),
+                  );
+                },
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => taille()),
-                );
-              },
-            ),
-            SizedBox(
-              height: 30,
-            )
-          ],
+              const SizedBox(
+                height: 30,
+              )
+            ],
+          ),
         ),
       )),
     );

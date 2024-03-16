@@ -10,9 +10,7 @@ import 'package:gym_app/core/profile.dart';
 class Home extends StatefulWidget {
   Home({
     super.key,
-    required this.s,
   });
-  int s;
 
   @override
   State<Home> createState() => _HomeState();

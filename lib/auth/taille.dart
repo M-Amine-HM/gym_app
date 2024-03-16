@@ -14,10 +14,10 @@ class _tailleState extends State<taille> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFf1faee),
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

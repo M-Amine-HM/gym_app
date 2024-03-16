@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:gym_app/auth/Emailsignup.dart';
+import 'package:gym_app/auth/login.dart';
 import 'package:gym_app/auth/signup.dart';
-import 'package:gym_app/home.dart';
 
 class FirstPage extends StatelessWidget {
   const FirstPage({super.key});
@@ -39,7 +40,12 @@ class FirstPage extends StatelessWidget {
                     fixedSize:
                         Size.fromWidth(MediaQuery.of(context).size.width * 1),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => user()),
+                    );
+                  },
                   icon: Image.asset(
                     "assets/images/google.png",
                     width: 20,
@@ -69,7 +75,7 @@ class FirstPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => user(),
+                        builder: (context) => EmailSignupScreen(),
                       ),
                     );
                   },
@@ -82,11 +88,7 @@ class FirstPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => Home(
-                          s: 5,
-                        ),
-                      ),
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
                     );
                   },
                   child: Text(
