@@ -111,7 +111,7 @@ class _tailleState extends State<taille> {
                     Text(
                       "Continuer",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Color(0xFFf1faee),
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),

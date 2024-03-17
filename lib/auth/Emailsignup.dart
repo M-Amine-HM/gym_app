@@ -185,17 +185,18 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                       Size.fromWidth(MediaQuery.of(context).size.width * 1),
                 ),
                 onPressed: () {
-                  if (_textVerifyEmail &&
-                      _textVerifyPassword &&
-                      _password.text.isNotEmpty &&
-                      _email.text.isNotEmpty &&
-                      _ischecked == true) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const user()),
-                    );
-                  }
-                },
+                  // if (_textVerifyEmail &&
+                  //     _textVerifyPassword &&
+                  //     _password.text.isNotEmpty &&
+                  //     _email.text.isNotEmpty &&
+                  //     _ischecked == true) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const user()),
+                  );
+                }
+                //  }
+                ,
                 //amine@gmail.com
                 child: const Text(
                   "Continuer",
