@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_const, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:gym_app/core/calendar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -76,11 +77,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Row(
               children: [
-                Button_IconWidget(name: "Mesures"),
+                Button_IconWidget(
+                  name: "Mesures",
+                ),
                 SizedBox(
                   width: 8,
                 ),
-                Button_IconWidget(name: "Calendrier"),
+                IconButton(
+                  icon: Icon(Icons.calendar_month),
+                  onPressed: () {
+                    // Add your onPressed functionality here
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => calendar()),
+                    );
+                  },
+                ),
               ],
             ),
           ],
