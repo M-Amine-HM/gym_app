@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_const, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/calendar.dart';
 
@@ -63,27 +65,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Row(
               children: [
-                Button_IconWidget(
-                  name: "Statistiques",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => calendar()),
-                    );
-                  },
-                ),
+                Button_IconWidget(name: "Statistiques"),
                 SizedBox(
                   width: 8,
                 ),
-                Button_IconWidget(
-                  name: "Communité",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => calendar()),
-                    );
-                  },
-                ),
+                Button_IconWidget(name: "Communité"),
               ],
             ),
             SizedBox(
@@ -93,19 +79,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Button_IconWidget(
                   name: "Mesures",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => calendar()),
-                    );
-                  },
                 ),
                 SizedBox(
                   width: 8,
                 ),
-                Button_IconWidget(
-                  name: "Calendar",
-                  onTap: () {
+                IconButton(
+                  icon: Icon(Icons.calendar_month),
+                  onPressed: () {
+                    // Add your onPressed functionality here
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => calendar()),
@@ -122,10 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class Button_IconWidget extends StatelessWidget {
-  Button_IconWidget({super.key, required this.name, required this.onTap});
+  const Button_IconWidget({super.key, required this.name});
   //final Icon iconSpecial;
   final String name;
-  void Function() onTap;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -138,7 +119,7 @@ class Button_IconWidget extends StatelessWidget {
             // fixedSize:
             //     Size.fromWidth(MediaQuery.of(context).size.width * 1),
           ),
-          onPressed: onTap,
+          onPressed: () {},
           icon: const Icon(
             Icons.abc,
             size: 40,

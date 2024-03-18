@@ -197,7 +197,7 @@ class _MyWidgetState extends State<h_f> with TickerProviderStateMixin {
                   Text(
                     "Continuer",
                     style: TextStyle(
-                        color: Color(0xFFf1faee),
+                        color: Color(0xff1d3557),
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),

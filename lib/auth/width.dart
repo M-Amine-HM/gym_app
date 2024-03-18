@@ -154,7 +154,7 @@ class _widthState extends State<width> {
                       Text(
                         "Continuer",
                         style: TextStyle(
-                          color: Color(0xFFf1faee),
+                          color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),

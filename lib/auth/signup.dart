@@ -151,7 +151,7 @@ class _MyWidgetState extends State<user> {
                     Text(
                       "Continuer",
                       style: TextStyle(
-                          color: Color(0xFFf1faee),
+                          color: Color(0xff1d3557),
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),

@@ -46,16 +46,15 @@ class _ExercicesScreenState extends State<ExercicesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffe63946),
+        backgroundColor: Colors.white,
         title: const Text(
           "Exercices",
-          style:
-              TextStyle(fontWeight: FontWeight.w600, color: Color(0xFFf1faee)),
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
       body: Container(
-        color: Color(0xFFf1faee),
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView.separated(
@@ -116,7 +115,7 @@ class BodyPartWidget extends StatelessWidget {
             Text(
               nameBodyPart,
               style: const TextStyle(
-                  color: Color(0xFFf1faee),
+                  color: Colors.white,
                   fontSize: 25,
                   fontWeight: FontWeight.w600),
             )

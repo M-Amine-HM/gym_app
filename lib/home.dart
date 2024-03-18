@@ -75,9 +75,8 @@ class _HomeState extends State<Home> {
       tabBar: CupertinoTabBar(
           // border: Border.symmetric(vertical: BorderSide(width: 2)),
           height: 52,
-          backgroundColor: Color(0xffa8dadc),
-          activeColor: Color(0xff1d3557),
-          inactiveColor: Color(0xFFf1faee),
+          backgroundColor: Colors.white,
+          activeColor: Colors.black,
           //iconSize: 15,
           items: [
             bottomNavBar("nav11", "nav11_filled", "Exercices"),

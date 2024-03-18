@@ -26,8 +26,7 @@ List<String> _warningDetails = [
   "Contrôlez votre respiration, expirez lors d'une contraction musculaire.",
   "Gardez vos épaules rapprochées pendant toute la durée de l'exercice",
   "N'étirez pas trop vos muscles, afin de ne pas vous blesser",
-  "hhehhdfh",
-  "kkkkkk"
+  "hhehhdfh"
 ];
 
 String _videoName = "video2";
@@ -129,9 +128,8 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                 //   child: Row(children: [],),
                 // ),
                 SizedBox(
-                  //height: 80 * (_instructionDetails.length).toDouble(),
+                  height: 80 * (_instructionDetails.length).toDouble(),
                   child: ListView.separated(
-                      shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: ((context, index) => InstructionWidget(
                           instructionIndex: (index + 1).toString(),
@@ -143,7 +141,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                 ),
 
                 const SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 const Row(children: [
                   SizedBox(
@@ -170,7 +168,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                       width: 8,
                     ),
                     Container(
-                      //height: (_warningDetails.length).toDouble() * 53,
+                      height: (_warningDetails.length).toDouble() * 53,
                       width: MediaQuery.of(context).size.width * 0.85,
                       decoration: BoxDecoration(
                           borderRadius:
@@ -185,9 +183,9 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                             )
                           ]),
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 10, 10, 20),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 13),
                         child: ListView.separated(
-                            shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: ((context, index) => WarningRowWidget(
                                 WarningText: _warningDetails[index])),
