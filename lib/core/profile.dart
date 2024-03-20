@@ -1,135 +1,157 @@
-// ignore_for_file: unnecessary_const, prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:gym_app/core/calendar.dart';
+import 'package:gym_app/core/update_profile.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
-          "Profile",
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
         centerTitle: true,
+        title: Text("Profil", style: Theme.of(context).textTheme.headline4),
       ),
-      body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/AminePhoto.jpg")),
-                  shape: BoxShape.circle,
-                  color: Colors.black),
-              // child: Image(
-              //   image: AssetImage("assets/images/AminePhoto.jpg"),
-              //   //fit: BoxFit.cover,
-              // ),
-            ),
-
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Amine",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-            ),
-            // Divider(
-            //   indent: 10,
-            //   endIndent: 10,
-            //   height: 20,
-            //   color: Colors.grey,
-            //   thickness: 1,
-            // ),
-            SizedBox(
-              height: 50,
-            ),
-            Row(
-              children: [
-                Button_IconWidget(name: "Statistiques"),
-                SizedBox(
-                  width: 8,
-                ),
-                Button_IconWidget(name: "Communité"),
-              ],
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Row(
-              children: [
-                Button_IconWidget(
-                  name: "Mesures",
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                IconButton(
-                  icon: Icon(Icons.calendar_month),
-                  onPressed: () {
-                    // Add your onPressed functionality here
-
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: const Image(
+                            image: AssetImage("assets/images/AminePhoto.jpg"))),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Color(0xffffe501)),
+                      child: const Icon(
+                        LineAwesomeIcons.alternate_pencil,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text("Nom et prénom",
+                  style: Theme.of(context).textTheme.headline4),
+              Text("Email", style: Theme.of(context).textTheme.bodyText2),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () => {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => calendar()),
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UpdateProfileScreen()))
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffffe501),
+                      side: BorderSide.none,
+                      shape: const StadiumBorder()),
+                  child: const Text("Modifier Profile",
+                      style: TextStyle(color: Colors.black)),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 30),
+              const Divider(),
+              const SizedBox(height: 10),
+              ProfileMenuWidget(
+                  title: "Calendrier",
+                  icon: LineAwesomeIcons.calendar,
+                  onPress: () {}),
+              ProfileMenuWidget(
+                  title: "Communité",
+                  icon: LineAwesomeIcons.user_friends,
+                  onPress: () {}),
+              ProfileMenuWidget(
+                  title: "Statistiques",
+                  icon: LineAwesomeIcons.chalkboard,
+                  onPress: () {}),
+              ProfileMenuWidget(
+                  title: "Mesures",
+                  icon: LineAwesomeIcons.horizontal_sliders,
+                  onPress: () {}),
+              const Divider(),
+              const SizedBox(height: 10),
+              ProfileMenuWidget(
+                  title: "Informations",
+                  icon: LineAwesomeIcons.info,
+                  onPress: () {}),
+              ProfileMenuWidget(
+                  title: "Logout",
+                  icon: LineAwesomeIcons.alternate_sign_out,
+                  textColor: Colors.red,
+                  endIcon: false,
+                  onPress: () {}),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }
 
-class Button_IconWidget extends StatelessWidget {
-  const Button_IconWidget({super.key, required this.name});
-  //final Icon iconSpecial;
-  final String name;
+class ProfileMenuWidget extends StatelessWidget {
+  const ProfileMenuWidget({
+    Key? key,
+    required this.title,
+    required this.icon,
+    required this.onPress,
+    this.endIcon = true,
+    this.textColor,
+  }) : super(key: key);
+
+  final String title;
+  final IconData icon;
+  final VoidCallback onPress;
+  final bool endIcon;
+  final Color? textColor;
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: OutlinedButton.icon(
-          style: OutlinedButton.styleFrom(
-            fixedSize: const Size.fromHeight(55),
-            backgroundColor: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            // fixedSize:
-            //     Size.fromWidth(MediaQuery.of(context).size.width * 1),
-          ),
-          onPressed: () {},
-          icon: const Icon(
-            Icons.abc,
-            size: 40,
-            color: Colors.blue,
-          ),
-          label: Text(
-            name,
-            style: const TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
-          )),
+    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    var iconColor = isDark ? Color(0xffffe501) : Colors.black;
+
+    return ListTile(
+      onTap: onPress,
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: iconColor.withOpacity(0.1),
+        ),
+        child: Icon(icon, color: iconColor),
+      ),
+      title: Text(title,
+          style:
+              Theme.of(context).textTheme.bodyText1?.apply(color: textColor)),
+      trailing: endIcon
+          ? Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: Colors.grey.withOpacity(0.1),
+              ),
+              child: const Icon(LineAwesomeIcons.angle_right,
+                  size: 18.0, color: Colors.grey))
+          : null,
     );
   }
 }
