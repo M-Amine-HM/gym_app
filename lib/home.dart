@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gym_app/core/Exercices.dart';
 import 'package:gym_app/core/Rapport.dart';
 import 'package:gym_app/core/plan.dart';
+import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/core/profile.dart';
 //import 'package:gym_app/globals.dart';
 
@@ -100,7 +101,7 @@ class _HomeState extends State<Home> {
               screenH = 1;
               return CupertinoTabView(
                 builder: (context) {
-                  return const CupertinoPageScaffold(child: PlanScreen());
+                  return const CupertinoPageScaffold(child: PlansScreen());
                 },
               );
             }

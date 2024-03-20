@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/planOnGoing.dart';
 
-class PlanScreen extends StatefulWidget {
-  const PlanScreen({super.key});
+class PlansScreen extends StatefulWidget {
+  const PlansScreen({super.key});
 
   @override
-  State<PlanScreen> createState() => _PlanScreenState();
+  State<PlansScreen> createState() => _PlanScreenState();
 }
 
-class _PlanScreenState extends State<PlanScreen> {
+class _PlanScreenState extends State<PlansScreen> {
   final List<Widget> _screens = [
     Container(
       color: Colors.grey.shade300,
