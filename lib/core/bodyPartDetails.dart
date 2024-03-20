@@ -128,8 +128,9 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                 //   child: Row(children: [],),
                 // ),
                 SizedBox(
-                  height: 80 * (_instructionDetails.length).toDouble(),
+                  //height: 80 * (_instructionDetails.length).toDouble(),
                   child: ListView.separated(
+                      shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: ((context, index) => InstructionWidget(
                           instructionIndex: (index + 1).toString(),
@@ -141,7 +142,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                 ),
 
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 const Row(children: [
                   SizedBox(
@@ -168,7 +169,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                       width: 8,
                     ),
                     Container(
-                      height: (_warningDetails.length).toDouble() * 53,
+                      //height: (_warningDetails.length).toDouble() * 53,
                       width: MediaQuery.of(context).size.width * 0.85,
                       decoration: BoxDecoration(
                           borderRadius:
@@ -186,6 +187,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 12, horizontal: 13),
                         child: ListView.separated(
+                            shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: ((context, index) => WarningRowWidget(
                                 WarningText: _warningDetails[index])),
