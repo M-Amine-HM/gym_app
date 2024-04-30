@@ -4,10 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:gym_app/auth/Emailsignup.dart';
 import 'package:gym_app/auth/login.dart';
 import 'package:gym_app/auth/signup.dart';
+import 'package:gym_app/model/userModel.dart';
 
-class FirstPage extends StatelessWidget {
-  const FirstPage({super.key});
+class FirstPage extends StatefulWidget {
+  FirstPage({super.key});
 
+  @override
+  State<FirstPage> createState() => _FirstPageState();
+}
+
+User oneUser = User();
+
+class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -43,7 +51,10 @@ class FirstPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => user()),
+                      MaterialPageRoute(
+                          builder: (context) => user(
+                                oneUser: oneUser,
+                              )),
                     );
                   },
                   icon: Image.asset(
@@ -88,7 +99,10 @@ class FirstPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => LoginScreen(
+                                oneUser: oneUser,
+                              )),
                     );
                   },
                   child: Text(

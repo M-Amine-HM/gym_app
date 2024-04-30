@@ -9,9 +9,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
+
   // This widget is the root of your application.
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Gym App',
       home: FirstPage(),
     );

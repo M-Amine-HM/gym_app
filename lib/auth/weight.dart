@@ -2,12 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/auth/def.dart';
 import 'package:gym_app/home.dart';
+import 'package:gym_app/model/userModel.dart';
+import 'package:gym_app/services/Api.dart';
 
-class width extends StatefulWidget {
-  const width({super.key});
+class weightScreen extends StatefulWidget {
+  const weightScreen({super.key, required this.oneUser});
+
+  final User oneUser;
 
   @override
-  State<width> createState() => _widthState();
+  State<weightScreen> createState() => _weightScreenState();
 }
 
 double imc = 0;
@@ -15,7 +19,7 @@ String s = "";
 String t = "";
 Color c1 = Colors.green;
 
-class _widthState extends State<width> {
+class _weightScreenState extends State<weightScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,11 +165,39 @@ class _widthState extends State<width> {
                       ),
                     ],
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                    );
+                  onPressed: () async {
+                    //TODO : weight mch widht
+                    String userWeight = poid.toString();
+                    widget.oneUser.weight = userWeight;
+                    var data = {
+                      "name": widget.oneUser.name,
+                      "email": widget.oneUser.email,
+                      "password": widget.oneUser.password,
+                      "sexe": widget.oneUser.sexe,
+                      "height": widget.oneUser.height,
+                      "weight": widget.oneUser.weight,
+                      "phoneNumber": widget.oneUser.phoneNumber,
+                      "adress": widget.oneUser.adress
+                    };
+
+                    await Api.addUser(data);
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => Home(
+                    //             oneUser: widget.oneUser,
+                    //           )),
+                    // );
+
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Home(
+                            oneUser: widget.oneUser,
+                          ),
+                        ),
+                        (route) => false);
                   },
                 ),
               ],

@@ -2,17 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/Exercices.dart';
 import 'package:gym_app/core/Rapport.dart';
-import 'package:gym_app/core/plan.dart';
+//import 'package:gym_app/core/plan.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/core/profile.dart';
+import 'package:gym_app/model/userModel.dart';
 //import 'package:gym_app/globals.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
-  Home({
-    super.key,
-  });
-
+  Home({super.key, required this.oneUser});
+  final User oneUser;
   @override
   State<Home> createState() => _HomeState();
 }
@@ -119,7 +118,10 @@ class _HomeState extends State<Home> {
               screenH = 3;
               return CupertinoTabView(
                 builder: (context) {
-                  return const CupertinoPageScaffold(child: ProfileScreen());
+                  return CupertinoPageScaffold(
+                      child: ProfileScreen(
+                    oneUser: widget.oneUser,
+                  ));
                 },
               );
             }

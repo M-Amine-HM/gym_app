@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/auth/signup.dart';
 import 'package:gym_app/home.dart';
+import 'package:gym_app/model/userModel.dart';
+import 'package:gym_app/services/Api.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, required this.oneUser});
 
+  final User oneUser;
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -23,6 +26,10 @@ class _LoginScreenState extends State<LoginScreen> {
     RegExp regex = RegExp(r'^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,}$');
     return regex.hasMatch(email);
   }
+
+  List<User> _userdata = [];
+  //TODO: erreur text ki famech user wela 8alet fl password
+  String _erreurText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -144,15 +151,42 @@ class _LoginScreenState extends State<LoginScreen> {
                   fixedSize:
                       Size.fromWidth(MediaQuery.of(context).size.width * 1),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_textVerifyEmail &&
                       _textVerifyPassword &&
                       _password.text.isNotEmpty &&
                       _email.text.isNotEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Home()),
-                    );
+                    _userdata = await Api.getUserByEmail((_email.text));
+                    if (_userdata.isEmpty) {
+                      //case : there no user
+                      setState(() {
+                        _erreurText = "user doesn't exist go sign in";
+                      });
+                    } else {
+                      if (_userdata[0].password != (_password.text)) {
+                        setState(() {
+                          _erreurText =
+                              "password ${_userdata[0].password} is incorrect";
+                        });
+                      } else {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => Home(
+                        //       oneUser: _userdata[0],
+                        //     ),
+                        //   ),
+                        // );
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Home(
+                                oneUser: _userdata[0],
+                              ),
+                            ),
+                            (route) => false);
+                      }
+                    }
                   }
                 },
                 child: const Text(
@@ -204,7 +238,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => user()),
+                    MaterialPageRoute(
+                        builder: (context) => user(
+                              oneUser: widget.oneUser,
+                            )),
                   );
                 },
                 icon: Image.asset(
@@ -215,6 +252,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 label: const Text("Se Connecter avec Google",
                     style: TextStyle(color: Colors.black)),
               ),
+              //TODO: autre methode d'afficher les erreurs
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _erreurText,
+                style: TextStyle(fontSize: 25, color: Colors.red),
+              )
             ],
           ),
         ),

@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/auth/signup.dart';
+//import 'package:gym_app/auth/width.dart';
+import 'package:gym_app/model/userModel.dart';
+import 'package:gym_app/services/Api.dart';
 
 class EmailSignupScreen extends StatefulWidget {
   const EmailSignupScreen({super.key});
@@ -11,6 +14,8 @@ class EmailSignupScreen extends StatefulWidget {
 }
 
 class _EmailSignupScreenState extends State<EmailSignupScreen> {
+  User oneUser = User();
+
   bool? _ischecked = false;
   bool _secureText = true;
   TextEditingController _email = TextEditingController();
@@ -25,6 +30,9 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
     return regex.hasMatch(email);
   }
 
+  List<User> _userdata = [];
+  //TODO: erreur text ki famech user wela 8alet fl password
+  String _erreurText = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,17 +192,46 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                   fixedSize:
                       Size.fromWidth(MediaQuery.of(context).size.width * 1),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_textVerifyEmail &&
                       _textVerifyPassword &&
                       _password.text.isNotEmpty &&
                       _email.text.isNotEmpty &&
                       _ischecked == true) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const user()),
-                    );
+                    String email = _email.text;
+                    String password = _password.text;
+                    oneUser.email = email;
+                    oneUser.password = password;
+
+                    _userdata = await Api.getUserByEmail((email));
+
+                    if (_userdata.isEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => user(
+                                  oneUser: oneUser,
+                                )),
+                      );
+                    } else {
+                      if (_userdata[0].email == (_email.text)) {
+                        //case : there no user
+                        setState(() {
+                          _erreurText = "user is already exist try to connect";
+                        });
+                      }
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => Home(
+                      //       oneUser: _userdata[0],
+                      //     ),
+                      //   ),
+                      // );
+                    }
                   }
+
+                  //TODO : badll esm user screen
                 },
                 //amine@gmail.com
                 child: const Text(
@@ -205,6 +242,10 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
               const SizedBox(
                 height: 15,
               ),
+              Text(
+                _erreurText,
+                style: TextStyle(fontSize: 25, color: Colors.red),
+              )
             ],
           ),
         ),

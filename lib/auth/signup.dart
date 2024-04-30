@@ -1,16 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gym_app/auth/homme_femme.dart';
+import 'package:gym_app/auth/maleOrFemale.dart';
+import 'package:gym_app/model/userModel.dart';
 //import 'package:pfe/homme_femme.dart';
 
 class user extends StatefulWidget {
-  const user({super.key});
+  user({super.key, required this.oneUser});
 
+//   final String userEmail;
+// final String userPassword;
+  final User oneUser;
   @override
   State<user> createState() => _MyWidgetState();
 }
 
 class _MyWidgetState extends State<user> {
+  // User oneUser = User();
+  TextEditingController _userName = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +55,7 @@ class _MyWidgetState extends State<user> {
                 height: 15,
               ),
               TextField(
+                controller: _userName,
                 decoration: InputDecoration(
                   hintText: "Entrez votre nom d'utilisateur",
                   prefixIcon: Icon(
@@ -158,8 +165,22 @@ class _MyWidgetState extends State<user> {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: ((context) => h_f())));
+                  if (_userName.text.isNotEmpty) {
+                    String username = _userName.text;
+                    widget.oneUser.name = username;
+                    //send the user name with other attirbutes
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => maleOrFemaleScreen(
+                              oneUser: widget.oneUser,
+                            )),
+                      ),
+                    );
+                    print(
+                      widget.oneUser.sexe,
+                    );
+                  }
                 },
               )
             ],

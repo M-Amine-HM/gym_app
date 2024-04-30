@@ -1,9 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:gym_app/core/update_profile.dart';
+import 'package:gym_app/auth/firstPage.dart';
+import 'package:gym_app/core/community.dart';
+import 'package:gym_app/core/updateProfile.dart';
+import 'package:gym_app/home.dart';
+import 'package:gym_app/model/userModel.dart';
+import 'package:gym_app/services/Api.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({Key? key, required this.oneUser}) : super(key: key);
+  final User oneUser;
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  List<User> userdata = [];
+  User theUser = User();
+
+  // @override
+  // void initState() async{
+  //   super.initState();
+
+  //   userdata= await Api.getUserByEmail((widget.oneUser.email));
+  //   theUser=userdata[0];
+  // }
+
+//dynamic getTheUser= Api.getUserByEmail(widget.oneUser.email);
+
+  // List<User> getTheUserdata() {
+  //   dynamic getTheUser() {
+  //     return Api.getUserByEmail(widget.oneUser.email);
+  //   }
+
+  //   return getTheUser();
+  // }
+
+  //AsyncSnapshot<dynamic> i=AsyncSnapshot.nothing();
 
   @override
   Widget build(BuildContext context) {
@@ -46,27 +81,62 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              Text("Nom et prénom",
-                  style: Theme.of(context).textTheme.headline4),
-              Text("Email", style: Theme.of(context).textTheme.bodyText2),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                  onPressed: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UpdateProfileScreen()))
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xffffe501),
-                      side: BorderSide.none,
-                      shape: const StadiumBorder()),
-                  child: const Text("Modifier Profile",
-                      style: TextStyle(color: Colors.black)),
-                ),
-              ),
+              FutureBuilder(
+                  future: Api.getUserByEmail((widget.oneUser.email).toString()),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      userdata = snapshot.data;
+                      theUser = userdata[0];
+
+                      return Column(
+                        children: [
+                          Text(theUser.name,
+                              style: Theme.of(context).textTheme.headline4),
+                          //email field
+                          Text(theUser.email,
+                              style: Theme.of(context).textTheme.bodyText2),
+                          //nameAndemail(),
+                          //email(),
+                          const SizedBox(height: 10),
+                          Text(
+                              "sexe: ${theUser.sexe} height: ${(theUser.height).toString()} weight: ${(theUser.phoneNumber).toString()} "),
+                          SizedBox(
+                            width: 200,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // userdata = Api.getUserByEmail(widget.oneUser.email),
+
+                                //print(userdata[0]),
+                                setState(() {});
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UpdateProfileScreen(
+                                      theUser: theUser,
+                                      userEmail: widget.oneUser.email,
+                                    ),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xffffe501),
+                                  side: BorderSide.none,
+                                  shape: const StadiumBorder()),
+                              child: const Text("Modifier Profile",
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  }),
+
+              //name field
+
               const SizedBox(height: 30),
               const Divider(),
               const SizedBox(height: 10),
@@ -77,7 +147,13 @@ class ProfileScreen extends StatelessWidget {
               ProfileMenuWidget(
                   title: "Communité",
                   icon: LineAwesomeIcons.user_friends,
-                  onPress: () {}),
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => coummunityScreen()),
+                    );
+                  }),
               ProfileMenuWidget(
                   title: "Statistiques",
                   icon: LineAwesomeIcons.chalkboard,
@@ -93,16 +169,71 @@ class ProfileScreen extends StatelessWidget {
                   icon: LineAwesomeIcons.info,
                   onPress: () {}),
               ProfileMenuWidget(
-                  title: "Logout",
-                  icon: LineAwesomeIcons.alternate_sign_out,
-                  textColor: Colors.red,
-                  endIcon: false,
-                  onPress: () {}),
+                title: "Logout",
+                icon: LineAwesomeIcons.alternate_sign_out,
+                textColor: Colors.red,
+                endIcon: false,
+                onPress: () {
+                  //TODO: logout take the user to first page
+                  // User user = User();
+                  // Navigator.pushAndRemoveUntil(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => FirstPage(
+
+                  //             )),
+                  //     (route) => false);
+
+                  //Navigator.pop(context);
+                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>FirstPage()));
+                },
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  FutureBuilder<dynamic> email() {
+    return FutureBuilder(
+        future: Api.getUserByEmail((widget.oneUser.email).toString()),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            userdata = snapshot.data;
+            theUser = userdata[0];
+
+            return Text(userdata[0].email.toString());
+          }
+        });
+  }
+
+  FutureBuilder<dynamic> nameAndemail() {
+    return FutureBuilder(
+        future: Api.getUserByEmail((widget.oneUser.email).toString()),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            userdata = snapshot.data;
+
+            return Column(
+              children: [
+                Text((userdata[0].name),
+                    style: Theme.of(context).textTheme.headline4),
+                //email field
+                Text("Email: ${(userdata[0].email).toString()}",
+                    style: Theme.of(context).textTheme.bodyText2),
+              ],
+            );
+          }
+        });
   }
 }
 

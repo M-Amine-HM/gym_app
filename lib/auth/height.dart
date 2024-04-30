@@ -2,14 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:gym_app/auth/def.dart';
-import 'package:gym_app/auth/width.dart';
+import 'package:gym_app/auth/weight.dart';
+import 'package:gym_app/model/userModel.dart';
 
-class taille extends StatefulWidget {
+class heightScreen extends StatefulWidget {
+  const heightScreen({super.key, required this.oneUser});
+  final User oneUser;
+
   @override
-  _tailleState createState() => _tailleState();
+  _heightScreenState createState() => _heightScreenState();
 }
 
-class _tailleState extends State<taille> {
+class _heightScreenState extends State<heightScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +41,7 @@ class _tailleState extends State<taille> {
                     Column(
                       children: [
                         TextButton(
+                          // TODO : chbeha button
                           child: Text(
                             "$taile cm",
                             style: TextStyle(
@@ -119,8 +124,13 @@ class _tailleState extends State<taille> {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => width()));
+                  String userHeight = taile.toString();
+                  widget.oneUser.height = userHeight;
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              weightScreen(oneUser: widget.oneUser)));
                 },
               ),
             ],
