@@ -120,13 +120,23 @@ class _coummunityScreenState extends State<coummunityScreen> {
                                 //   style: TextStyle(color: Colors.amber),
                                 // ),
                                 leading: snapshot.data[index].image == ""
-                                    ? ClipOval(
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
                                         child: Image.asset(
-                                            "assets/images/noPerson.png"),
+                                          "assets/images/noPerson.png",
+                                          fit: BoxFit.cover,
+                                          height: 80,
+                                          width: 55,
+                                        ),
                                       )
-                                    : ClipOval(
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
                                         child: Image.network(
-                                            snapshot.data[index].image),
+                                          snapshot.data[index].image,
+                                          fit: BoxFit.cover,
+                                          height: 80,
+                                          width: 55,
+                                        ),
                                       )
                                 // CircleAvatar(
                                 //   backgroundColor: Colors.blue,

@@ -156,7 +156,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                     width: 10,
                   ),
                   Text(
-                    "ADVERTISSEMENT",
+                    "AVERTISSEMENTS",
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                   )
                 ]),

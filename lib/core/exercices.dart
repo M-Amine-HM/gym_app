@@ -62,11 +62,11 @@ class _ExercicesScreenState extends State<ExercicesScreen> {
                   imageBodyPart: _imagesBodyPart[index],
                   nameBodyPart: _namesBodyPart[index],
                   onTap: () {
-                    String a = _namesBodyPart[index];
+                    String bodyPart = _namesBodyPart[index];
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return BodyPartScreen(
-                        bodyPart: a,
+                        bodyPart: bodyPart,
                       );
                     }));
                   })),
