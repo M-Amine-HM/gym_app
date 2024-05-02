@@ -21,6 +21,13 @@ Color c1 = Colors.green;
 
 class _weightScreenState extends State<weightScreen> {
   @override
+  void dispose() {
+    // TODO: implement dispose
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFf1faee),
@@ -177,7 +184,8 @@ class _weightScreenState extends State<weightScreen> {
                       "height": widget.oneUser.height,
                       "weight": widget.oneUser.weight,
                       "phoneNumber": widget.oneUser.phoneNumber,
-                      "adress": widget.oneUser.adress
+                      "adress": widget.oneUser.adress,
+                      "image": widget.oneUser.image,
                     };
 
                     await Api.addUser(data);

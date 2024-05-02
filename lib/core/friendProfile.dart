@@ -33,14 +33,21 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                   child: CircularProgressIndicator(),
                 );
               } else {
+                //TODO: if it return null , must handle the error
                 List<User> data = snapshot.data;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(
+                    SizedBox(
                       height: 180,
                       width: 180,
-                      child: CircleAvatar(),
+                      child: data[0].image == ""
+                          ? ClipOval(
+                              child: Image.asset("assets/images/noPerson.png"),
+                            )
+                          : ClipOval(
+                              child: Image.network(data[0].image),
+                            ),
                     ),
                     const SizedBox(
                       height: 50,

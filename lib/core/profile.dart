@@ -59,25 +59,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 120,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: const Image(
-                            image: AssetImage("assets/images/AminePhoto.jpg"))),
+                        child: widget.oneUser.image == ""
+                            ? Image.asset("assets/images/noPerson.png")
+                            : Image.network(widget.oneUser.image)
+                        // const Image(
+                        //   image: AssetImage("assets/images/AminePhoto.jpg"),
+                        // ),
+                        ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Color(0xffffe501)),
-                      child: const Icon(
-                        LineAwesomeIcons.alternate_pencil,
-                        color: Colors.black,
-                        size: 20,
-                      ),
-                    ),
-                  ),
+                  // Positioned(
+                  //   bottom: 0,
+                  //   right: 0,
+                  //   child: Container(
+                  //     width: 35,
+                  //     height: 35,
+                  //     decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(100),
+                  //         color: Color(0xffffe501)),
+                  //     child: const Icon(
+                  //       LineAwesomeIcons.alternate_pencil,
+                  //       color: Colors.black,
+                  //       size: 20,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const SizedBox(height: 10),

@@ -156,7 +156,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       _textVerifyPassword &&
                       _password.text.isNotEmpty &&
                       _email.text.isNotEmpty) {
+                    if (await Api.getUserByEmail((_email.text)) == null) {
+                      print("erreur de serveur");
+                      return;
+                    }
                     _userdata = await Api.getUserByEmail((_email.text));
+
                     if (_userdata.isEmpty) {
                       //case : there no user
                       setState(() {

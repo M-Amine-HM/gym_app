@@ -84,14 +84,12 @@ class _coummunityScreenState extends State<coummunityScreen> {
                         height: 20,
                       ),
                       SizedBox(
-                        //TODO: mahich responsive 100% list.view builder
-                        height: 550,
+                        height: MediaQuery.sizeOf(context).height * 0.67,
                         child: ListView.builder(
                           scrollDirection: Axis.vertical,
-                          // physics: NeverScrollableScrollPhysics(),
+                          //physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: snapshot.data.length,
-
                           itemBuilder: (context, index) => InkWell(
                             onTap: () {
                               Navigator.push(
@@ -103,28 +101,37 @@ class _coummunityScreenState extends State<coummunityScreen> {
                               );
                             },
                             child: ListTile(
-                              contentPadding: EdgeInsets.fromLTRB(5, 1, 5, 1),
-                              title: Text(
-                                snapshot.data[index].name,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                contentPadding: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                title: Text(
+                                  snapshot.data[index].name,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              subtitle: Text(
-                                snapshot.data[index].email,
-                                style: TextStyle(
-                                  color: Colors.black54,
+                                subtitle: Text(
+                                  snapshot.data[index].email,
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                  ),
                                 ),
-                              ),
-                              // trailing: Text(
-                              //   snapshot.data[index].weight,
-                              //   style: TextStyle(color: Colors.amber),
-                              // ),
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.blue,
-                              ),
-                            ),
+                                // trailing: Text(
+                                //   snapshot.data[index].weight,
+                                //   style: TextStyle(color: Colors.amber),
+                                // ),
+                                leading: snapshot.data[index].image == ""
+                                    ? ClipOval(
+                                        child: Image.asset(
+                                            "assets/images/noPerson.png"),
+                                      )
+                                    : ClipOval(
+                                        child: Image.network(
+                                            snapshot.data[index].image),
+                                      )
+                                // CircleAvatar(
+                                //   backgroundColor: Colors.blue,
+                                // ),
+                                ),
                           ),
                         ),
                       ),

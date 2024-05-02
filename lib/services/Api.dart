@@ -1,6 +1,9 @@
 //all api methods
 
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
+import 'dart:io';
 
 //import 'package:crudtest/model/product_model.dart';
 import 'package:gym_app/model/userModel.dart';
@@ -21,6 +24,38 @@ class Api {
         print(data);
         //
       } else {
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static addImage(File image) async {
+    var imageURL;
+    // print(pdata);
+    //ali mawjouda fl post fl nodeJS
+    var url = Uri.parse(baseUrl + "uploadImage");
+    var request = http.MultipartRequest('POST', url);
+    request.files.add(await http.MultipartFile.fromPath('profile', image.path));
+
+    try {
+      // final res = await http.post(url, body: [image]);
+      var res = await request.send();
+      if (res.statusCode == 200) {
+        var responseData = await res.stream.bytesToString();
+        var data = jsonDecode(responseData);
+        print(data);
+        imageURL = data["profile_url_mobile"];
+        return imageURL;
+
+        // var data = jsonDecode(res.body.toString());
+        // print(data);
+        // imageURL = data["profile_url_mobile"];
+        // return imageURL;
+        //
+      } else {
+        return "error";
         //
       }
     } catch (e) {
@@ -54,7 +89,8 @@ class Api {
                   weight: value['weight'],
                   id: value['_id'],
                   phoneNumber: value['phoneNumber'],
-                  adress: value['adress']),
+                  adress: value['adress'],
+                  image: value['image']),
               //id: value['id'].toString()),
             ),
           },
@@ -97,7 +133,8 @@ class Api {
                   weight: (value['weight']),
                   id: value['_id'],
                   phoneNumber: value['phoneNumber'],
-                  adress: value['adress']),
+                  adress: value['adress'],
+                  image: value['image']),
               //id: value['id'].toString()),
             ),
           },
@@ -140,7 +177,8 @@ class Api {
                   weight: value['weight'],
                   id: value['_id'],
                   phoneNumber: value['phoneNumber'],
-                  adress: value['adress']),
+                  adress: value['adress'],
+                  image: value['image']),
               //id: value['id'].toString()),
             ),
           },
@@ -185,7 +223,8 @@ class Api {
                   weight: value['weight'],
                   id: value['_id'],
                   phoneNumber: value['phoneNumber'],
-                  adress: value['adress']),
+                  adress: value['adress'],
+                  image: value['image']),
               //id: value['id'].toString()),
             ),
           },

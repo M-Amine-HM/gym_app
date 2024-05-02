@@ -62,6 +62,13 @@ class _MyWidgetState extends State<maleOrFemaleScreen>
   String homme_ou_femme = "";
 
   @override
+  void dispose() {
+    controller.dispose();
+    controller1.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

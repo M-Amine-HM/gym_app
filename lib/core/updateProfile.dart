@@ -1,15 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:gym_app/core/ImageUpload.dart';
 import 'package:gym_app/core/profile.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+// ignore: must_be_immutable
 class UpdateProfileScreen extends StatefulWidget {
   UpdateProfileScreen(
-      {super.key, required this.userEmail, required this.theUser});
+      {super.key,
+      required this.userEmail,
+      required this.theUser,
+      this.imageUploaded});
 
-  final String userEmail;
-  User theUser;
+  final String? userEmail;
+  User? theUser;
+  final File? imageUploaded;
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
@@ -18,16 +26,17 @@ class UpdateProfileScreen extends StatefulWidget {
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   List<User> userdata = [];
   String _userID = "";
+  //File? imagefile = widget.theUser.image;
   TextEditingController _name = TextEditingController();
   TextEditingController _adress = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
 
   @override
   void initState() {
-    _name.text = widget.theUser.name;
-    _adress.text = widget.theUser.adress;
-    _phoneNumber.text = widget.theUser.phoneNumber;
-    _userID = widget.theUser.id;
+    _name.text = widget.theUser!.name;
+    _adress.text = widget.theUser!.adress;
+    _phoneNumber.text = widget.theUser!.phoneNumber;
+    _userID = widget.theUser!.id;
 
     super.initState();
   }
@@ -56,11 +65,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            ProfileScreen(oneUser: widget.theUser)),
+                            ProfileScreen(oneUser: widget.theUser!)),
                     (route) => false);
               });
             },
-            icon: Icon(Icons.arrow_back_sharp)),
+            icon: const Icon(Icons.arrow_back_sharp)),
         centerTitle: true,
         title: Text("Modifier Profile",
             style: Theme.of(context).textTheme.headlineMedium),
@@ -77,20 +86,37 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     height: 120,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: const Image(
-                            image: AssetImage("assets/images/AminePhoto.jpg"))),
+                        child: widget.theUser!.image == ""
+                            ? Image.asset("assets/images/noPerson.png")
+                            : Image.network(widget.theUser!.image)
+                        //Text("Please select an image"),
+                        // const Image(
+                        //   image: AssetImage("assets/images/AminePhoto.jpg"),
+                        // ),
+                        ),
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
-                    child: Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Color(0xffffe501)),
-                      child: const Icon(LineAwesomeIcons.camera,
-                          color: Colors.black, size: 20),
+                    child: InkResponse(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => (imageUploadScreen(
+                                      theUser: widget.theUser,
+                                      userEmail: widget.userEmail,
+                                    ))));
+                      },
+                      child: Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: const Color(0xffffe501)),
+                        child: const Icon(LineAwesomeIcons.camera,
+                            color: Colors.black, size: 20),
+                      ),
                     ),
                   ),
                 ],
@@ -104,7 +130,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      userdata = snapshot.data;
+                      // userdata = snapshot.data;
                       // _name.text = userdata[0].name;
                       // _adress.text = userdata[0].adress;
                       // _phoneNumber.text = userdata[0].phoneNumber;
@@ -115,7 +141,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           TextFormField(
                             //initialValue: "fff",
                             controller: _name,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 label: Text("Nom"),
                                 prefixIcon: Icon(LineAwesomeIcons.user)),
                           ),
@@ -124,17 +150,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           //   children: [Icon(LineAwesomeIcons.envelope_1), Text("data")],
                           // ),
                           ListTile(
-                            contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                            leading: Icon(LineAwesomeIcons.envelope_1),
-                            title: Text(
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            leading: const Icon(LineAwesomeIcons.envelope_1),
+                            title: const Text(
                               "Email",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 13,
                               ),
                             ),
                             subtitle: Text(
-                              widget.userEmail,
-                              style: TextStyle(
+                              widget.userEmail!,
+                              style: const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w500),
                             ),
                           ),
@@ -155,10 +182,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           const SizedBox(height: 10),
                           TextFormField(
                             controller: _adress,
-                            decoration: InputDecoration(
-                              label: const Text("Adresse"),
-                              prefixIcon:
-                                  const Icon(Icons.location_on_outlined),
+                            decoration: const InputDecoration(
+                              label: Text("Adresse"),
+                              prefixIcon: Icon(Icons.location_on_outlined),
                             ),
                           ),
                           const SizedBox(height: 15),
@@ -174,12 +200,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 await Api.updateUser(_userID, Data);
                                 setState(() {
                                   ProfileScreen(
-                                    oneUser: widget.theUser,
+                                    oneUser: widget.theUser!,
                                   );
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xffffe501),
+                                  backgroundColor: const Color(0xffffe501),
                                   side: BorderSide.none,
                                   shape: const StadiumBorder()),
                               child: const Text("Confirmer",

@@ -8,6 +8,7 @@ class User {
   String weight;
   String phoneNumber;
   String adress;
+  String image;
 
 //constructor
   User({
@@ -20,5 +21,6 @@ class User {
     this.weight = "",
     this.phoneNumber = "",
     this.adress = "",
+    this.image = "",
   });
 }
