@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:io';
 
 //import 'package:crudtest/model/product_model.dart';
+import 'package:gym_app/model/exerciseModel.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:http/http.dart' as http;
 
@@ -189,6 +190,51 @@ class Api {
         //
       } else {
         print("erreur lors la fonctions getByEmail");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static getExercisesByBodyPArt(bodyPart) async {
+    //List<Product> products = [];
+    List<Exercise> exercises = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getExercisesByBodyPart/$bodyPart");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['exercises'].forEach(
+          (value) => {
+            exercises.add(
+              Exercise(
+                bodyPart: value['bodyPart'],
+                name: value['name'],
+                image: value['image'],
+                video: value['video'],
+                description: value['description'],
+                instructions: value['instructions'],
+                id: value['_id'],
+                warnings: value['warnings'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(exercises);
+        //tretruni l lista bch nafffichah
+        return exercises;
+        //
+      } else {
+        print("erreur lors la fonctions getExercisesBybodyPart");
         return [];
         //
       }

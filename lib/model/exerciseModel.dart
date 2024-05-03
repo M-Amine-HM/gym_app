@@ -5,8 +5,8 @@ class Exercise {
   String image;
   String video;
   String description;
-  List<String> instructions;
-  List<String> warnings;
+  List instructions;
+  List warnings;
 
 //constructor
   Exercise({

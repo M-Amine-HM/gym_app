@@ -1,13 +1,14 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:gym_app/model/exerciseModel.dart';
 import 'package:video_player/video_player.dart';
 // import 'package:video_player/video_player.dart';
 
 class BodyPartDetailsScreen extends StatefulWidget {
-  const BodyPartDetailsScreen({super.key, required this.ExerciceName});
-
-  final String ExerciceName;
+  const BodyPartDetailsScreen({super.key, required this.exercise});
+  final Exercise exercise;
+  //final String ExerciceName;
   @override
   State<BodyPartDetailsScreen> createState() => _BodyPartDetailsScreenState();
 }
@@ -40,10 +41,12 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.asset("assets/videos/$_videoName.mp4")
-      ..addListener(() => setState(() {}))
-      ..setLooping(true)
-      ..initialize().then((_) => controller.play());
+    // controller = VideoPlayerController.asset("assets/videos/$_videoName.mp4")
+    controller =
+        VideoPlayerController.networkUrl(Uri.parse(widget.exercise.video))
+          ..addListener(() => setState(() {}))
+          ..setLooping(true)
+          ..initialize().then((_) => controller.play());
   }
 
   @override
@@ -58,7 +61,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          widget.ExerciceName,
+          (widget.exercise.name),
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
@@ -96,7 +99,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                   height: 10,
                 ),
                 Text(
-                  _exerciceName,
+                  (widget.exercise.name),
                   style: const TextStyle(
                       fontWeight: FontWeight.w600, fontSize: 15),
                 ),
@@ -104,7 +107,7 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                   height: 10,
                 ),
                 Text(
-                  _exerciceDescription,
+                  (widget.exercise.description),
                   style: const TextStyle(
                       fontWeight: FontWeight.w400, fontSize: 12),
                 ),
@@ -134,11 +137,12 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: ((context, index) => InstructionWidget(
                           instructionIndex: (index + 1).toString(),
-                          instructionDetails: _instructionDetails[index])),
+                          instructionDetails:
+                              widget.exercise.instructions[index])),
                       separatorBuilder: (context, index) => const SizedBox(
                             height: 10,
                           ),
-                      itemCount: _instructionDetails.length),
+                      itemCount: widget.exercise.instructions.length),
                 ),
 
                 const SizedBox(
@@ -190,12 +194,12 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: ((context, index) => WarningRowWidget(
-                                WarningText: _warningDetails[index])),
+                                WarningText: widget.exercise.warnings[index])),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(
                                   height: 10,
                                 ),
-                            itemCount: _warningDetails.length),
+                            itemCount: widget.exercise.warnings.length),
                       ),
                     ),
                   ],
