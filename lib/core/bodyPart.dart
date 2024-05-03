@@ -28,7 +28,7 @@ class _BodyPartScreenState extends State<BodyPartScreen> {
         centerTitle: true,
       ),
       body: Container(
-        color: Colors.white,
+        color: Colors.grey[200],
         child: FutureBuilder(
           future: Api.getExercisesByBodyPArt(widget.bodyPart),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -55,7 +55,7 @@ class _BodyPartScreenState extends State<BodyPartScreen> {
                         bodyPartName: dataEx[index].name,
                       )),
                   separatorBuilder: (context, index) => const SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                   itemCount: dataEx.length);
             }
@@ -81,26 +81,41 @@ class ExerciceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 5, right: 0.0),
-        leading: SizedBox(
-            height: 70,
-            width: 60,
-            // constraints: BoxConstraints(
-            //   minWidth: 70,
-            //   minHeight: 40,
-            //   maxWidth: 95,
-            //   maxHeight: 90,
-            // ),
-            child: Image.network(bodyPartImage)),
-        title: Text(
-          bodyPartName,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+      child: Container(
+        height: 75,
+        decoration: BoxDecoration(
+          //shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
         ),
-        // trailing: Checkbox(
-        //   value: false,
-        //   onChanged: (newBool) {},
-        // ),
+        child: Center(
+          child: ListTile(
+            //tileColor: Colors.white,
+            contentPadding: const EdgeInsets.only(left: 5, right: 0.0),
+            leading: SizedBox(
+              height: 70,
+              width: 60,
+              // constraints: BoxConstraints(
+              //   minWidth: 70,
+              //   minHeight: 40,
+              //   maxWidth: 95,
+              //   maxHeight: 90,
+              // ),
+              child: Image.network(
+                bodyPartImage,
+                fit: BoxFit.cover,
+              ),
+            ),
+            title: Text(
+              bodyPartName,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+            // trailing: Checkbox(
+            //   value: false,
+            //   onChanged: (newBool) {},
+            // ),
+          ),
+        ),
       ),
     );
   }

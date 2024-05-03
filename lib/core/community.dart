@@ -39,56 +39,55 @@ class _coummunityScreenState extends State<coummunityScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: FutureBuilder(
-              future: _name.text.isEmpty
-                  ? Api.getUsers()
-                  : Api.getUsersByNames(_name.text),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  //List<User> data = snapshot.data;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Search for a user",
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                      SizedBox(
-                        height: 22,
-                      ),
-                      TextFormField(
-                        controller: _name,
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey[400],
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none),
-                            hintText: "eg : Amine",
-                            prefixIcon: Icon(Icons.search),
-                            prefixIconColor: Colors.grey.shade900),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.sizeOf(context).height * 0.67,
+          child: FutureBuilder(
+            future: _name.text.isEmpty
+                ? Api.getUsers()
+                : Api.getUsersByNames(_name.text),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                //List<User> data = snapshot.data;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Search for a user",
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 22,
+                    ),
+                    TextFormField(
+                      controller: _name,
+                      onChanged: (value) {
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[400],
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none),
+                          hintText: "eg : Amine",
+                          prefixIcon: Icon(Icons.search),
+                          prefixIconColor: Colors.grey.shade900),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        // height: MediaQuery.sizeOf(context).height * 0.67,
                         child: ListView.builder(
-                          scrollDirection: Axis.vertical,
+                          // scrollDirection: Axis.vertical,
                           //physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
+                          //shrinkWrap: true,
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) => InkWell(
                             onTap: () {
@@ -145,11 +144,11 @@ class _coummunityScreenState extends State<coummunityScreen> {
                           ),
                         ),
                       ),
-                    ],
-                  );
-                }
-              },
-            ),
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ));
   }
