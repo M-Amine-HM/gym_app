@@ -70,15 +70,15 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                   color: Colors.grey[300],
                   // borderRadius: BorderRadius.circular(18),
                 ),
-                child: ListView.separated(
+                child: ListView.builder(
                     itemBuilder: ((context, index) => ExerciceWidget(
                           onTap: () {},
                           bodyPartImage: "chestflyes.png",
                           bodyPartName: "Arm Chest flyes plies à la machine",
                         )),
-                    separatorBuilder: (context, index) => const SizedBox(
-                          height: 8,
-                        ),
+                    // separatorBuilder: (context, index) => const SizedBox(
+                    //       height: 0,
+                    //     ),
                     itemCount: 20),
               ),
             ),
@@ -141,39 +141,43 @@ class ExerciceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        height: 75,
-        decoration: BoxDecoration(
-          //shape: BoxShape.rectangle,
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-          child: ListTile(
-            //tileColor: Colors.white,
-            contentPadding: const EdgeInsets.only(left: 5, right: 0.0),
-            leading: SizedBox(
-              height: 70,
-              width: 60,
-              // constraints: BoxConstraints(
-              //   minWidth: 70,
-              //   minHeight: 40,
-              //   maxWidth: 95,
-              //   maxHeight: 90,
-              // ),
-              child: Image(
-                image: AssetImage("assets/images/$bodyPartImage"),
-                fit: BoxFit.cover,
+      child: Padding(
+        padding: EdgeInsets.only(left: 7, right: 7, top: 5, bottom: 2),
+        child: Container(
+          height: 68,
+          decoration: BoxDecoration(
+            //shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: ListTile(
+              //tileColor: Colors.white,
+              contentPadding: const EdgeInsets.only(left: 5, right: 0.0),
+              leading: SizedBox(
+                height: 70,
+                width: 60,
+                // constraints: BoxConstraints(
+                //   minWidth: 70,
+                //   minHeight: 40,
+                //   maxWidth: 95,
+                //   maxHeight: 90,
+                // ),
+                child: Image(
+                  image: AssetImage("assets/images/$bodyPartImage"),
+                  fit: BoxFit.cover,
+                ),
               ),
+              title: Text(
+                bodyPartName,
+                style:
+                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              ),
+              // trailing: Checkbox(
+              //   value: false,
+              //   onChanged: (newBool) {},
+              // ),
             ),
-            title: Text(
-              bodyPartName,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            ),
-            // trailing: Checkbox(
-            //   value: false,
-            //   onChanged: (newBool) {},
-            // ),
           ),
         ),
       ),

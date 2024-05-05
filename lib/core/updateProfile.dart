@@ -7,6 +7,8 @@ import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+//TODO: l page m9asma 3ala zoz l backgroud gris , w kl botton l icon mta3ha mlawen
+// 7ata modifier Profile
 // ignore: must_be_immutable
 class UpdateProfileScreen extends StatefulWidget {
   UpdateProfileScreen(
@@ -51,7 +53,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
+        backgroundColor: Colors.grey.shade200,
         leading: IconButton(
             onPressed: () {
               setState(() {
@@ -114,9 +118,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         height: 35,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            color: const Color(0xffffe501)),
-                        child: const Icon(LineAwesomeIcons.camera,
-                            color: Colors.black, size: 20),
+                            color: Colors.blue),
+                        child: const Icon(
+                          LineAwesomeIcons.camera,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -139,58 +146,84 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
                       return Column(
                         children: [
-                          TextFormField(
-                            //initialValue: "fff",
-                            controller: _name,
-                            decoration: const InputDecoration(
-                                label: Text("Nom"),
-                                prefixIcon: Icon(LineAwesomeIcons.user)),
-                          ),
-                          const SizedBox(height: 10),
-                          // Row(
-                          //   children: [Icon(LineAwesomeIcons.envelope_1), Text("data")],
-                          // ),
-                          ListTile(
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                            leading: const Icon(LineAwesomeIcons.envelope_1),
-                            title: const Text(
-                              "Email",
-                              style: const TextStyle(
-                                fontSize: 13,
+                          Container(
+                            decoration: BoxDecoration(
+                              //shape: BoxShape.rectangle,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    //initialValue: "fff",
+                                    controller: _name,
+                                    decoration: InputDecoration(
+                                        //labelText: "dd",
+                                        border: InputBorder.none,
+                                        label: Text("Nom"),
+                                        prefixIcon:
+                                            Icon(LineAwesomeIcons.user)),
+                                  ),
+                                  //const SizedBox(height: 2),
+                                  // Row(
+                                  //   children: [Icon(LineAwesomeIcons.envelope_1), Text("data")],
+                                  // ),
+                                  ListTile(
+                                    contentPadding:
+                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                    leading:
+                                        const Icon(LineAwesomeIcons.envelope_1),
+                                    title: const Text(
+                                      "Email",
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      widget.userEmail!,
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                  // const SizedBox(height: 10),
+                                  // TextFormField(
+                                  //   decoration: const InputDecoration(
+                                  //       label: Text("Email"),
+                                  //       prefixIcon: Icon(LineAwesomeIcons.envelope_1)),
+                                  // ),
+
+                                  TextFormField(
+                                    controller: _phoneNumber,
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        //contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        label: Text("numéro de téléphone"),
+                                        prefixIcon:
+                                            Icon(LineAwesomeIcons.phone)),
+                                  ),
+                                  // const SizedBox(height: 10),
+                                  TextFormField(
+                                    controller: _adress,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      label: Text("Adresse"),
+                                      prefixIcon:
+                                          Icon(Icons.location_on_outlined),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  )
+                                ],
                               ),
                             ),
-                            subtitle: Text(
-                              widget.userEmail!,
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w500),
-                            ),
                           ),
-                          // const SizedBox(height: 10),
-                          // TextFormField(
-                          //   decoration: const InputDecoration(
-                          //       label: Text("Email"),
-                          //       prefixIcon: Icon(LineAwesomeIcons.envelope_1)),
-                          // ),
-
-                          TextFormField(
-                            controller: _phoneNumber,
-                            decoration: const InputDecoration(
-                                //contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                label: Text("numéro de téléphone"),
-                                prefixIcon: Icon(LineAwesomeIcons.phone)),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _adress,
-                            decoration: const InputDecoration(
-                              label: Text("Adresse"),
-                              prefixIcon: Icon(Icons.location_on_outlined),
-                            ),
-                          ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 30),
                           SizedBox(
-                            width: double.infinity,
+                            width: MediaQuery.sizeOf(context).width * 0.6,
                             child: ElevatedButton(
                               onPressed: () async {
                                 Map Data = {
@@ -206,43 +239,46 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xffffe501),
+                                  backgroundColor: Colors.blue,
                                   side: BorderSide.none,
                                   shape: const StadiumBorder()),
                               child: const Text("Confirmer",
-                                  style: TextStyle(color: Colors.black)),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
-                          const SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text.rich(
-                                TextSpan(
-                                  text: "Nom ",
-                                  style: TextStyle(fontSize: 12),
-                                  children: [
-                                    TextSpan(
-                                        text: "Prénom",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12))
-                                  ],
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Colors.redAccent.withOpacity(0.1),
-                                    elevation: 0,
-                                    foregroundColor: Colors.red,
-                                    shape: const StadiumBorder(),
-                                    side: BorderSide.none),
-                                child: const Text("Supprimer le compte"),
-                              ),
-                            ],
-                          )
+                          // const SizedBox(height: 15),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     const Text.rich(
+                          //       TextSpan(
+                          //         text: "Nom ",
+                          //         style: TextStyle(fontSize: 12),
+                          //         children: [
+                          //           TextSpan(
+                          //               text: "Prénom",
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.bold,
+                          //                   fontSize: 12))
+                          //         ],
+                          //       ),
+                          //     ),
+                          //     ElevatedButton(
+                          //       onPressed: () {},
+                          //       style: ElevatedButton.styleFrom(
+                          //           backgroundColor:
+                          //               Colors.redAccent.withOpacity(0.1),
+                          //           elevation: 0,
+                          //           foregroundColor: Colors.red,
+                          //           shape: const StadiumBorder(),
+                          //           side: BorderSide.none),
+                          //       child: const Text("Supprimer le compte"),
+                          //     ),
+                          //   ],
+                          // )
                         ],
                       );
                     }

@@ -144,6 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               ElevatedButton(
+                child: const Text(
+                  "Se connecter",
+                  style: TextStyle(color: Colors.white, fontSize: 17),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
@@ -194,10 +198,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   }
                 },
-                child: const Text(
-                  "Se connecter",
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                ),
               ),
               const SizedBox(
                 height: 15,

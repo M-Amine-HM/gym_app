@@ -73,7 +73,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-          // border: Border.symmetric(vertical: BorderSide(width: 2)),
+
+          //border: Border(top: BorderSide(style: BorderStyle.solid)),
+          //border: Border.symmetric(vertical: BorderSide(width: 2)),
           height: 52,
           backgroundColor: Colors.white,
           activeColor: Colors.black,

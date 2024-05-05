@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gym_app/auth/firstPage.dart';
 import 'package:gym_app/core/community.dart';
 import 'package:gym_app/core/updateProfile.dart';
-import 'package:gym_app/home.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+//TODO: l page m9asma 3ala zoz l backgroud gris , w kl botton l icon mta3ha mlawen
+// 7ata modifier Profile
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, required this.oneUser}) : super(key: key);
   final User oneUser;
@@ -43,11 +43,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
+        backgroundColor: Colors.grey.shade200,
         centerTitle: true,
         title: Text("Profil", style: Theme.of(context).textTheme.headline4),
       ),
       body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Container(
           padding: const EdgeInsets.all(15),
           child: Column(
@@ -99,16 +102,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       return Column(
                         children: [
-                          Text(theUser.name,
-                              style: Theme.of(context).textTheme.headline4),
+                          Text(
+                            theUser.name,
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.w500),
+                          ),
+                          //style: Theme.of(context).textTheme.headline4),
                           //email field
-                          Text(theUser.email,
-                              style: Theme.of(context).textTheme.bodyText2),
+                          Text(
+                            theUser.email,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w400),
+                          ),
+                          //style: Theme.of(context).textTheme.bodyText2),
                           //nameAndemail(),
                           //email(),
                           const SizedBox(height: 10),
-                          Text(
-                              "sexe: ${theUser.sexe} height: ${(theUser.height).toString()} weight: ${(theUser.phoneNumber).toString()} "),
+                          // Text(
+                          //     "sexe: ${theUser.sexe} height: ${(theUser.height).toString()} weight: ${(theUser.phoneNumber).toString()} "),
                           SizedBox(
                             width: 200,
                             child: ElevatedButton(
@@ -142,57 +153,115 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               //name field
 
-              const SizedBox(height: 30),
-              const Divider(),
               const SizedBox(height: 10),
-              ProfileMenuWidget(
-                  title: "Calendrier",
-                  icon: LineAwesomeIcons.calendar,
-                  onPress: () {}),
-              ProfileMenuWidget(
-                  title: "Communité",
-                  icon: LineAwesomeIcons.user_friends,
-                  onPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => coummunityScreen()),
-                    );
-                  }),
-              ProfileMenuWidget(
-                  title: "Statistiques",
-                  icon: LineAwesomeIcons.chalkboard,
-                  onPress: () {}),
-              ProfileMenuWidget(
-                  title: "Mesures",
-                  icon: LineAwesomeIcons.horizontal_sliders,
-                  onPress: () {}),
-              const Divider(),
-              const SizedBox(height: 10),
-              ProfileMenuWidget(
-                  title: "Informations",
-                  icon: LineAwesomeIcons.info,
-                  onPress: () {}),
-              ProfileMenuWidget(
-                title: "Logout",
-                icon: LineAwesomeIcons.alternate_sign_out,
-                textColor: Colors.red,
-                endIcon: false,
-                onPress: () {
-                  //TODO: logout take the user to first page
-                  // User user = User();
-                  // Navigator.pushAndRemoveUntil(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => FirstPage(
-
-                  //             )),
-                  //     (route) => false);
-
-                  //Navigator.pop(context);
-                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>FirstPage()));
-                },
+              // const Divider(),
+              //const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  //shape: BoxShape.rectangle,
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 5,
+                    ),
+                    ProfileMenuWidget(
+                        title: "Calendrier",
+                        icon: LineAwesomeIcons.calendar,
+                        onPress: () {}),
+                    // const Divider(
+                    //   height: 0,
+                    //   thickness: 0.5,
+                    //   indent: 40,
+                    //   endIndent: 40,
+                    // ),
+                    ProfileMenuWidget(
+                        title: "Communité",
+                        icon: LineAwesomeIcons.user_friends,
+                        onPress: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => coummunityScreen()),
+                          );
+                        }),
+                    // const Divider(
+                    //   height: 0,
+                    //   thickness: 0.5,
+                    //   indent: 40,
+                    //   endIndent: 40,
+                    // ),
+                    ProfileMenuWidget(
+                        title: "Statistiques",
+                        icon: LineAwesomeIcons.chalkboard,
+                        onPress: () {}),
+                    // const Divider(
+                    //   height: 0,
+                    //   thickness: 0.5,
+                    //   indent: 40,
+                    //   endIndent: 40,
+                    // ),
+                    ProfileMenuWidget(
+                        title: "Mesures",
+                        icon: LineAwesomeIcons.horizontal_sliders,
+                        onPress: () {}),
+                    SizedBox(
+                      height: 5,
+                    ),
+                  ],
+                ),
               ),
+              //const Divider(),
+              const SizedBox(height: 15),
+              Container(
+                decoration: BoxDecoration(
+                  //shape: BoxShape.rectangle,
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ProfileMenuWidget(
+                        title: "Informations",
+                        icon: LineAwesomeIcons.info,
+                        onPress: () {}),
+                    // const Divider(
+                    //   height: 0,
+                    //   thickness: 0.5,
+                    //   indent: 40,
+                    //   endIndent: 40,
+                    // ),
+                    ProfileMenuWidget(
+                      title: "Logout",
+                      icon: LineAwesomeIcons.alternate_sign_out,
+                      textColor: Colors.red,
+                      endIcon: false,
+                      onPress: () {
+                        //TODO: logout take the user to first page
+                        // User user = User();
+                        // Navigator.pushAndRemoveUntil(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => FirstPage(
+
+                        //             )),
+                        //     (route) => false);
+
+                        //Navigator.pop(context);
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>FirstPage()));
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -264,6 +333,7 @@ class ProfileMenuWidget extends StatelessWidget {
     var iconColor = isDark ? Color(0xffffe501) : Colors.black;
 
     return ListTile(
+      //contentPadding: EdgeInsets.only(bottom: 5, left: 20, right: 20, top: 5),
       onTap: onPress,
       leading: Container(
         width: 40,

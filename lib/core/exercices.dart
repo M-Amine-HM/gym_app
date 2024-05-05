@@ -45,8 +45,9 @@ class _ExercicesScreenState extends State<ExercicesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade200,
         title: const Text(
           "Exercices",
           style: TextStyle(fontWeight: FontWeight.w600),
@@ -54,7 +55,7 @@ class _ExercicesScreenState extends State<ExercicesScreen> {
         centerTitle: true,
       ),
       body: Container(
-        color: Colors.white,
+        //color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView.separated(

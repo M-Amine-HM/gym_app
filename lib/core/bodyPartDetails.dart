@@ -58,8 +58,9 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade200,
         title: Text(
           (widget.exercise.name),
           style: const TextStyle(fontWeight: FontWeight.w600),

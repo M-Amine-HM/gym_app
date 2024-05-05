@@ -1,9 +1,6 @@
-import 'package:async_builder/async_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/friendProfile.dart';
-import 'package:gym_app/core/model/movie_model.dart';
-import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 
 class coummunityScreen extends StatefulWidget {
@@ -30,7 +27,9 @@ class _coummunityScreenState extends State<coummunityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey.shade200,
         appBar: AppBar(
+          backgroundColor: Colors.grey.shade200,
           centerTitle: true,
           title: Text(
             "Community",
@@ -38,7 +37,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
           child: FutureBuilder(
             future: _name.text.isEmpty
                 ? Api.getUsers()
@@ -72,7 +71,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
                           filled: true,
                           fillColor: Colors.grey[400],
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide.none),
                           hintText: "eg : Amine",
                           prefixIcon: Icon(Icons.search),
@@ -82,8 +81,13 @@ class _coummunityScreenState extends State<coummunityScreen> {
                       height: 20,
                     ),
                     Expanded(
-                      child: SizedBox(
-                        // height: MediaQuery.sizeOf(context).height * 0.67,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          //shape: BoxShape.rectangle,
+                          color: Colors.white,
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(15)),
+                        ),
                         child: ListView.builder(
                           // scrollDirection: Axis.vertical,
                           //physics: NeverScrollableScrollPhysics(),
@@ -100,7 +104,8 @@ class _coummunityScreenState extends State<coummunityScreen> {
                               );
                             },
                             child: ListTile(
-                                contentPadding: EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(10, 1, 5, 1),
                                 title: Text(
                                   snapshot.data[index].name,
                                   style: TextStyle(

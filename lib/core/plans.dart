@@ -11,7 +11,7 @@ class PlansScreen extends StatefulWidget {
 class _PlanScreenState extends State<PlansScreen> {
   final List<Widget> _screens = [
     Container(
-      color: Colors.grey.shade300,
+      color: Colors.grey.shade200,
       child: PlanContainerWidget(),
     ),
     Container(
@@ -38,9 +38,10 @@ class _PlanScreenState extends State<PlansScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade200,
+        //shadowColor: Colors.grey.shade50,
         title: const Text(
           "Plan",
           style: TextStyle(fontWeight: FontWeight.w600),
@@ -52,7 +53,7 @@ class _PlanScreenState extends State<PlansScreen> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 //TODO: Design des boutons et les couleurs
                 ElevatedButton(
@@ -61,9 +62,16 @@ class _PlanScreenState extends State<PlansScreen> {
                   },
                   child: Text(
                     "Mes Plans",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[700],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -71,9 +79,16 @@ class _PlanScreenState extends State<PlansScreen> {
                   },
                   child: Text(
                     "Plans Prédéfinis",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[700],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -81,9 +96,16 @@ class _PlanScreenState extends State<PlansScreen> {
                   },
                   child: Text(
                     "Plans amis",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[700],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
                 ),
               ],
             ),
@@ -106,15 +128,39 @@ class PlanContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey.shade300,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-        child: ListView.separated(
-            itemBuilder: ((context, index) => PlanWidget()),
-            separatorBuilder: (context, index) => const SizedBox(
-                  height: 13,
-                ),
-            itemCount: 5),
+      color: Colors.grey.shade200,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+            child: ElevatedButton.icon(
+              icon: Icon(
+                Icons.add,
+                size: 32,
+                color: Colors.white,
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                fixedSize: Size((MediaQuery.of(context).size.width * 0.55), 45),
+              ),
+              onPressed: () {},
+              label: Text(
+                "Créer un Plan",
+                style: TextStyle(fontSize: 17, color: Colors.white),
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.separated(
+                itemBuilder: ((context, index) => PlanWidget()),
+                separatorBuilder: (context, index) => const SizedBox(
+                      height: 13,
+                    ),
+                itemCount: 5),
+          ),
+        ],
       ),
     );
   }
