@@ -30,7 +30,7 @@ class _BodyPartScreenState extends State<BodyPartScreen> {
       body: Container(
         color: Colors.grey.shade200,
         child: FutureBuilder(
-          future: Api.getExercisesByBodyPArt(widget.bodyPart),
+          future: Api.getExercisesByBodyPart(widget.bodyPart),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) {
               return const Center(
@@ -57,7 +57,8 @@ class _BodyPartScreenState extends State<BodyPartScreen> {
                                   );
                                 }));
                               },
-                              bodyPartImage: dataEx[index].image,
+                              bodyPartImage: "${Api.baseUrl}exercise/" +
+                                  dataEx[index].image,
                               bodyPartName: dataEx[index].name,
                             )),
                         itemCount: dataEx.length),

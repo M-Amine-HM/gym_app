@@ -46,7 +46,8 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                               child: Image.asset("assets/images/noPerson.png"),
                             )
                           : ClipOval(
-                              child: Image.network(data[0].image),
+                              child: Image.network(
+                                  "${Api.baseUrl}profile/" + data[0].image),
                             ),
                     ),
                     const SizedBox(

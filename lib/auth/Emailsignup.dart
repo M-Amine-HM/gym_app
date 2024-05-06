@@ -30,7 +30,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
     return regex.hasMatch(email);
   }
 
-  List<User> _userdata = [];
+  List? _userdata = [];
   //TODO: erreur text ki famech user wela 8alet fl password
   String _erreurText = "";
   @override
@@ -204,8 +204,11 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                     oneUser.password = password;
 
                     _userdata = await Api.getUserByEmail((email));
-
-                    if (_userdata.isEmpty) {
+                    if (_userdata == null) {
+                      print("no connection with server");
+                      return;
+                    }
+                    if (_userdata!.isEmpty) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -214,7 +217,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                                 )),
                       );
                     } else {
-                      if (_userdata[0].email == (_email.text)) {
+                      if (_userdata![0].email == (_email.text)) {
                         //case : there no user
                         setState(() {
                           _erreurText = "user is already exist try to connect";

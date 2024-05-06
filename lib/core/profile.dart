@@ -64,7 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         borderRadius: BorderRadius.circular(100),
                         child: widget.oneUser.image == ""
                             ? Image.asset("assets/images/noPerson.png")
-                            : Image.network(widget.oneUser.image)
+                            : Image.network(
+                                "${Api.baseUrl}profile/${widget.oneUser.image}")
                         // const Image(
                         //   image: AssetImage("assets/images/AminePhoto.jpg"),
                         // ),

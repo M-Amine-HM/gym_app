@@ -48,6 +48,7 @@ class _ExercicesScreenState extends State<ExercicesScreen> {
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
+        surfaceTintColor: Colors.grey.shade200,
         title: const Text(
           "Exercices",
           style: TextStyle(fontWeight: FontWeight.w600),

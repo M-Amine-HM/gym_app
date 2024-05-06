@@ -83,45 +83,46 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
               ),
             ),
             Expanded(
-                child: Container(
-              color: Colors.grey[200],
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[700],
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fixedSize:
-                            Size((MediaQuery.of(context).size.width * 0.9), 45),
+              child: Container(
+                color: Colors.grey[200],
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue[700],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          fixedSize: Size(
+                              (MediaQuery.of(context).size.width * 0.9), 45),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          "DEBUT",
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
                       ),
-                      onPressed: () {},
-                      child: Text(
-                        "DEBUT",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          fixedSize: Size(
+                              (MediaQuery.of(context).size.width * 0.9), 45),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          "MODIFIER",
+                          style: TextStyle(fontSize: 20, color: Colors.black),
+                        ),
                       ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fixedSize:
-                            Size((MediaQuery.of(context).size.width * 0.9), 45),
-                      ),
-                      onPressed: () {},
-                      child: Text(
-                        "MODIFIER",
-                        style: TextStyle(fontSize: 20, color: Colors.black),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ))
+            ),
           ],
         ));
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/friendProfile.dart';
+import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 
 class coummunityScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
   //   print('Field Value: $fieldValue');
   //   setState(() {});
   // }
+  String theimagepaths = "${Api.baseUrl}profile/";
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
         backgroundColor: Colors.grey.shade200,
         appBar: AppBar(
           backgroundColor: Colors.grey.shade200,
+          surfaceTintColor: Colors.grey.shade200,
           centerTitle: true,
           title: Text(
             "Community",
@@ -48,7 +51,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
                   child: CircularProgressIndicator(),
                 );
               } else {
-                //List<User> data = snapshot.data;
+                List? thedata = snapshot.data;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -92,14 +95,14 @@ class _coummunityScreenState extends State<coummunityScreen> {
                           // scrollDirection: Axis.vertical,
                           //physics: NeverScrollableScrollPhysics(),
                           //shrinkWrap: true,
-                          itemCount: snapshot.data.length,
+                          itemCount: thedata!.length,
                           itemBuilder: (context, index) => InkWell(
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => friendProfileScreen(
-                                          email: (snapshot.data[index]).email,
+                                          email: (thedata[index]).email,
                                         )),
                               );
                             },
@@ -107,14 +110,14 @@ class _coummunityScreenState extends State<coummunityScreen> {
                                 contentPadding:
                                     EdgeInsets.fromLTRB(10, 1, 5, 1),
                                 title: Text(
-                                  snapshot.data[index].name,
+                                  thedata[index].name,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 subtitle: Text(
-                                  snapshot.data[index].email,
+                                  thedata[index].email,
                                   style: TextStyle(
                                     color: Colors.black54,
                                   ),
@@ -123,7 +126,13 @@ class _coummunityScreenState extends State<coummunityScreen> {
                                 //   snapshot.data[index].weight,
                                 //   style: TextStyle(color: Colors.amber),
                                 // ),
-                                leading: snapshot.data[index].image == ""
+
+                                leading: theimagepaths +
+                                                snapshot.data[index].image ==
+                                            "${Api.baseUrl}profile/" ||
+                                        theimagepaths +
+                                                snapshot.data[index].image ==
+                                            ""
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(50),
                                         child: Image.asset(
@@ -136,7 +145,9 @@ class _coummunityScreenState extends State<coummunityScreen> {
                                     : ClipRRect(
                                         borderRadius: BorderRadius.circular(50),
                                         child: Image.network(
-                                          snapshot.data[index].image,
+                                          theimagepaths +
+                                              thedata[index]
+                                                  .image, //snapshot.data[index].image,
                                           fit: BoxFit.cover,
                                           height: 80,
                                           width: 55,

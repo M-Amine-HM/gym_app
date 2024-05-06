@@ -1,7 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/model/exerciseModel.dart';
+import 'package:gym_app/services/Api.dart';
 import 'package:video_player/video_player.dart';
 // import 'package:video_player/video_player.dart';
 
@@ -36,23 +38,31 @@ String _exerciceDescription =
     "Il s'agit d'un exercice isolé visant à faire travailler les muscles de la poitrine. Cet exercice sollicite les muscles suivants : les torse, avec une petite aide des deltoides frontaux.";
 
 class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
-  late VideoPlayerController controller;
+  //late VideoPlayerController controller;
+  final FijkPlayer player = FijkPlayer();
 
   @override
   void initState() {
     super.initState();
     // controller = VideoPlayerController.asset("assets/videos/$_videoName.mp4")
-    controller =
-        VideoPlayerController.networkUrl(Uri.parse(widget.exercise.video))
-          ..addListener(() => setState(() {}))
-          ..setLooping(true)
-          ..initialize().then((_) => controller.play());
+    // controller =
+    //     VideoPlayerController.networkUrl(Uri.parse(widget.exercise.video))
+    //       ..addListener(() => setState(() {}))
+    //       ..setLooping(true)
+    //       ..initialize().then((_) => controller.play());
+    player.setLoop(20);
+
+    //player.enterFullScreen();
+    //player.isPlayable();
+    player.setDataSource("${Api.baseUrl}exercise/" + widget.exercise.video,
+        autoPlay: true, showCover: false);
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    //controller.dispose();
     super.dispose();
+    player.release();
   }
 
   @override
@@ -79,23 +89,44 @@ class _BodyPartDetailsScreenState extends State<BodyPartDetailsScreen> {
               children: [
                 // the video
                 //    controller != null && controller.value.isInitialized
-                controller.value.isInitialized
-                    ? Center(
-                        child: SizedBox(
-                          height: 400,
-                          child: AspectRatio(
-                            aspectRatio: controller.value.aspectRatio,
-                            child: VideoPlayer(controller),
-                          ),
-                        ),
-                      )
-                    // ignore: sized_box_for_whitespace
-                    : Container(
-                        height: 200,
-                        child: const Center(
-                          child: CircularProgressIndicator(),
+                //controller.value.isInitialized
+                Center(
+                  child: Container(
+                    color: Colors.white,
+                    height: 450,
+                    child: FijkView(
+                      fit: FijkFit.contain,
+                      player: player,
+                      panelBuilder:
+                          (player, data, context, viewSize, texturePos) =>
+                              Container(
+                        color: Colors.white.withOpacity(0.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: 460,
+                              width: 65,
+                              color: Colors.white,
+                            ),
+                            Container(
+                              height: 460,
+                              width: 65,
+                              color: Colors.white,
+                            )
+                          ],
                         ),
                       ),
+                    ),
+                  ),
+                ),
+                // ignore: sized_box_for_whitespace
+                // : Container(
+                //     height: 200,
+                //     child: const Center(
+                //       child: CircularProgressIndicator(),
+                //     ),
+                //   ),
                 const SizedBox(
                   height: 10,
                 ),

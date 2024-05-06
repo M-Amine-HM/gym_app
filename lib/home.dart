@@ -73,12 +73,12 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-
-          //border: Border(top: BorderSide(style: BorderStyle.solid)),
+          border: null,
           //border: Border.symmetric(vertical: BorderSide(width: 2)),
           height: 52,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.grey.shade200,
           activeColor: Colors.black,
+
           //iconSize: 15,
           items: [
             bottomNavBar("nav11", "nav11_filled", "Exercices"),
@@ -147,7 +147,7 @@ class _HomeState extends State<Home> {
           ),
           Text(
             label,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 14, color: Colors.black),
           )
         ],
       ),
@@ -160,7 +160,9 @@ class _HomeState extends State<Home> {
           ),
           Text(
             label,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(
+              fontSize: 14,
+            ),
           )
         ],
       ),

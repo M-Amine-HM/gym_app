@@ -92,7 +92,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         borderRadius: BorderRadius.circular(100),
                         child: widget.theUser!.image == ""
                             ? Image.asset("assets/images/noPerson.png")
-                            : Image.network(widget.theUser!.image)
+                            : Image.network(
+                                "${Api.baseUrl}profile/${widget.theUser!.image}")
                         //Text("Please select an image"),
                         // const Image(
                         //   image: AssetImage("assets/images/AminePhoto.jpg"),
