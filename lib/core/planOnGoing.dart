@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:gym_app/core/bodyPartDetails.dart';
+import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/services/Api.dart';
 
 class OnGoingPlanScreen extends StatefulWidget {
-  const OnGoingPlanScreen({super.key});
+  const OnGoingPlanScreen({super.key, required this.planToDo});
+  final Plan planToDo;
 
   @override
   State<OnGoingPlanScreen> createState() => _OnGoingPlanScreenState();
@@ -22,14 +27,40 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                 color: Colors.white,
               )),
           backgroundColor: Colors.blue[700],
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.settings,
+          actions: [
+            PopupMenuButton(
+              color: Colors.black87,
+              icon: Icon(
+                Icons.more_vert,
                 color: Colors.white,
               ),
-              tooltip: 'Comment Icon',
-              onPressed: () {},
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    child: Text(
+                      "Renommer",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    value: 1,
+                  ),
+                  PopupMenuItem(
+                    child: Text(
+                      "Supprimer",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    value: 2,
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                if (value == 1) {
+                  // Perform action for Option 1
+                  // Add your code here
+                } else if (value == 2) {
+                  // Perform action for Option 2
+                  // Add your code here
+                }
+              },
             ), //IconButton
             //IconButton
           ],
@@ -43,14 +74,16 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Nom de Plan",
+                    widget.planToDo.planName,
                     style: TextStyle(
                         fontSize: 25,
                         color: Colors.white,
                         fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    "Date de creation",
+                    widget.planToDo.nbrExercises == "1"
+                        ? "${widget.planToDo.nbrExercises} exercice"
+                        : "${widget.planToDo.nbrExercises} exercices",
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -65,22 +98,43 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
             Expanded(
               flex: 4,
               child: Container(
-                decoration: BoxDecoration(
-                  //shape: BoxShape.rectangle,
-                  color: Colors.grey[300],
-                  // borderRadius: BorderRadius.circular(18),
-                ),
-                child: ListView.builder(
-                    itemBuilder: ((context, index) => ExerciceWidget(
-                          onTap: () {},
-                          bodyPartImage: "chestflyes.png",
-                          bodyPartName: "Arm Chest flyes plies à la machine",
-                        )),
-                    // separatorBuilder: (context, index) => const SizedBox(
-                    //       height: 0,
-                    //     ),
-                    itemCount: 20),
-              ),
+                  decoration: BoxDecoration(
+                    //shape: BoxShape.rectangle,
+                    color: Colors.grey[300],
+                    // borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: FutureBuilder(
+                      future: Api.getExercisesByPlan(widget.planToDo.planName),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          //TODO: if it return null , must handle the error
+                          List? data = snapshot.data;
+                          return ListView.builder(
+                              itemBuilder: ((context, index) => ExerciceWidget(
+                                    onTap: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return BodyPartDetailsScreen(
+                                          exercise: data[index],
+                                        );
+                                      }));
+                                    },
+                                    exerciseImage: "${Api.baseUrl}exercise/" +
+                                        data[index].image,
+                                    exerciseName: data[index].name,
+                                    bodyPartName: data[index].bodyPart,
+                                    nbrSer: widget.planToDo.nbrsSeries[index],
+                                  )),
+                              // separatorBuilder: (context, index) => const SizedBox(
+                              //       height: 0,
+                              //     ),
+                              itemCount: data!.length);
+                        }
+                      })),
             ),
             Expanded(
               child: Container(
@@ -131,12 +185,16 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
 class ExerciceWidget extends StatelessWidget {
   ExerciceWidget(
       {super.key,
-      required this.bodyPartImage,
+      required this.exerciseImage,
+      required this.exerciseName,
       required this.bodyPartName,
+      required this.nbrSer,
       required this.onTap});
   void Function() onTap;
-  final String bodyPartImage;
+  final String exerciseImage;
+  final String exerciseName;
   final String bodyPartName;
+  final String nbrSer;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +212,7 @@ class ExerciceWidget extends StatelessWidget {
           child: Center(
             child: ListTile(
               //tileColor: Colors.white,
-              contentPadding: const EdgeInsets.only(left: 5, right: 0.0),
+              contentPadding: const EdgeInsets.only(left: 5, right: 15),
               leading: SizedBox(
                 height: 70,
                 width: 60,
@@ -164,20 +222,24 @@ class ExerciceWidget extends StatelessWidget {
                 //   maxWidth: 95,
                 //   maxHeight: 90,
                 // ),
-                child: Image(
-                  image: AssetImage("assets/images/$bodyPartImage"),
+                child: Image.network(
+                  exerciseImage,
                   fit: BoxFit.cover,
                 ),
               ),
               title: Text(
-                bodyPartName,
+                exerciseName,
                 style:
                     const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
               ),
-              // trailing: Checkbox(
-              //   value: false,
-              //   onChanged: (newBool) {},
-              // ),
+              subtitle: Text(
+                bodyPartName,
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black45),
+              ),
+              trailing: Text("Series : $nbrSer"),
             ),
           ),
         ),

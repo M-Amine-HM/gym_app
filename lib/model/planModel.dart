@@ -4,6 +4,7 @@ class Plan {
   String nbrExercises;
   List exercises;
   List nbrsSeries;
+  // lista dynamique mch string
 
 //constructor
   Plan({

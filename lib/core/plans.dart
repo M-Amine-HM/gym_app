@@ -61,6 +61,7 @@ class _PlanScreenState extends State<PlansScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                //TODO: ali fi wost l plan container ydhaher kan awl 4 exercises wfam button afficher plus...
                 //TODO: Design des boutons et les couleurs
                 ElevatedButton(
                   onPressed: () {
@@ -160,7 +161,8 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
   Widget build(BuildContext context) {
     TextEditingController _planName = TextEditingController();
     TextEditingController _Exercisename = TextEditingController(text: "");
-
+    bool newPlanName = true;
+//gesture detector to rdismmiss the toast
     return Container(
       color: Colors.grey.shade200,
       child: Column(
@@ -179,171 +181,151 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                     borderRadius: BorderRadius.circular(10)),
                 fixedSize: Size((MediaQuery.of(context).size.width * 0.55), 45),
               ),
-              onPressed: () {
-                showDialog(
-                    useSafeArea: false,
-                    barrierDismissible: true,
-                    //barrierColor: Colors.amber.withOpacity(0.2),
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          title: const Text("Nom de Plan"),
-                          content: TextFormField(controller: _planName),
-                          actions: [
-                            TextButton(
-                                onPressed: () {
-                                  if (_planName.text.isEmpty) {
-                                    Navigator.pop(context);
-                                    Navigator.push(
+              onPressed: () async {
+                // ignore: use_build_context_synchronously
+                showToastWidget(
+                  reverseAnimation: StyledToastAnimation.fade,
+                  //dismissOtherToast: false,
+                  // animDuration: Duration(seconds: 4),
+                  context: context,
+                  animation: StyledToastAnimation.fade,
+                  isIgnoring: false,
+                  duration: Duration.zero,
+                  position: const StyledToastPosition(align: Alignment.center),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ModalBarrier(
+                        color: Colors.black.withOpacity(0.2),
+                        dismissible:
+                            false, // Prevents dismissing the toast by tapping outside
+                      ),
+                      Container(
+                        color: Colors.black,
+                        height: 50,
+                        width: 50,
+                      ),
+                      Container(
+                        height: 210,
+                        width: 320,
+                        padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 7,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Choisir un nom pour le plan",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+
+                            //error message in textformfield is not working in the toast so need other way
+                            TextFormField(
+                              controller: _planName,
+                              decoration: InputDecoration(
+                                //errorText: newPlanName ? null : "error",
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.5),
+                                ),
+                                hintText: "eg: Plan 1",
+                                //border: OutlineInputBorder(),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.red[700],
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  onPressed: () {
+                                    dismissAllToast(showAnim: true);
+                                  },
+                                  child: Text("Fermer",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                SizedBox(width: 10),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.blue[700],
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  onPressed: () async {
+                                    //bool notExist = true;
+                                    late List<dynamic>? allPlans;
+
+                                    allPlans =
+                                        await Api.getPlanByName(_planName.text);
+
+                                    if (_planName.text.isNotEmpty &&
+                                        allPlans!.isEmpty) {
+                                      dismissAllToast(showAnim: false);
+                                      late List<dynamic>? exercisesData;
+                                      Map chosed = {};
+                                      exercisesData = await Api.getExercises();
+
+                                      exercisesData!.forEach((key) {
+                                        chosed[key.name] = [false, 1];
+                                      });
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                ChooseExercisesScreen()));
-                                    // showToastWidget(
-                                    //   reverseAnimation:
-                                    //       StyledToastAnimation.fadeRotate,
-                                    //   // animDuration: Duration(seconds: 4),
-                                    //   context: context,
-                                    //   animation: StyledToastAnimation.fade,
-                                    //   isIgnoring: false,
-                                    //   duration: Duration.zero,
-                                    //   position: const StyledToastPosition(
-                                    //       align: Alignment.center),
-                                    //   Container(
-                                    //     color: Colors.white,
-                                    //     height:
-                                    //         MediaQuery.sizeOf(context).height *
-                                    //             0.9,
-                                    //     child: Center(
-                                    //       child: FutureBuilder(
-                                    //         future: _Exercisename.text.isEmpty
-                                    //             ? Api.getExercises()
-                                    //             : Api.getExercisesByName(
-                                    //                 _Exercisename.text),
-                                    //         builder: (BuildContext context,
-                                    //             AsyncSnapshot snapshot) {
-                                    //           if (!snapshot.hasData) {
-                                    //             return const Center(
-                                    //               child:
-                                    //                   CircularProgressIndicator(),
-                                    //             );
-                                    //           } else {
-                                    //             //TODO: if it return null , must handle the error
-                                    //             List<Exercise> data =
-                                    //                 snapshot.data;
-                                    //             return Padding(
-                                    //               padding:
-                                    //                   const EdgeInsets.fromLTRB(
-                                    //                       8, 0, 8, 0),
-                                    //               child: Column(
-                                    //                 children: [
-                                    //                   SizedBox(
-                                    //                     height: 20,
-                                    //                   ),
-                                    //                   TextButton(
-                                    //                     onPressed: () {
-                                    //                       dismissAllToast(
-                                    //                           showAnim: true);
-                                    //                     },
-                                    //                     child: Text(
-                                    //                       "Choisir des Exercices",
-                                    //                       style: TextStyle(
-                                    //                           fontSize: 22,
-                                    //                           fontWeight:
-                                    //                               FontWeight
-                                    //                                   .bold,
-                                    //                           color:
-                                    //                               Colors.black),
-                                    //                     ),
-                                    //                   ),
-                                    //                   SizedBox(
-                                    //                     height: 22,
-                                    //                   ),
-                                    //                   TextFormField(
-                                    //                     onFieldSubmitted:
-                                    //                         (value) {
-                                    //                       setState(() {});
-                                    //                     },
-                                    //                     controller:
-                                    //                         _Exercisename,
-                                    //                     onChanged: (value) {
-                                    //                       setState(() {
-                                    //                         value;
-                                    //                         _Exercisename;
-                                    //                       });
-                                    //                     },
-                                    //                     decoration: InputDecoration(
-                                    //                         filled: true,
-                                    //                         fillColor: Colors
-                                    //                             .grey[400],
-                                    //                         border: OutlineInputBorder(
-                                    //                             borderRadius:
-                                    //                                 BorderRadius
-                                    //                                     .circular(
-                                    //                                         15),
-                                    //                             borderSide:
-                                    //                                 BorderSide
-                                    //                                     .none),
-                                    //                         hintText:
-                                    //                             "eg : Pull Ups",
-                                    //                         prefixIcon: Icon(
-                                    //                             Icons.search),
-                                    //                         prefixIconColor:
-                                    //                             Colors.grey
-                                    //                                 .shade900),
-                                    //                   ),
-                                    //                   SizedBox(
-                                    //                     height: 10,
-                                    //                   ),
-                                    //                   Expanded(
-                                    //                     child: Container(
-                                    //                       child: ListView
-                                    //                           .separated(
-                                    //                               //shrinkWrap: true,
-                                    //                               itemBuilder: ((context, index) => ExerciceWidget(
-                                    //                                   checked:
-                                    //                                       false,
-                                    //                                   exerciseName:
-                                    //                                       data[index]
-                                    //                                           .name,
-                                    //                                   bodyPartImage:
-                                    //                                       "${Api.baseUrl}exercise/" +
-                                    //                                           data[index]
-                                    //                                               .image,
-                                    //                                   bodyPartName:
-                                    //                                       data[index]
-                                    //                                           .bodyPart,
-                                    //                                   onTap:
-                                    //                                       () {})),
-                                    //                               separatorBuilder:
-                                    //                                   (context,
-                                    //                                           index) =>
-                                    //                                       const SizedBox(
-                                    //                                         height:
-                                    //                                             0,
-                                    //                                       ),
-                                    //                               itemCount: data!
-                                    //                                   .length),
-                                    //                     ),
-                                    //                   ),
-                                    //                 ],
-                                    //               ),
-                                    //             );
-                                    //           }
-                                    //         },
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // );
-                                  }
-                                },
-                                child: const Text("Choisir les exercises")),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("close")),
+                                          builder: (context) =>
+                                              ChooseExercisesScreen(
+                                                  chosed: chosed,
+                                                  PlanName: _planName.text),
+                                        ),
+                                      );
+                                    } else {
+                                      setState(() {
+                                        newPlanName = false;
+                                      });
+                                      print("error message");
+                                      print(newPlanName);
+                                    }
+                                  },
+                                  child: Text("Choisir des exercices",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                              ],
+                            ),
                           ],
-                        ));
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               },
               label: Text(
                 "Créer un Plan",
@@ -363,16 +345,31 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                   //TODO: if it return null , must handle the error
                   List? data = snapshot.data;
                   return ListView.separated(
-                      itemBuilder: ((context, index) => PlanWidget(
-                            nbrExercises: data![index].nbrExercises,
-                            planName: data[index].planName,
-                            exercises: data[index].exercises,
-                            nbrsSeries: data[index].nbrsSeries,
+                      itemBuilder: ((context, index) => GestureDetector(
+                            child: PlanWidget(
+                                onTap: () {
+                                  dismissAllToast(showAnim: false);
+
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              OnGoingPlanScreen(
+                                                planToDo: snapshot.data[index],
+                                              )));
+                                },
+                                nbrExercises: data![index].nbrExercises,
+                                planName: snapshot.data[index].planName,
+                                exercises: snapshot.data[index].exercises,
+                                nbrsSeries: snapshot.data[index].nbrsSeries,
+                                theimage: (index + 1).toString()
+                                // (snapshot.data[index].planName).substring(0, 3),
+                                ),
                           )),
                       separatorBuilder: (context, index) => const SizedBox(
                             height: 13,
                           ),
-                      itemCount: data!.length);
+                      itemCount: snapshot.data.length);
                 }
               },
             ),
@@ -384,16 +381,20 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
 }
 
 class PlanWidget extends StatefulWidget {
-  const PlanWidget(
+  PlanWidget(
       {super.key,
       required this.planName,
       required this.nbrExercises,
       required this.exercises,
+      required this.theimage,
+      required this.onTap,
       required this.nbrsSeries});
   final String planName;
   final String nbrExercises;
   final List? exercises;
   final List? nbrsSeries;
+  final String theimage;
+  void Function() onTap;
 
   @override
   State<PlanWidget> createState() => _PlanWidgetState();
@@ -403,10 +404,7 @@ class _PlanWidgetState extends State<PlanWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => OnGoingPlanScreen()));
-      },
+      onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
           //shape: BoxShape.rectangle,
@@ -432,7 +430,7 @@ class _PlanWidgetState extends State<PlanWidget> {
                           //softWrap: true,
                         ),
                         Text(
-                          widget.nbrExercises,
+                          "Nombre des exercices : " + widget.nbrExercises,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w500),
                           //softWrap: true,
@@ -444,13 +442,27 @@ class _PlanWidgetState extends State<PlanWidget> {
                     width: 5,
                   ),
                   CircleAvatar(
-                    radius: 28,
-                    backgroundColor: Colors.red,
+                    child: Text(
+                      widget.theimage,
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    radius: 30,
+                    backgroundColor: Colors.red.shade500,
                   )
                 ],
               ),
               SizedBox(
                 height: 20,
+              ),
+              Text(
+                "les exercices : ",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 10,
               ),
               SizedBox(
                 child: ListView.separated(
@@ -490,15 +502,16 @@ class _ExNameAndNbrSetsRowState extends State<ExNameAndNbrSetsRow> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          flex: 3,
+          flex: 6,
           child: Text(
             widget.exerciseName,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
           ),
         ),
         Expanded(
+          flex: 2,
           child: Text(
-            widget.nbrSerie,
+            "series: " + widget.nbrSerie,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
           ),
         ),

@@ -57,23 +57,25 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
         leading: IconButton(
-            onPressed: () {
-              setState(() {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) =>
-                //           ProfileScreen(oneUser: widget.theUser)),
-                // );
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ProfileScreen(oneUser: widget.theUser!)),
-                    (route) => false);
-              });
-            },
-            icon: const Icon(Icons.arrow_back_sharp)),
+          onPressed: () {
+            setState(() {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) =>
+              //           ProfileScreen(oneUser: widget.theUser)),
+              // );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ProfileScreen(oneUser: widget.theUser!),
+                  ),
+                  (route) => false);
+            });
+          },
+          icon: const Icon(Icons.arrow_back_sharp),
+        ),
         centerTitle: true,
         title: Text("Modifier Profile",
             style: Theme.of(context).textTheme.headlineMedium),

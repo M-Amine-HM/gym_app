@@ -1,10 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/model/exerciseModel.dart';
+import 'package:gym_app/model/planModel.dart';
 import 'package:gym_app/services/Api.dart';
 
 class ChooseExercisesScreen extends StatefulWidget {
-  const ChooseExercisesScreen({super.key});
-
+  ChooseExercisesScreen(
+      {super.key, required this.PlanName, required this.chosed});
+  final String PlanName;
+  final Map chosed;
   @override
   State<ChooseExercisesScreen> createState() => _ChooseExercisesScreenState();
 }
@@ -12,11 +17,48 @@ class ChooseExercisesScreen extends StatefulWidget {
 class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
   TextEditingController _Exercisename = TextEditingController(text: "");
   late bool bo;
+  int length = 5; // Specify the length of the list
+  //TODO: mch heka a3ml map
+
+  List<bool> myList = List.generate(5, (index) => false);
+  late List<dynamic>? houdata;
+  // Map chosed = {};
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   houdata = Api.getExercises();
+
+  //   houdata!.forEach((key) {
+  //     chosed[key.name] = false;
+  //   });
+  //   print("$chosed new");
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
+        // leading: IconButton(
+        //   onPressed: () {
+        //     setState(() {
+        //       // Navigator.push(
+        //       //   context,
+        //       //   MaterialPageRoute(
+        //       //       builder: (context) =>
+        //       //           ProfileScreen(oneUser: widget.theUser)),
+        //       // );
+        //       Navigator.pushAndRemoveUntil(
+        //           context,
+        //           MaterialPageRoute(
+        //             builder: (context) => PlansScreen(),
+        //           ),
+        //           (route) => false);
+        //     });
+        //   },
+        //   icon: const Icon(Icons.arrow_back_sharp),
+        // ),
         centerTitle: true,
         backgroundColor: Colors.grey.shade200,
         surfaceTintColor: Colors.grey.shade200,
@@ -39,6 +81,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
             } else {
               //TODO: if it return null , must handle the error
               List<Exercise> data = snapshot.data;
+
               return Padding(
                 padding: const EdgeInsets.fromLTRB(10, 8, 10, 3),
                 child: Column(
@@ -96,31 +139,28 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                         child: ListView.separated(
                             //shrinkWrap: true,
                             itemBuilder: ((context, index) {
-                              int length =
-                                  data.length; // Specify the length of the list
-
-                              List<bool> myList =
-                                  List.generate(length, (index) => false);
-
-                              print(myList); // Output: [0, 1, 2, 3, 4]
+                              //print(myList); // Output: [0, 1, 2, 3, 4]
                               return ExerciceWidget(
-                                  tobeChecked: true,
-                                  isChecked: myList[index],
+                                  nbrsSerieFunction: (int p0) =>
+                                      widget.chosed[data[index].name][1] = p0,
+                                  isChecked: widget.chosed[data[index].name][0],
                                   exerciseName: data[index].name,
                                   bodyPartImage: "${Api.baseUrl}exercise/" +
                                       data[index].image,
                                   bodyPartName: data[index].bodyPart,
                                   onTap: () {
-                                    myList[index] = !(myList[index]);
+                                    widget.chosed[data[index].name][0] =
+                                        !(widget.chosed[data[index].name][0]);
+
                                     setState(() {});
-                                    print(myList[index]);
+                                    print("${widget.chosed} here");
                                   });
                             }),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(
                                   height: 0,
                                 ),
-                            itemCount: data!.length),
+                            itemCount: snapshot.data.length),
                       ),
                     ),
 
@@ -137,7 +177,80 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                                   (MediaQuery.of(context).size.width * 0.8),
                                   45),
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              List? exercises = [];
+                              List? listnbrsSeries = [];
+
+                              // Using a for loop
+                              // for (int i = 0; i < widget.chosed.length; i++) {
+                              //   //print(exercises[i]);
+                              //   if (myList[i] == true) {
+                              //     exercises
+                              //         .add((widget.chosed[i].name).toString());
+                              //   }
+
+                              // }
+
+                              widget.chosed.forEach((key, value) {
+                                if (value[0] == true) {
+                                  exercises.add((key).toString());
+                                }
+                                //widget.chosed[key] = false;
+                              });
+
+                              widget.chosed.forEach((key, value) {
+                                if (value[0] == true) {
+                                  listnbrsSeries.add((value[1]).toString());
+                                }
+
+                                //widget.chosed[key] = false;
+                              });
+                              print(exercises);
+                              print(listnbrsSeries);
+
+                              //TODO: nbrs series lezmou yet7at ml user mch par defaut =1
+                              // List<String> listnbrsSeries = List.generate(
+                              //     exercises.length, (index) => "1");
+
+                              String exsTostring = exercises.join(',');
+                              String nbrsSeriesTostring =
+                                  listnbrsSeries.join(',');
+                              Map<String, String> thedata = {
+                                "planName": widget.PlanName,
+                                "nbrExercises": (exercises.length).toString(),
+                                "exercises": exsTostring,
+                                "nbrsSeries": nbrsSeriesTostring,
+                              };
+
+                              // Map<dynamic, dynamic> hedata = {
+                              //   "planName": widget.PlanName,
+                              //   "nbrExercises": (exercises.length).toString(),
+                              //   "exercises": ["nbrsSerieFunction", "nbrsSerieFunctiona"],
+                              //   "nbrsSeries": "exes",
+                              // };
+
+// Create a Plan object using the fromMap function
+                              //Plan plan = Plan.fromMap(planData);
+                              //TODO: esm l plan ylzem ykun unique
+
+                              await Api.addPlan(thedata);
+                              // List<Plan>? thePlan;
+                              // String theid;
+                              // thePlan =
+                              //     await Api.getPlanByName(widget.PlanName);
+                              // await Api.updatePlan(thePlan![0].id, hedata);
+
+                              setState(() {
+                                PlansScreen();
+                                PlanContainerWidget();
+                              });
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PlansScreen()),
+                                  (route) => false);
+                              //Navigator.pop(context);
+                            },
                             child: Text(
                               "Comfirmer",
                               style:
@@ -165,69 +278,123 @@ class ExerciceWidget extends StatefulWidget {
       required this.bodyPartName,
       required this.exerciseName,
       required this.isChecked,
-      required this.tobeChecked,
-      required this.onTap});
+      required this.onTap,
+      required this.nbrsSerieFunction});
   void Function() onTap;
+  int Function(int) nbrsSerieFunction;
   final String bodyPartImage;
   final String bodyPartName;
   final String exerciseName;
-  bool? isChecked = false;
-  bool tobeChecked = false;
+  bool isChecked;
 
   @override
   State<ExerciceWidget> createState() => _ExerciceWidgetState();
 }
 
 class _ExerciceWidgetState extends State<ExerciceWidget> {
+  int nbrSerie = 1;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 7, right: 7, top: 5, bottom: 2),
-      child: Container(
-        height: 68,
-        decoration: BoxDecoration(
-          //shape: BoxShape.rectangle,
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Center(
-          child: ListTile(
-            onTap: widget.onTap,
-            //tileColor: Colors.white,
-            contentPadding: const EdgeInsets.only(left: 5, right: 0.0),
-            leading: SizedBox(
-              height: 70,
-              width: 60,
-              // constraints: BoxConstraints(
-              //   minWidth: 70,
-              //   minHeight: 40,
-              //   maxWidth: 95,
-              //   maxHeight: 90,
-              // ),
-              child: Image.network(
-                widget.bodyPartImage,
-                fit: BoxFit.cover,
+      child: InkWell(
+        onTap: widget.onTap,
+        child: Container(
+          height: widget.isChecked ? 120 : 80, //68 heifht ali ken
+          decoration: BoxDecoration(
+            //shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: [
+              ListTile(
+                //tileColor: Colors.white,
+                contentPadding: const EdgeInsets.only(left: 5, right: 0.0),
+                leading: SizedBox(
+                  height: 68,
+                  width: 60,
+                  // constraints: BoxConstraints(
+                  //   minWidth: 70,
+                  //   minHeight: 40,
+                  //   maxWidth: 95,
+                  //   maxHeight: 90,
+                  // ),
+                  child: Image.network(
+                    widget.bodyPartImage,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                title: Text(
+                  widget.exerciseName,
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                subtitle: Text(
+                  widget.bodyPartName,
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black45),
+                ),
+                trailing: IgnorePointer(
+                  ignoring: true,
+                  child: Checkbox(
+                    value: widget.isChecked,
+                    onChanged: (newBool) {
+                      setState(() {
+                        widget.isChecked = newBool!;
+                      });
+                    },
+                    checkColor: Colors.white, // Color of the check icon
+                    activeColor:
+                        Colors.black87, // Color of the checkbox when checked
+                    hoverColor: Colors.blue.withOpacity(
+                        0.1), // Color when hovering over the checkbox
+                    focusColor: Colors.blue
+                        .withOpacity(0.2), // Color when focused on the checkbox
+                    splashRadius: 20, // Adjust the splash radius as needed
+                  ),
+                ),
               ),
-            ),
-            title: Text(
-              widget.exerciseName,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            ),
-            subtitle: Text(
-              widget.bodyPartName,
-              style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black45),
-            ),
-            trailing: Checkbox(
-              value: widget.isChecked,
-              onChanged: (newBool) {
-                setState(() {
-                  widget.isChecked = newBool;
-                });
-              },
-            ),
+              if (widget.isChecked)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Series",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (nbrSerie > 1) {
+                          nbrSerie = nbrSerie - 1;
+                          //widget.nbrsSerieFunction = widget.nbrSerie as int Function();
+                          widget.nbrsSerieFunction(nbrSerie);
+                        }
+                        setState(() {});
+                      },
+                      icon: Icon(CupertinoIcons.minus_circle_fill),
+                      color: Colors.red[700],
+                    ),
+                    Text(
+                      (nbrSerie).toString(),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        nbrSerie = nbrSerie + 1;
+                        widget.nbrsSerieFunction(nbrSerie);
+                        setState(() {});
+                      },
+                      icon: Icon(CupertinoIcons.add_circled_solid),
+                      color: Colors.blue[700],
+                    ),
+                  ],
+                )
+            ],
           ),
         ),
       ),

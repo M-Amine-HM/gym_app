@@ -36,12 +36,23 @@ class Api {
   }
 
 //add plan
-  static addPlan(Map pdata) async {
-    print(pdata);
+  static addPlan(Map<String, dynamic> planData) async {
+    // Map<dynamic, dynamic> planData = plan.toMap();
+
+    // Print the data (optional)
+    print(planData);
     //ali mawjouda fl post fl nodeJS
     var url = Uri.parse(baseUrl + "add_plan");
     try {
-      final res = await http.post(url, body: pdata);
+      //var data = jsonEncode(planData);
+      //print(data);
+      Map<String, dynamic> a = {
+        'planName': "hasta el final",
+        'nbrExercises': "exercises nbrs",
+        'exercises': "a bb cc",
+        'nbrsSeries': "exes",
+      };
+      final res = await http.post(url, body: planData);
 
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body.toString());
@@ -51,7 +62,7 @@ class Api {
         //
       }
     } catch (e) {
-      print(e.toString());
+      print(e.toString() + " erreur add plan function ");
     }
   }
 
@@ -73,16 +84,6 @@ class Api {
           (value) => {
             plan.add(
               Plan(
-                // name: value['name'],
-                // email: value['email'],
-                // password: value['password'],
-                // sexe: value['sexe'],
-                // height: value['height'],
-                // weight: value['weight'],
-                // id: value['_id'],
-                // phoneNumber: value['phoneNumber'],
-                // adress: value['adress'],
-                // image: value['image'],
                 id: value['_id'],
                 planName: value['planName'],
                 nbrExercises: value['nbrExercises'],
@@ -100,6 +101,27 @@ class Api {
       } else {
         print("erreur lors la fonctions getByPlanName");
         return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static updatePlan(id, body) async {
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "update/$id");
+    try {
+      final res = await http.put(url, body: body);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        print(data);
+
+        //
+      } else {
+        print("failed updated plan");
         //
       }
     } catch (e) {
@@ -125,16 +147,6 @@ class Api {
           (value) => {
             plan.add(
               Plan(
-                // name: value['name'],
-                // email: value['email'],
-                // password: value['password'],
-                // sexe: value['sexe'],
-                // height: value['height'],
-                // weight: value['weight'],
-                // id: value['_id'],
-                // phoneNumber: value['phoneNumber'],
-                // adress: value['adress'],
-                // image: value['image'],
                 id: value['_id'],
                 planName: value['planName'],
                 nbrExercises: value['nbrExercises'],
@@ -150,12 +162,12 @@ class Api {
         return plan;
         //
       } else {
-        print("erreur lors la fonctions getByPlanName");
+        print("erreur lors la fonctions getPlan");
         return [];
         //
       }
     } catch (e) {
-      print(e.toString());
+      print(e.toString() + "erreur lors la fonctions getPlan");
     }
   }
 
@@ -331,6 +343,51 @@ class Api {
     //print(pdata);
     //ali mawjouda fl get fl nodeJS
     var url = Uri.parse(baseUrl + "getExercisesByBodyPart/$bodyPart");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['exercises'].forEach(
+          (value) => {
+            exercises.add(
+              Exercise(
+                bodyPart: value['bodyPart'],
+                name: value['name'],
+                image: value['image'],
+                video: value['video'],
+                description: value['description'],
+                instructions: value['instructions'],
+                id: value['_id'],
+                warnings: value['warnings'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(exercises);
+        //tretruni l lista bch nafffichah
+        return exercises;
+        //
+      } else {
+        print("erreur lors la fonctions getExercisesBybodyPart");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static getExercisesByPlan(planName) async {
+    //List<Product> products = [];
+    List<Exercise> exercises = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getExercisesByPlan/$planName");
     try {
       final res = await http.get(url);
 
