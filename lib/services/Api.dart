@@ -66,6 +66,32 @@ class Api {
     }
   }
 
+  static deletePlan(id) async {
+    //List<Product> products = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "deletePlan/$id");
+    try {
+      final res = await http.delete(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+
+        //tretruni l lista bch nafffichah
+
+        //
+      } else {
+        print("failed delete plan");
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   static getPlanByName(name) async {
     //List<Product> products = [];
     List<Plan> plan = [];
@@ -110,18 +136,43 @@ class Api {
 
   static updatePlan(id, body) async {
     //ali mawjouda fl get fl nodeJS
-    var url = Uri.parse(baseUrl + "update/$id");
+    var url = Uri.parse(baseUrl + "updatePlan/$id");
     try {
       final res = await http.put(url, body: body);
-
+      List<Plan> plan = [];
+      Plan? plan1;
       if (res.statusCode == 200) {
         //data ali bch tji ml serveur
         var data = jsonDecode(res.body.toString());
-        print(data);
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        // plan1!.id = data['plan']._id;
+        // plan1.planName = data['plan'].planName;
+        // plan1.nbrExercises = data['plan'].nbrExercises;
+        // plan1.exercises = data['plan'].exercises;
+        // plan1.nbrsSeries = data['plan'].nbrsSeries;
+        data['plan'].forEach(
+          (value) => {
+            plan.add(
+              Plan(
+                id: value['_id'],
+                planName: value['planName'],
+                nbrExercises: value['nbrExercises'],
+                exercises: value['exercises'],
+                nbrsSeries: value['nbrsSeries'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(plan1);
 
+        //tretruni l lista bch nafffichah
+        return plan[0];
         //
       } else {
-        print("failed updated plan");
+        print("erreur lors la fonctions getByPlanName");
+        return [];
         //
       }
     } catch (e) {
@@ -590,7 +641,7 @@ class Api {
     //List<Product> products = [];
     //print(pdata);
     //ali mawjouda fl get fl nodeJS
-    var url = Uri.parse(baseUrl + "delete/$id");
+    var url = Uri.parse(baseUrl + "deleteUser/$id");
     try {
       final res = await http.delete(url);
 

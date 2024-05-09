@@ -1,28 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:gym_app/core/planOnGoing.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/model/exerciseModel.dart';
 import 'package:gym_app/model/planModel.dart';
 import 'package:gym_app/services/Api.dart';
 
-class ChooseExercisesScreen extends StatefulWidget {
-  ChooseExercisesScreen(
-      {super.key, required this.PlanName, required this.chosed});
-  final String PlanName;
+class UpdatePlanScreen extends StatefulWidget {
+  UpdatePlanScreen(
+      {super.key,
+      required this.PlanName,
+      required this.chosed,
+      required this.PlanID});
+  String PlanName;
+  String PlanID;
   final Map chosed;
   @override
-  State<ChooseExercisesScreen> createState() => _ChooseExercisesScreenState();
+  State<UpdatePlanScreen> createState() => _UpdatePlanScreenState();
 }
 
-class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
+class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
   TextEditingController _Exercisename = TextEditingController(text: "");
   late bool bo;
   int length = 5; // Specify the length of the list
+  TextEditingController _planName = TextEditingController();
   //TODO: mch heka a3ml map
 
   List<bool> myList = List.generate(5, (index) => false);
   late List<dynamic>? houdata;
+
   // Map chosed = {};
   // @override
   // void initState() {
@@ -35,6 +42,14 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
   //   });
   //   print("$chosed new");
   // }
+  //
+  late String changedName;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    changedName = widget.PlanName;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +78,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
         centerTitle: true,
         backgroundColor: Colors.grey.shade200,
         surfaceTintColor: Colors.grey.shade200,
-        title: Text("Choisir des Exercices",
+        title: Text("Modifier le Plan",
             style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -87,22 +102,179 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                 padding: const EdgeInsets.fromLTRB(10, 8, 10, 3),
                 child: Column(
                   children: [
-                    // TextButton(
-                    //   onPressed: () {
-                    //     // dismissAllToast(
-                    //     //     showAnim: true);
-                    //   },
-                    //   child: Text(
-                    //     "Choisir des Exercices",
-                    //     style: TextStyle(
-                    //         fontSize: 22,
-                    //         fontWeight: FontWeight.bold,
-                    //         color: Colors.black),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 22,
-                    // ),
+                    Row(
+                      children: [
+                        Text(
+                          "Nom de Plan :",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          changedName,
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              showToastWidget(
+                                reverseAnimation: StyledToastAnimation.fade,
+                                //dismissOtherToast: false,
+                                // animDuration: Duration(seconds: 4),
+                                context: context,
+                                animation: StyledToastAnimation.fade,
+                                isIgnoring: false,
+                                duration: Duration.zero,
+                                position: const StyledToastPosition(
+                                    align: Alignment.center),
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    ModalBarrier(
+                                      color: Colors.black.withOpacity(0.2),
+                                      dismissible:
+                                          false, // Prevents dismissing the toast by tapping outside
+                                    ),
+                                    Container(
+                                      height: 210,
+                                      width: 280,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          30, 20, 30, 0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(18),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 2,
+                                            blurRadius: 7,
+                                            offset: Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Choisir un nouveau nom",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 10),
+
+                                          //error message in textformfield is not working in the toast so need other way
+                                          SizedBox(
+                                            width: 200,
+                                            child: TextFormField(
+                                              validator: (value) {},
+                                              // onSaved: (newValue) {
+                                              //   widget.PlanName = newValue!;
+                                              // },
+                                              controller: _planName,
+                                              decoration: InputDecoration(
+                                                //errorText: newPlanName ? null : "error",
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1.0),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.black,
+                                                      width: 1.5),
+                                                ),
+                                                hintText: "eg: Plan 1",
+                                                //border: OutlineInputBorder(),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 20),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.red[700],
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10))),
+                                                onPressed: () {
+                                                  dismissAllToast(
+                                                      showAnim: true);
+                                                },
+                                                child: Text("Annuler",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
+                                              SizedBox(width: 10),
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.blue[700],
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10))),
+                                                onPressed: () async {
+                                                  if (_planName
+                                                      .text.isNotEmpty) {
+                                                    changedName =
+                                                        _planName.text;
+
+                                                    setState(() {});
+                                                    dismissAllToast(
+                                                        showAnim: true);
+                                                    //a = "";
+                                                    _planName.clear();
+                                                  }
+                                                },
+                                                child: Text("Comfirmer",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.edit))
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     TextFormField(
                       onFieldSubmitted: (value) {
                         setState(() {});
@@ -142,6 +314,9 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                             itemBuilder: ((context, index) {
                               //print(myList); // Output: [0, 1, 2, 3, 4]
                               return ExerciceWidget(
+                                  nnbrSerie: int.parse(
+                                      (widget.chosed[data[index].name][1])
+                                          .toString()),
                                   nbrsSerieFunction: (int p0) =>
                                       widget.chosed[data[index].name][1] = p0,
                                   isChecked: widget.chosed[data[index].name][0],
@@ -164,7 +339,6 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                             itemCount: snapshot.data.length),
                       ),
                     ),
-
                     Expanded(
                       child: Container(
                         color: Colors.grey[200],
@@ -217,7 +391,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                               String nbrsSeriesTostring =
                                   listnbrsSeries.join(',');
                               Map<String, String> thedata = {
-                                "planName": widget.PlanName,
+                                "planName": changedName,
                                 "nbrExercises": (exercises.length).toString(),
                                 "exercises": exsTostring,
                                 "nbrsSeries": nbrsSeriesTostring,
@@ -235,12 +409,15 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                               //TODO: esm l plan ylzem ykun unique
 
                               if (exercises.isNotEmpty) {
-                                await Api.addPlan(thedata);
+                                await Api.updatePlan(widget.PlanID, thedata);
 
+                                List<Plan>? planToDo;
+                                planToDo = await Api.getPlanByName(changedName);
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PlansScreen()),
+                                        builder: (context) => OnGoingPlanScreen(
+                                            planToDo: planToDo![0])),
                                     (route) => false);
                               } else {
                                 showToast('Chosissez au minimaum un exercice',
@@ -282,6 +459,7 @@ class ExerciceWidget extends StatefulWidget {
       required this.exerciseName,
       required this.isChecked,
       required this.onTap,
+      required this.nnbrSerie,
       required this.nbrsSerieFunction});
   void Function() onTap;
   int Function(int) nbrsSerieFunction;
@@ -289,13 +467,20 @@ class ExerciceWidget extends StatefulWidget {
   final String bodyPartName;
   final String exerciseName;
   bool isChecked;
-
+  int nnbrSerie;
   @override
   State<ExerciceWidget> createState() => _ExerciceWidgetState();
 }
 
 class _ExerciceWidgetState extends State<ExerciceWidget> {
-  int nbrSerie = 1;
+  late int nbrSerie;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    nbrSerie = widget.nnbrSerie;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
