@@ -342,7 +342,7 @@ class _ExerciceWidgetState extends State<ExerciceWidget> {
                 ),
                 trailing: IgnorePointer(
                   ignoring: true,
-                  child: Checkbox(
+                  child: CupertinoCheckbox(
                     value: widget.isChecked,
                     onChanged: (newBool) {
                       setState(() {
@@ -352,11 +352,11 @@ class _ExerciceWidgetState extends State<ExerciceWidget> {
                     checkColor: Colors.white, // Color of the check icon
                     activeColor:
                         Colors.black87, // Color of the checkbox when checked
-                    hoverColor: Colors.blue.withOpacity(
-                        0.1), // Color when hovering over the checkbox
+                    //hoverColor: Colors.blue.withOpacity(
+                    //  0.1), // Color when hovering over the checkbox
                     focusColor: Colors.blue
                         .withOpacity(0.2), // Color when focused on the checkbox
-                    splashRadius: 20, // Adjust the splash radius as needed
+                    //splashRadius: 20, // Adjust the splash radius as needed
                   ),
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:gym_app/core/bodyPartDetails.dart';
 import 'package:gym_app/core/choseExercises.dart';
+import 'package:gym_app/core/doingPlan.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/core/updatePlan.dart';
 import 'package:gym_app/model/planModel.dart';
@@ -525,7 +526,14 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                                 (MediaQuery.of(context).size.width * 0.8),
                                 MediaQuery.of(context).size.height * 0.057),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => doingPlanScreen(
+                                          planDoing: widget.planToDo,
+                                        )));
+                          },
                           child: Text(
                             "DEBUT",
                             style: TextStyle(fontSize: 20, color: Colors.white),
