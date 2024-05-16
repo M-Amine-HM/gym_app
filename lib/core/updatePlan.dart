@@ -142,8 +142,11 @@ class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
                                           false, // Prevents dismissing the toast by tapping outside
                                     ),
                                     Container(
-                                      height: 210,
-                                      width: 280,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.25,
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.65,
                                       padding: const EdgeInsets.fromLTRB(
                                           30, 20, 30, 0),
                                       decoration: BoxDecoration(

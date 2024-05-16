@@ -66,6 +66,37 @@ class Api {
     }
   }
 
+  //add plan
+  static addPlanCompleted(Map<String, String> planData) async {
+    // Map<dynamic, dynamic> planData = plan.toMap();
+
+    // Print the data (optional)
+    print(planData);
+    //ali mawjouda fl post fl nodeJS
+    var url = Uri.parse(baseUrl + "addCompletedPlan");
+    try {
+      //var data = jsonEncode(planData);
+      //print(data);
+      // Map<String, dynamic> a = {
+      //   'planName': "hasta el final",
+      //   'nbrExercises': "exercises nbrs",
+      //   'exercises': "a bb cc",
+      //   'nbrsSeries': "exes",
+      // };
+      final res = await http.post(url, body: planData);
+
+      if (res.statusCode == 200) {
+        var data = jsonDecode(res.body.toString());
+        print(data);
+        //
+      } else {
+        //
+      }
+    } catch (e) {
+      print(e.toString() + " erreur add planCompleted function ");
+    }
+  }
+
   static deletePlan(id) async {
     //List<Product> products = [];
     //print(pdata);

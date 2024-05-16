@@ -200,14 +200,14 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                         dismissible:
                             false, // Prevents dismissing the toast by tapping outside
                       ),
+                      // Container(
+                      //   color: Colors.black,
+                      //   height: 50,
+                      //   width: 50,
+                      // ),
                       Container(
-                        color: Colors.black,
-                        height: 50,
-                        width: 50,
-                      ),
-                      Container(
-                        height: 210,
-                        width: 320,
+                        height: MediaQuery.sizeOf(context).height * 0.25,
+                        width: MediaQuery.sizeOf(context).width * 0.78,
                         padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(18),

@@ -15,11 +15,11 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _secureText = true;
-  TextEditingController _email = TextEditingController();
+  TextEditingController _email = TextEditingController(text: "amine@gmail.com");
   bool _textVerifyEmail = true;
   String _errorTextEmail = "Email forme non valide";
 
-  TextEditingController _password = TextEditingController();
+  TextEditingController _password = TextEditingController(text: "123456");
   bool _textVerifyPassword = true;
   bool isValidEmail(String email) {
     // Regular expression pattern for email validation

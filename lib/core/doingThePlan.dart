@@ -1,134 +1,53 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/model/planModel.dart';
 import 'package:gym_app/services/Api.dart';
 
-class doingPlanScreen extends StatefulWidget {
-  doingPlanScreen({super.key, required this.planDoing, required this.data
-      // required this.seriesCompleted,
-      // required this.seriesCompletedChecked
-      });
+class doingThePlanScreen extends StatelessWidget {
+  doingThePlanScreen({super.key, required this.planDoing, required this.data});
   Plan planDoing;
   List data;
-  // List<List> seriesCompleted;
-  // List<List> seriesCompletedChecked;
-  //late TextEditingController _weightController = TextEditingController();
-//late TextEditingController _repetitonController = TextEditingController();
-
   @override
-  State<doingPlanScreen> createState() => _doingPlanScreenState();
-}
+  Widget build(BuildContext context) {
+    List<List<dynamic>> generateListOfLists(
+        int numberOfLists, int lengthOfEachList, dynamic defaultValue) {
+      // Generate a list of lists
+      return List.generate(
+        numberOfLists,
+        (_) => List.generate(
+          lengthOfEachList,
+          (_) =>
+              defaultValue, // Here, you can specify the default value of each element in the inner list
+        ),
+      );
+    }
 
-List<List<dynamic>> generateListOfLists(
-    int numberOfLists, int lengthOfEachList, dynamic defaultValue) {
-  // Generate a list of lists
-  return List.generate(
-    numberOfLists,
-    (_) => List.generate(
-      lengthOfEachList,
-      (_) =>
-          defaultValue, // Here, you can specify the default value of each element in the inner list
-    ),
-  );
-}
-
-late List<List> seriesCompletedChecked = [];
-List<List<dynamic>> seriesCompleted = [];
-late List<TextEditingController> controllers;
-bool pauseTimer = false;
-
-class _doingPlanScreenState extends State<doingPlanScreen> {
-  // int timee = 0;
-  // int _seconds = 0;
-  // int _minutes = 0;
-  //Timer? _timer;
-  late Stream<int> _timerStream;
-  late StreamSubscription<int> _timerSubscription;
-  @override
-  void initState() {
-    super.initState();
-    // _timerStream = Stream<int>.periodic(Duration(seconds: 1), (i) => i)
-    //     .asBroadcastStream();
-    // _timerSubscription = _timerStream.listen((int tick) {
-    //   setState(() {
-    //     _seconds = tick % 60;
-    //     _minutes = tick ~/ 60;
-    //   });
-    // });
-
-    //startTimer();
+    late List<List> seriesCompletedChecked = [];
+    List<List<dynamic>> seriesCompleted = [];
     seriesCompletedChecked = generateListOfLists(
-      widget.planDoing.nbrsSeries.length,
+      planDoing.nbrsSeries.length,
       1,
       false,
     );
-    for (int i = 0; i < widget.planDoing.nbrsSeries.length; i++) {
-      for (int j = 0;
-          j < (int.parse(widget.planDoing.nbrsSeries[i]) - 1);
-          j++) {
+    for (int i = 0; i < planDoing.nbrsSeries.length; i++) {
+      for (int j = 0; j < (int.parse(planDoing.nbrsSeries[i]) - 1); j++) {
         seriesCompletedChecked[i].add(false);
       }
     }
-    for (int i = 0; i < (widget.planDoing.nbrsSeries).length; i++) {
+    for (int i = 0; i < (planDoing.nbrsSeries).length; i++) {
       List<dynamic> k = [];
-      for (int j = 0; j < int.parse(widget.planDoing.nbrsSeries[i]); j++) {
+      for (int j = 0; j < int.parse(planDoing.nbrsSeries[i]); j++) {
         k.add(["", ""]);
       }
       seriesCompleted.add(k);
     }
     print(seriesCompleted);
-  }
 
-  // @override
-  // void dispose() {
-  //   _timerSubscription.cancel();
-  //   //_timer?.cancel();
-  //   super.dispose();
-  // }
-
-  // void _timer() {
-  //   Timer.periodic(Duration(seconds: 1), (timer) {
-  //     setState(() {
-  //       timee++;
-  //     });
-  //   });
-  // }
-  // void startTimer() {
-  //   const oneSec = const Duration(seconds: 1);
-  //   _timer = Timer.periodic(oneSec, (Timer timer) {
-  //     if (pauseTimer == false) {
-  //       setState(() {
-  //         if (_seconds < 59) {
-  //           _seconds++;
-  //         } else {
-  //           _seconds = 0;
-  //           if (_minutes < 59) {
-  //             _minutes++;
-  //           } else {
-  //             // Reset the timer if it reaches maximum
-  //             _minutes = 0;
-  //           }
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    // String timerText =
-    //     '${_minutes.toString().padLeft(2, '0')}:${_seconds.toString().padLeft(2, '0')}';
-    final Stream<int> _timerStream =
-        Stream<int>.periodic(Duration(seconds: 1), (i) => i)
-            .asBroadcastStream();
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
-        title: Text(widget.planDoing.planName,
+        title: Text(planDoing.planName,
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
         actions: [
           // IconButton(
@@ -144,19 +63,19 @@ class _doingPlanScreenState extends State<doingPlanScreen> {
           //         )
           //       : Icon(Icons.pause, size: 35),
           // ),
-          StreamBuilder<int>(
-            stream: _timerStream,
-            builder: (context, snapshot) {
-              final int seconds = snapshot.data ?? 0;
-              final int minutes = seconds ~/ 60;
-              final int remainingSeconds = seconds % 60;
+          // StreamBuilder<int>(
+          //   stream: _timerStream,
+          //   builder: (context, snapshot) {
+          //     final int seconds = snapshot.data ?? 0;
+          //     final int minutes = seconds ~/ 60;
+          //     final int remainingSeconds = seconds % 60;
 
-              return Text(
-                '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}',
-                style: TextStyle(fontSize: 40),
-              );
-            },
-          ),
+          //     return Text(
+          //       '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}',
+          //       style: TextStyle(fontSize: 40),
+          //     );
+          //   },
+          // ),
           SizedBox(
             width: 30,
           )
@@ -186,11 +105,11 @@ class _doingPlanScreenState extends State<doingPlanScreen> {
                             //   );
                             // }));
                           },
-                          exerciseImage: "${Api.baseUrl}exercise/" +
-                              widget.data[index].image,
-                          exerciseName: widget.data[index].name,
-                          bodyPartName: widget.data[index].bodyPart,
-                          nbrSer: widget.planDoing.nbrsSeries[index],
+                          exerciseImage:
+                              "${Api.baseUrl}exercise/" + data[index].image,
+                          exerciseName: data[index].name,
+                          bodyPartName: data[index].bodyPart,
+                          nbrSer: planDoing.nbrsSeries[index],
                           serieChecked: seriesCompletedChecked[index],
                           weightsAndrepetitions: seriesCompleted[index],
                           // repetitions: widget.seriesCompleted[index],
@@ -198,7 +117,7 @@ class _doingPlanScreenState extends State<doingPlanScreen> {
                     // separatorBuilder: (context, index) => const SizedBox(
                     //       height: 0,
                     //     ),
-                    itemCount: widget.data!.length),
+                    itemCount: data.length),
               ),
               Container(
                 height: MediaQuery.sizeOf(context).height * 0.1,
@@ -254,15 +173,14 @@ class _doingPlanScreenState extends State<doingPlanScreen> {
                         }
 
                         print(selonEx);
-                        String exsTostring =
-                            widget.planDoing.exercises.join(',');
+                        String exsTostring = planDoing.exercises.join(',');
                         String nbrsSeriesTostring =
-                            widget.planDoing.nbrsSeries.join(',');
+                            planDoing.nbrsSeries.join(',');
 
                         Map<String, String> thedata = {
-                          "planName": widget.planDoing.planName,
+                          "planName": planDoing.planName,
                           "nbrExercises":
-                              (widget.planDoing.exercises.length).toString(),
+                              (planDoing.exercises.length).toString(),
                           "exercises": exsTostring,
                           "nbrsSeries": nbrsSeriesTostring,
                           "seriesCompleted": selonEx,
@@ -283,7 +201,7 @@ class _doingPlanScreenState extends State<doingPlanScreen> {
   }
 }
 
-class ExerciceWidget extends StatefulWidget {
+class ExerciceWidget extends StatelessWidget {
   ExerciceWidget({
     super.key,
     required this.exerciseImage,
@@ -304,167 +222,173 @@ class ExerciceWidget extends StatefulWidget {
   List weightsAndrepetitions;
   //List repetitions;
 
-//  List<TextEditingController> weightController;
-  @override
-  State<ExerciceWidget> createState() => _ExerciceWidgetState();
-}
+// //  List<TextEditingController> weightController;
+//   @override
+//   State<ExerciceWidget> createState() => _ExerciceWidgetState();
+// }
 
-class _ExerciceWidgetState extends State<ExerciceWidget> {
+// class _ExerciceWidgetState extends State<ExerciceWidget> {
   //List controllers = List.generate(6, (_) => TextEditingController());
-  bool clicked = false;
+
 //late TextEditingController _repetitonController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    bool clicked = false;
     return Padding(
-      padding: EdgeInsets.only(left: 7, right: 7, top: 5, bottom: 2),
-      child: Container(
-        height: clicked ? (100 + (65 * double.parse(widget.nbrSer))) : 80,
-        decoration: BoxDecoration(
-          //shape: BoxShape.rectangle,
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  clicked = !clicked;
-                  setState(() {});
-                },
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      child: clicked
-                          ? Icon(CupertinoIcons.arrowtriangle_down)
-                          : Icon(CupertinoIcons.arrowtriangle_up),
-                    ),
-                    Expanded(
-                      child: ListTile(
-                        //tileColor: Colors.white,
-                        contentPadding:
-                            const EdgeInsets.only(left: 5, right: 15),
-                        leading: SizedBox(
-                          height: 70,
-                          width: 60,
-                          // constraints: BoxConstraints(
-                          //   minWidth: 70,
-                          //   minHeight: 40,
-                          //   maxWidth: 95,
-                          //   maxHeight: 90,
-                          // ),
-                          child: Image.network(
-                            widget.exerciseImage,
-                            fit: BoxFit.cover,
+        padding: EdgeInsets.only(left: 7, right: 7, top: 5, bottom: 2),
+        child: StatefulBuilder(builder: (context, myStateFunc) {
+          return Container(
+            height: clicked ? (100 + (65 * double.parse(nbrSer))) : 80,
+            decoration: BoxDecoration(
+              //shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      myStateFunc(
+                        () {
+                          clicked = !clicked;
+                        },
+                      );
+                      //setState(() {});
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 30,
+                          child: clicked
+                              ? Icon(CupertinoIcons.arrowtriangle_down)
+                              : Icon(CupertinoIcons.arrowtriangle_up),
+                        ),
+                        Expanded(
+                          child: ListTile(
+                            //tileColor: Colors.white,
+                            contentPadding:
+                                const EdgeInsets.only(left: 5, right: 15),
+                            leading: SizedBox(
+                              height: 70,
+                              width: 60,
+                              // constraints: BoxConstraints(
+                              //   minWidth: 70,
+                              //   minHeight: 40,
+                              //   maxWidth: 95,
+                              //   maxHeight: 90,
+                              // ),
+                              child: Image.network(
+                                exerciseImage,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            title: Text(
+                              exerciseName,
+                              style: const TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(
+                              bodyPartName,
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black45),
+                            ),
+                            trailing: Text("Series : ${nbrSer}"),
                           ),
                         ),
-                        title: Text(
-                          widget.exerciseName,
-                          style: const TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text(
-                          widget.bodyPartName,
-                          style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black45),
-                        ),
-                        trailing: Text("Series : ${widget.nbrSer}"),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  if (clicked)
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          child: ListView.separated(
+                            physics: NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, index) => SizedBox(
+                              height: 8,
+                            ),
+                            shrinkWrap: true,
+                            itemBuilder: ((context, index) => SetContainer(
+                                  contentRep: "",
+                                  contentWeight: "",
+                                  //TODO: l checkbox matet3ada kan maykunu l donnes m3ebiin;
+                                  //weightController: controllers[index],
+                                  // weight: widget.weightsAndrepetitions[index],
+                                  // repetition: widget.weightsAndrepetitions[index],
+                                  weightFunction: (p0) {
+                                    weightsAndrepetitions[index][0] = p0;
+                                    // String a = p0;
+                                    // int i = widget.weightsAndrepetitions[index]
+                                    //     .indexOf(';');
+                                    // int l =
+                                    //     widget.weightsAndrepetitions[index].length;
+
+                                    // if (i > 0) {
+                                    //   String sliced = widget
+                                    //       .weightsAndrepetitions[index]
+                                    //       .substring(i, l);
+
+                                    //   widget.weightsAndrepetitions[index] =
+                                    //       p0 + sliced;
+                                    // } else if (widget
+                                    //         .weightsAndrepetitions[index] ==
+                                    //     "") {
+                                    //   widget.weightsAndrepetitions[index] = a;
+                                    // } else {
+                                    //   widget.weightsAndrepetitions[index] =
+                                    //       a + widget.weightsAndrepetitions[index];
+                                    // }
+
+                                    return p0;
+                                  },
+                                  repetetionFunction: (p1) {
+                                    //print("fl setcontainer  " + index.toString());
+                                    weightsAndrepetitions[index][1] = p1;
+                                    // int i = widget.weightsAndrepetitions[index]
+                                    //     .indexOf(';');
+                                    // late String sliced;
+                                    // if (i > 0) {
+                                    //   sliced = widget.weightsAndrepetitions[index]
+                                    //       .substring(0, i);
+                                    //   // widget.weightsAndrepetitions[index] = "";
+                                    //   widget.weightsAndrepetitions[index] =
+                                    //       sliced + ";" + p1;
+                                    // } else if (widget
+                                    //         .weightsAndrepetitions[index] !=
+                                    //     "") {
+                                    //   //widget.weightsAndrepetitions[index] = "";
+                                    //   widget.weightsAndrepetitions[index] =
+                                    //       widget.weightsAndrepetitions[index] +
+                                    //           ";" +
+                                    //           p1;
+                                    // } else {
+                                    //   widget.weightsAndrepetitions[index] = p1;
+                                    // }
+                                    return p1;
+                                  },
+                                  isChecked: serieChecked[index],
+                                  chekedSetFunction: (p0) =>
+                                      serieChecked[index] = p0,
+                                  serieNumber: (index + 1).toString(),
+                                )),
+                            itemCount: int.parse(nbrSer),
+                          ),
+                        ),
+                      ],
+                    )
+                ],
               ),
-              if (clicked)
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      child: ListView.separated(
-                        physics: NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) => SizedBox(
-                          height: 8,
-                        ),
-                        shrinkWrap: true,
-                        itemBuilder: ((context, index) => SetContainer(
-                              contentRep: "",
-                              contentWeight: "",
-                              //TODO: l checkbox matet3ada kan maykunu l donnes m3ebiin;
-                              //weightController: controllers[index],
-                              // weight: widget.weightsAndrepetitions[index],
-                              // repetition: widget.weightsAndrepetitions[index],
-                              weightFunction: (p0) {
-                                widget.weightsAndrepetitions[index][0] = p0;
-                                // String a = p0;
-                                // int i = widget.weightsAndrepetitions[index]
-                                //     .indexOf(';');
-                                // int l =
-                                //     widget.weightsAndrepetitions[index].length;
-
-                                // if (i > 0) {
-                                //   String sliced = widget
-                                //       .weightsAndrepetitions[index]
-                                //       .substring(i, l);
-
-                                //   widget.weightsAndrepetitions[index] =
-                                //       p0 + sliced;
-                                // } else if (widget
-                                //         .weightsAndrepetitions[index] ==
-                                //     "") {
-                                //   widget.weightsAndrepetitions[index] = a;
-                                // } else {
-                                //   widget.weightsAndrepetitions[index] =
-                                //       a + widget.weightsAndrepetitions[index];
-                                // }
-
-                                return p0;
-                              },
-                              repetetionFunction: (p1) {
-                                //print("fl setcontainer  " + index.toString());
-                                widget.weightsAndrepetitions[index][1] = p1;
-                                // int i = widget.weightsAndrepetitions[index]
-                                //     .indexOf(';');
-                                // late String sliced;
-                                // if (i > 0) {
-                                //   sliced = widget.weightsAndrepetitions[index]
-                                //       .substring(0, i);
-                                //   // widget.weightsAndrepetitions[index] = "";
-                                //   widget.weightsAndrepetitions[index] =
-                                //       sliced + ";" + p1;
-                                // } else if (widget
-                                //         .weightsAndrepetitions[index] !=
-                                //     "") {
-                                //   //widget.weightsAndrepetitions[index] = "";
-                                //   widget.weightsAndrepetitions[index] =
-                                //       widget.weightsAndrepetitions[index] +
-                                //           ";" +
-                                //           p1;
-                                // } else {
-                                //   widget.weightsAndrepetitions[index] = p1;
-                                // }
-                                return p1;
-                              },
-                              isChecked: widget.serieChecked[index],
-                              chekedSetFunction: (p0) =>
-                                  widget.serieChecked[index] = p0,
-                              serieNumber: (index + 1).toString(),
-                            )),
-                        itemCount: int.parse(widget.nbrSer),
-                      ),
-                    ),
-                  ],
-                )
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        }));
   }
 }
 
@@ -493,44 +417,19 @@ class SetContainer extends StatefulWidget {
   bool isChecked;
   String contentWeight;
   String contentRep;
-  //TextEditingController weightController;
-//TextEditingController _repetitonController;
-  //ba3d bch ki tetsaker w t3awed tet7al kanha checked to93d checked
 
   @override
   State<SetContainer> createState() => _SetContainerState();
 }
 
-late bool serieChecked;
-late TextEditingController _weightController = TextEditingController();
-// late TextEditingController _repetitonController = TextEditingController();
-
 class _SetContainerState extends State<SetContainer> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // if (widget.test == "") {
-    //   serieChecked = widget.chekedSetFunction(false);
-    // } else {
-    //   serieChecked = widget.chekedSetFunction(true);
-    // }
-    serieChecked = widget.isChecked;
-    //_weightController = widget.weightController;
-    // _weightController.text = widget.weight;
-    //_repetitonController.text = widget.repetition;
-  }
-
-  // void _submitForm(String value) {
-  //   // Handle form submission logic here
-  //   //String fieldValue = _name.text;
-  //   //print('Field Value: $fieldValue');
-  //   widget.weightFunction(value);
-  //   setState(() {});
-  // }
-
+  //TextEditingController weightController;
   @override
   Widget build(BuildContext context) {
+    late bool serieChecked;
+    late TextEditingController _weightController = TextEditingController();
+    serieChecked = widget.isChecked;
+    //return StatefulBuilder(builder: (context, statefunc) {
     return Container(
       decoration: BoxDecoration(
         //shape: BoxShape.rectangle,
@@ -549,13 +448,16 @@ class _SetContainerState extends State<SetContainer> {
             value: serieChecked,
             onChanged: (newBool) {
               //ndhaer toast wela nbadel lon l setcontainer kan l fields far8iin
-              setState(() {
-                if (widget.contentWeight.isNotEmpty &&
-                    widget.contentRep.isNotEmpty) {
-                  serieChecked = newBool!;
-                  widget.chekedSetFunction(newBool);
-                }
-              });
+              //if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
+              //  statefunc(
+              //() {
+              serieChecked = newBool!;
+              widget.chekedSetFunction(newBool);
+              // },
+              //);
+              //  }
+              // setState(() {
+              // });
             },
             checkColor: Colors.green, // Color of the check icon
             activeColor: Colors.white,
@@ -575,8 +477,12 @@ class _SetContainerState extends State<SetContainer> {
             child: TextFormField(
               //controller: _weightController,
               onChanged: (value) {
+                //statefunc(
+                //() {
                 widget.contentWeight = value;
                 widget.weightFunction(value);
+                // },
+                //);
               },
               textAlignVertical: TextAlignVertical.top,
               style: TextStyle(
@@ -631,8 +537,12 @@ class _SetContainerState extends State<SetContainer> {
             width: 60,
             child: TextFormField(
               onChanged: (value) {
+                //statefunc(
+                //() {
                 widget.contentRep = value;
                 widget.repetetionFunction(value);
+                //},
+                //);
               },
               textAlignVertical: TextAlignVertical.top,
               style: TextStyle(
@@ -688,5 +598,6 @@ class _SetContainerState extends State<SetContainer> {
         ],
       ),
     );
+    //});
   }
 }
