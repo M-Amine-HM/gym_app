@@ -12,7 +12,7 @@ import 'package:gym_app/model/userModel.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String ipAdress = "192.168.1.12";
+  static const String ipAdress = "192.168.222.218";
   static const baseUrl = "http://$ipAdress:2000/api/";
 
   //static String ipAdress = "192.168.81.218";

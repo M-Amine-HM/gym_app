@@ -1,83 +1,147 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_app/core/doingPlan.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/providers/checked_provider.dart';
+import 'package:gym_app/providers/timer_provider.dart';
 import 'package:gym_app/services/Api.dart';
+import 'package:provider/provider.dart';
 
-class doingThePlanScreen extends StatelessWidget {
+class doingThePlanScreen extends StatefulWidget {
   doingThePlanScreen({super.key, required this.planDoing, required this.data});
   Plan planDoing;
   List data;
-  @override
-  Widget build(BuildContext context) {
-    List<List<dynamic>> generateListOfLists(
-        int numberOfLists, int lengthOfEachList, dynamic defaultValue) {
-      // Generate a list of lists
-      return List.generate(
-        numberOfLists,
-        (_) => List.generate(
-          lengthOfEachList,
-          (_) =>
-              defaultValue, // Here, you can specify the default value of each element in the inner list
-        ),
-      );
-    }
 
-    late List<List> seriesCompletedChecked = [];
-    List<List<dynamic>> seriesCompleted = [];
+  @override
+  State<doingThePlanScreen> createState() => _doingThePlanScreenState();
+}
+
+class _doingThePlanScreenState extends State<doingThePlanScreen> {
+  List<List<dynamic>> generateListOfLists(
+      int numberOfLists, int lengthOfEachList, dynamic defaultValue) {
+    // Generate a list of lists
+    return List.generate(
+      numberOfLists,
+      (_) => List.generate(
+        lengthOfEachList,
+        (_) =>
+            defaultValue, // Here, you can specify the default value of each element in the inner list
+      ),
+    );
+  }
+
+  late List<List> seriesCompletedChecked = [];
+  List<List<dynamic>> seriesCompleted = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //context.read<CheckedProvider>().seriesChecked;
+    // final checkedProvider =
+    //     Provider.of<CheckedProvider>(context, listen: false);
+    final timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    //timerProvider.resetTimer();
+    // timerProvider.changeSeconds();
+    //checkedProvider.seriesChecked = seriesCompletedChecked;
+    timerProvider.startTimer();
+    timerProvider.timerOn = true;
+    // sseriesCompletedChecked = seriesCompletedChecked;
+    // print("object");
+    // print(sseriesCompletedChecked);
+
     seriesCompletedChecked = generateListOfLists(
-      planDoing.nbrsSeries.length,
+      widget.planDoing.nbrsSeries.length,
       1,
       false,
     );
-    for (int i = 0; i < planDoing.nbrsSeries.length; i++) {
-      for (int j = 0; j < (int.parse(planDoing.nbrsSeries[i]) - 1); j++) {
+    for (int i = 0; i < widget.planDoing.nbrsSeries.length; i++) {
+      for (int j = 0;
+          j < (int.parse(widget.planDoing.nbrsSeries[i]) - 1);
+          j++) {
         seriesCompletedChecked[i].add(false);
       }
     }
-    for (int i = 0; i < (planDoing.nbrsSeries).length; i++) {
+    for (int i = 0; i < (widget.planDoing.nbrsSeries).length; i++) {
       List<dynamic> k = [];
-      for (int j = 0; j < int.parse(planDoing.nbrsSeries[i]); j++) {
+      for (int j = 0; j < int.parse(widget.planDoing.nbrsSeries[i]); j++) {
         k.add(["", ""]);
       }
       seriesCompleted.add(k);
     }
     print(seriesCompleted);
+    //bool pauseTimer = context.watch<TimerProvider>().isTimerStarted;
+    // ab = seriesCompletedChecked;
+    // print("object");
+    // print(ab);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final timerProvider = Provider.of<TimerProvider>(context);
+    // context.read<CheckedProvider>().updateSeriesChecked(ab);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              //Toast t9olou t7b to5rej ??
+              timerProvider.timerOn = false;
+              timerProvider.resetTimer();
+              sseriesCompletedChecked = [];
+
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back)),
         backgroundColor: Colors.grey.shade200,
-        title: Text(planDoing.planName,
+        title: Text(widget.planDoing.planName,
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
         actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     setState(() {
-          //       pauseTimer = !pauseTimer;
-          //     });
-          //   },
-          //   icon: pauseTimer
-          //       ? Icon(
-          //           Icons.play_arrow_sharp,
-          //           size: 35,
-          //         )
-          //       : Icon(Icons.pause, size: 35),
-          // ),
-          // StreamBuilder<int>(
-          //   stream: _timerStream,
-          //   builder: (context, snapshot) {
-          //     final int seconds = snapshot.data ?? 0;
-          //     final int minutes = seconds ~/ 60;
-          //     final int remainingSeconds = seconds % 60;
-
-          //     return Text(
-          //       '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}',
-          //       style: TextStyle(fontSize: 40),
-          //     );
-          //   },
-          // ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (!(timerProvider.timerOn))
+                IconButton(
+                  onPressed: () {
+                    timerProvider.timerOn = true;
+                    timerProvider.startTimer();
+                  },
+                  icon: Icon(
+                    Icons.play_arrow_rounded,
+                    size: 30,
+                  ),
+                ),
+              //SizedBox(width: 10),
+              if (timerProvider.timerOn)
+                IconButton(
+                  onPressed: () {
+                    timerProvider.timerOn = false;
+                    timerProvider.stopTimer();
+                  },
+                  icon: Icon(
+                    Icons.pause,
+                    size: 30,
+                  ),
+                ),
+              // SizedBox(width: 10),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     timerProvider.timerOn = false;
+              //     timerProvider.resetTimer();
+              //   },
+              //   child: Text('Reset'),
+              // ),
+            ],
+          ),
           SizedBox(
-            width: 30,
+            width: 10,
+          ),
+          Text(
+            timerProvider.formatTime(),
+            style: TextStyle(fontSize: 30.0),
+          ),
+          SizedBox(
+            width: 25,
           )
         ],
       ),
@@ -95,6 +159,7 @@ class doingThePlanScreen extends StatelessWidget {
                 ),
                 child: ListView.builder(
                     itemBuilder: ((context, index) => ExerciceWidget(
+                          theEx: index,
                           //weightController: controllers,
                           onTap: () {
                             print("fl exXidget" + index.toString());
@@ -105,11 +170,11 @@ class doingThePlanScreen extends StatelessWidget {
                             //   );
                             // }));
                           },
-                          exerciseImage:
-                              "${Api.baseUrl}exercise/" + data[index].image,
-                          exerciseName: data[index].name,
-                          bodyPartName: data[index].bodyPart,
-                          nbrSer: planDoing.nbrsSeries[index],
+                          exerciseImage: "${Api.baseUrl}exercise/" +
+                              widget.data[index].image,
+                          exerciseName: widget.data[index].name,
+                          bodyPartName: widget.data[index].bodyPart,
+                          nbrSer: widget.planDoing.nbrsSeries[index],
                           serieChecked: seriesCompletedChecked[index],
                           weightsAndrepetitions: seriesCompleted[index],
                           // repetitions: widget.seriesCompleted[index],
@@ -117,7 +182,7 @@ class doingThePlanScreen extends StatelessWidget {
                     // separatorBuilder: (context, index) => const SizedBox(
                     //       height: 0,
                     //     ),
-                    itemCount: data.length),
+                    itemCount: widget.data.length),
               ),
               Container(
                 height: MediaQuery.sizeOf(context).height * 0.1,
@@ -146,13 +211,13 @@ class doingThePlanScreen extends StatelessWidget {
                         List<List<dynamic>> list = seriesCompleted;
                         List<List<dynamic>> listChecked =
                             seriesCompletedChecked;
-                        // for (int i = 0; i < (listChecked.length); i++) {
-                        //   for (int j = 0; j < (listChecked[i].length); j++) {
-                        //     if (listChecked[i][j] == false) {
-                        //       list[i][j] = ["n", "n"];
-                        //     }
-                        //   }
-                        // }
+                        for (int i = 0; i < (listChecked.length); i++) {
+                          for (int j = 0; j < (listChecked[i].length); j++) {
+                            if (listChecked[i][j] == false) {
+                              list[i][j] = ["n", "n"];
+                            }
+                          }
+                        }
                         print("ahaya");
                         print(list);
                         String selonEx = "";
@@ -173,21 +238,23 @@ class doingThePlanScreen extends StatelessWidget {
                         }
 
                         print(selonEx);
-                        String exsTostring = planDoing.exercises.join(',');
+                        String exsTostring =
+                            widget.planDoing.exercises.join(',');
                         String nbrsSeriesTostring =
-                            planDoing.nbrsSeries.join(',');
+                            widget.planDoing.nbrsSeries.join(',');
 
                         Map<String, String> thedata = {
-                          "planName": planDoing.planName,
+                          "planName": widget.planDoing.planName,
                           "nbrExercises":
-                              (planDoing.exercises.length).toString(),
+                              (widget.planDoing.exercises.length).toString(),
                           "exercises": exsTostring,
                           "nbrsSeries": nbrsSeriesTostring,
                           "seriesCompleted": selonEx,
                         };
-                        // Api.addPlanCompleted(thedata);
+                        Api.addPlanCompleted(thedata);
 
                         print(seriesCompletedChecked);
+                        print(thedata);
                       },
                     ),
                   ],
@@ -211,6 +278,7 @@ class ExerciceWidget extends StatelessWidget {
     required this.serieChecked,
     required this.onTap,
     required this.weightsAndrepetitions,
+    required this.theEx,
     //required this.weightController,
   });
   void Function() onTap;
@@ -220,179 +288,182 @@ class ExerciceWidget extends StatelessWidget {
   final String nbrSer;
   List serieChecked;
   List weightsAndrepetitions;
+  int theEx;
+
+  bool clicked = true;
+
   //List repetitions;
-
-// //  List<TextEditingController> weightController;
-//   @override
-//   State<ExerciceWidget> createState() => _ExerciceWidgetState();
-// }
-
-// class _ExerciceWidgetState extends State<ExerciceWidget> {
-  //List controllers = List.generate(6, (_) => TextEditingController());
-
-//late TextEditingController _repetitonController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    bool clicked = false;
     return Padding(
         padding: EdgeInsets.only(left: 7, right: 7, top: 5, bottom: 2),
-        child: StatefulBuilder(builder: (context, myStateFunc) {
-          return Container(
-            height: clicked ? (100 + (65 * double.parse(nbrSer))) : 80,
-            decoration: BoxDecoration(
-              //shape: BoxShape.rectangle,
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      myStateFunc(
-                        () {
-                          clicked = !clicked;
-                        },
-                      );
-                      //setState(() {});
-                    },
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          child: clicked
-                              ? Icon(CupertinoIcons.arrowtriangle_down)
-                              : Icon(CupertinoIcons.arrowtriangle_up),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            //tileColor: Colors.white,
-                            contentPadding:
-                                const EdgeInsets.only(left: 5, right: 15),
-                            leading: SizedBox(
-                              height: 70,
-                              width: 60,
-                              // constraints: BoxConstraints(
-                              //   minWidth: 70,
-                              //   minHeight: 40,
-                              //   maxWidth: 95,
-                              //   maxHeight: 90,
-                              // ),
-                              child: Image.network(
-                                exerciseImage,
-                                fit: BoxFit.cover,
-                              ),
+        child: Container(
+          height: clicked ? (100 + (65 * double.parse(nbrSer))) : 80,
+          decoration: BoxDecoration(
+            //shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    //myStateFunc(
+                    //() {
+
+                    //},
+                    //);
+                    //setState(() {
+                    clicked = !clicked;
+                    // });
+                  },
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        child: clicked
+                            ? Icon(CupertinoIcons.arrowtriangle_down)
+                            : Icon(CupertinoIcons.arrowtriangle_up),
+                      ),
+                      Expanded(
+                        child: ListTile(
+                          //tileColor: Colors.white,
+                          contentPadding:
+                              const EdgeInsets.only(left: 5, right: 15),
+                          leading: SizedBox(
+                            height: 70,
+                            width: 60,
+                            // constraints: BoxConstraints(
+                            //   minWidth: 70,
+                            //   minHeight: 40,
+                            //   maxWidth: 95,
+                            //   maxHeight: 90,
+                            // ),
+                            child: Image.network(
+                              exerciseImage,
+                              fit: BoxFit.cover,
                             ),
-                            title: Text(
-                              exerciseName,
-                              style: const TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w600),
-                            ),
-                            subtitle: Text(
-                              bodyPartName,
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black45),
-                            ),
-                            trailing: Text("Series : ${nbrSer}"),
                           ),
+                          title: Text(
+                            exerciseName,
+                            style: const TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text(
+                            bodyPartName,
+                            style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black45),
+                          ),
+                          trailing: Text("Series : ${nbrSer}"),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  if (clicked)
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: ListView.separated(
-                            physics: NeverScrollableScrollPhysics(),
-                            separatorBuilder: (context, index) => SizedBox(
-                              height: 8,
-                            ),
-                            shrinkWrap: true,
-                            itemBuilder: ((context, index) => SetContainer(
-                                  contentRep: "",
-                                  contentWeight: "",
-                                  //TODO: l checkbox matet3ada kan maykunu l donnes m3ebiin;
-                                  //weightController: controllers[index],
-                                  // weight: widget.weightsAndrepetitions[index],
-                                  // repetition: widget.weightsAndrepetitions[index],
-                                  weightFunction: (p0) {
-                                    weightsAndrepetitions[index][0] = p0;
-                                    // String a = p0;
-                                    // int i = widget.weightsAndrepetitions[index]
-                                    //     .indexOf(';');
-                                    // int l =
-                                    //     widget.weightsAndrepetitions[index].length;
-
-                                    // if (i > 0) {
-                                    //   String sliced = widget
-                                    //       .weightsAndrepetitions[index]
-                                    //       .substring(i, l);
-
-                                    //   widget.weightsAndrepetitions[index] =
-                                    //       p0 + sliced;
-                                    // } else if (widget
-                                    //         .weightsAndrepetitions[index] ==
-                                    //     "") {
-                                    //   widget.weightsAndrepetitions[index] = a;
-                                    // } else {
-                                    //   widget.weightsAndrepetitions[index] =
-                                    //       a + widget.weightsAndrepetitions[index];
-                                    // }
-
-                                    return p0;
-                                  },
-                                  repetetionFunction: (p1) {
-                                    //print("fl setcontainer  " + index.toString());
-                                    weightsAndrepetitions[index][1] = p1;
-                                    // int i = widget.weightsAndrepetitions[index]
-                                    //     .indexOf(';');
-                                    // late String sliced;
-                                    // if (i > 0) {
-                                    //   sliced = widget.weightsAndrepetitions[index]
-                                    //       .substring(0, i);
-                                    //   // widget.weightsAndrepetitions[index] = "";
-                                    //   widget.weightsAndrepetitions[index] =
-                                    //       sliced + ";" + p1;
-                                    // } else if (widget
-                                    //         .weightsAndrepetitions[index] !=
-                                    //     "") {
-                                    //   //widget.weightsAndrepetitions[index] = "";
-                                    //   widget.weightsAndrepetitions[index] =
-                                    //       widget.weightsAndrepetitions[index] +
-                                    //           ";" +
-                                    //           p1;
-                                    // } else {
-                                    //   widget.weightsAndrepetitions[index] = p1;
-                                    // }
-                                    return p1;
-                                  },
-                                  isChecked: serieChecked[index],
-                                  chekedSetFunction: (p0) =>
-                                      serieChecked[index] = p0,
-                                  serieNumber: (index + 1).toString(),
-                                )),
-                            itemCount: int.parse(nbrSer),
+                ),
+                if (clicked)
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        child: ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
+                          separatorBuilder: (context, index) => SizedBox(
+                            height: 8,
                           ),
+                          shrinkWrap: true,
+                          itemBuilder: ((context, index) => SetContainer(
+                                contentRep: "",
+                                contentWeight: "",
+                                //TODO: l checkbox matet3ada kan maykunu l donnes m3ebiin;
+                                //weightController: controllers[index],
+                                // weight: widget.weightsAndrepetitions[index],
+                                // repetition: widget.weightsAndrepetitions[index],
+                                weightFunction: (p0) {
+                                  weightsAndrepetitions[index][0] = p0;
+                                  // String a = p0;
+                                  // int i = widget.weightsAndrepetitions[index]
+                                  //     .indexOf(';');
+                                  // int l =
+                                  //     widget.weightsAndrepetitions[index].length;
+
+                                  // if (i > 0) {
+                                  //   String sliced = widget
+                                  //       .weightsAndrepetitions[index]
+                                  //       .substring(i, l);
+
+                                  //   widget.weightsAndrepetitions[index] =
+                                  //       p0 + sliced;
+                                  // } else if (widget
+                                  //         .weightsAndrepetitions[index] ==
+                                  //     "") {
+                                  //   widget.weightsAndrepetitions[index] = a;
+                                  // } else {
+                                  //   widget.weightsAndrepetitions[index] =
+                                  //       a + widget.weightsAndrepetitions[index];
+                                  // }
+
+                                  return p0;
+                                },
+                                repetetionFunction: (p1) {
+                                  //print("fl setcontainer  " + index.toString());
+                                  weightsAndrepetitions[index][1] = p1;
+                                  // int i = widget.weightsAndrepetitions[index]
+                                  //     .indexOf(';');
+                                  // late String sliced;
+                                  // if (i > 0) {
+                                  //   sliced = widget.weightsAndrepetitions[index]
+                                  //       .substring(0, i);
+                                  //   // widget.weightsAndrepetitions[index] = "";
+                                  //   widget.weightsAndrepetitions[index] =
+                                  //       sliced + ";" + p1;
+                                  // } else if (widget
+                                  //         .weightsAndrepetitions[index] !=
+                                  //     "") {
+                                  //   //widget.weightsAndrepetitions[index] = "";
+                                  //   widget.weightsAndrepetitions[index] =
+                                  //       widget.weightsAndrepetitions[index] +
+                                  //           ";" +
+                                  //           p1;
+                                  // } else {
+                                  //   widget.weightsAndrepetitions[index] = p1;
+                                  // }
+                                  return p1;
+                                },
+                                isChecked: serieChecked[index],
+                                theEX: theEx,
+                                theindex: index,
+                                chekedSetFunction: (p0) {
+                                  context.read<CheckedProvider>().changeChecked(
+                                      checked: p0, i: theEx, j: index);
+                                  serieChecked[index] = p0;
+                                  return p0;
+                                },
+
+                                serieNumber: (index + 1).toString(),
+                                onTap: () {
+                                  serieChecked[index] = !serieChecked[index];
+                                  // setState(() {});
+                                },
+                              )),
+                          itemCount: int.parse(nbrSer),
                         ),
-                      ],
-                    )
-                ],
-              ),
+                      ),
+                    ],
+                  )
+              ],
             ),
-          );
-        }));
+          ),
+        ));
   }
 }
 
-class SetContainer extends StatefulWidget {
+class SetContainer extends StatelessWidget {
   SetContainer({
     super.key,
     required this.serieNumber,
@@ -404,6 +475,9 @@ class SetContainer extends StatefulWidget {
     required this.repetetionFunction,
     required this.contentWeight,
     required this.contentRep,
+    required this.onTap,
+    required this.theindex,
+    required this.theEX,
     //required this.weightController,
   });
 
@@ -417,187 +491,196 @@ class SetContainer extends StatefulWidget {
   bool isChecked;
   String contentWeight;
   String contentRep;
+  void Function() onTap;
+  int theindex;
+  int theEX;
 
-  @override
-  State<SetContainer> createState() => _SetContainerState();
-}
+  TextEditingController _weightController = TextEditingController();
 
-class _SetContainerState extends State<SetContainer> {
+  //bool serieChecked = isChecked;
+
   //TextEditingController weightController;
   @override
   Widget build(BuildContext context) {
-    late bool serieChecked;
-    late TextEditingController _weightController = TextEditingController();
-    serieChecked = widget.isChecked;
+    bool serieChecked =
+        context.watch<CheckedProvider>().seriesChecked[theEX][theindex];
+    //serieChecked = isChecked;
     //return StatefulBuilder(builder: (context, statefunc) {
-    return Container(
-      decoration: BoxDecoration(
-        //shape: BoxShape.rectangle,
-        color: serieChecked ? Colors.green : Colors.black.withOpacity(0.7),
+    return InkWell(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            //shape: BoxShape.rectangle,
+            color: serieChecked ? Colors.green : Colors.black.withOpacity(0.7),
 
-        borderRadius: BorderRadius.circular(20),
-      ),
-      width: MediaQuery.sizeOf(context).width * 0.88,
-      height: 55,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          //TODO: maynajmch ya3di set
-          CupertinoCheckbox(
-            value: serieChecked,
-            onChanged: (newBool) {
-              //ndhaer toast wela nbadel lon l setcontainer kan l fields far8iin
-              //if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
-              //  statefunc(
-              //() {
-              serieChecked = newBool!;
-              widget.chekedSetFunction(newBool);
-              // },
-              //);
-              //  }
-              // setState(() {
-              // });
-            },
-            checkColor: Colors.green, // Color of the check icon
-            activeColor: Colors.white,
-            inactiveColor: Colors.white,
+            borderRadius: BorderRadius.circular(20),
           ),
-          Text(
-            widget.serieNumber,
-            style: TextStyle(
-                fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            height: 43,
-            width: 60,
-            child: TextFormField(
-              //controller: _weightController,
-              onChanged: (value) {
-                //statefunc(
-                //() {
-                widget.contentWeight = value;
-                widget.weightFunction(value);
-                // },
-                //);
-              },
-              textAlignVertical: TextAlignVertical.top,
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-              //maxLength: 2,
-              showCursor: true,
-              cursorColor: Colors.white,
-
-              //textAlignVertical: TextAlignVertical.center,
-              textAlign: TextAlign.center,
-
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: serieChecked
-                    ? Colors.green.shade300
-                    : Colors.black.withOpacity(0.5),
-                border: InputBorder.none,
-                //errorText: newPlanName ? null : "error",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  // borderSide: BorderSide(
-                  //   color: widget.serieChecked
-                  //       ? Colors.green
-                  //       : Colors.black.withOpacity(0.7),
-                  // ),
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  // borderSide: BorderSide(
-                  //   color: widget.serieChecked
-                  //       ? Colors.green
-                  //       : Colors.black.withOpacity(0.7),
-                  // ),
-                  borderSide: BorderSide.none,
-                ),
-                // hintText: "eg: Plan 1",
-                //border: OutlineInputBorder(),
+          width: MediaQuery.sizeOf(context).width * 0.88,
+          height: 55,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              //TODO: maynajmch ya3di set
+              CupertinoCheckbox(
+                value: serieChecked,
+                onChanged: (newBool) {
+                  //ndhaer toast wela nbadel lon l setcontainer kan l fields far8iin
+                  //if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
+                  //  statefunc(
+                  //() {
+                  //serieChecked = newBool!;
+                  if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
+                    chekedSetFunction(newBool!);
+                    serieChecked = newBool;
+                  }
+                  // });
+                },
+                checkColor: Colors.green, // Color of the check icon
+                activeColor: Colors.white,
+                inactiveColor: Colors.white,
               ),
-            ),
-          ),
-          Text(
-            "KG",
-            style: TextStyle(
-                fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 43,
-            width: 60,
-            child: TextFormField(
-              onChanged: (value) {
-                //statefunc(
-                //() {
-                widget.contentRep = value;
-                widget.repetetionFunction(value);
-                //},
-                //);
-              },
-              textAlignVertical: TextAlignVertical.top,
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-              //maxLength: 2,
-              showCursor: true,
-              cursorColor: Colors.white,
-
-              //textAlignVertical: TextAlignVertical.center,
-              textAlign: TextAlign.center,
-
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: serieChecked
-                    ? Colors.green.shade300
-                    : Colors.black.withOpacity(0.5),
-                border: InputBorder.none,
-                //errorText: newPlanName ? null : "error",
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                  // borderSide: BorderSide(
-                  //   color: widget.serieChecked
-                  //       ? Colors.green
-                  //       : Colors.black.withOpacity(0.7),
-                  // ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                  // borderSide: BorderSide(
-                  //   color: widget.serieChecked
-                  //       ? Colors.green
-                  //       : Colors.black.withOpacity(0.7),
-                  // ),
-                ),
-                // hintText: "eg: Plan 1",
-                //border: OutlineInputBorder(),
+              Text(
+                serieNumber,
+                style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
-            ),
+              SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                height: 43,
+                width: 60,
+                child: TextFormField(
+                  //controller: _weightController,
+                  onChanged: (value) {
+                    //statefunc(
+                    //() {
+                    contentWeight = value;
+                    weightFunction(value);
+                    // },
+                    //);
+                  },
+                  textAlignVertical: TextAlignVertical.top,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                  //maxLength: 2,
+                  showCursor: true,
+                  cursorColor: Colors.white,
+
+                  //textAlignVertical: TextAlignVertical.center,
+                  textAlign: TextAlign.center,
+
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: serieChecked
+                        ? Colors.green.shade300
+                        : Colors.black.withOpacity(0.5),
+                    border: InputBorder.none,
+                    //errorText: newPlanName ? null : "error",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      // borderSide: BorderSide(
+                      //   color: widget.serieChecked
+                      //       ? Colors.green
+                      //       : Colors.black.withOpacity(0.7),
+                      // ),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      // borderSide: BorderSide(
+                      //   color: widget.serieChecked
+                      //       ? Colors.green
+                      //       : Colors.black.withOpacity(0.7),
+                      // ),
+                      borderSide: BorderSide.none,
+                    ),
+                    // hintText: "eg: Plan 1",
+                    //border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Text(
+                "KG",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 43,
+                width: 60,
+                child: TextFormField(
+                  onChanged: (value) {
+                    //statefunc(
+                    //() {
+                    contentRep = value;
+                    repetetionFunction(value);
+                    //},
+                    //);
+                  },
+                  textAlignVertical: TextAlignVertical.top,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                  //maxLength: 2,
+                  showCursor: true,
+                  cursorColor: Colors.white,
+
+                  //textAlignVertical: TextAlignVertical.center,
+                  textAlign: TextAlign.center,
+
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: serieChecked
+                        ? Colors.green.shade300
+                        : Colors.black.withOpacity(0.5),
+                    border: InputBorder.none,
+                    //errorText: newPlanName ? null : "error",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                      // borderSide: BorderSide(
+                      //   color: widget.serieChecked
+                      //       ? Colors.green
+                      //       : Colors.black.withOpacity(0.7),
+                      // ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                      // borderSide: BorderSide(
+                      //   color: widget.serieChecked
+                      //       ? Colors.green
+                      //       : Colors.black.withOpacity(0.7),
+                      // ),
+                    ),
+                    // hintText: "eg: Plan 1",
+                    //border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Text(
+                "REP",
+                style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                width: 10,
+              )
+            ],
           ),
-          Text(
-            "REP",
-            style: TextStyle(
-                fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 10,
-          )
-        ],
-      ),
-    );
+        ));
     //});
   }
 }

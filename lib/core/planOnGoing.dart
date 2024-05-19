@@ -7,7 +7,9 @@ import 'package:gym_app/core/doingThePlan.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/core/updatePlan.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/providers/checked_provider.dart';
 import 'package:gym_app/services/Api.dart';
+import 'package:provider/provider.dart';
 
 class OnGoingPlanScreen extends StatefulWidget {
   OnGoingPlanScreen({super.key, required this.planToDo});
@@ -616,6 +618,56 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                             List? data;
                             data = await Api.getExercisesByPlan(
                                 widget.planToDo.planName);
+                            //here
+                            List<List<dynamic>> generateListOfLists(
+                                int numberOfLists,
+                                int lengthOfEachList,
+                                dynamic defaultValue) {
+                              // Generate a list of lists
+                              return List.generate(
+                                numberOfLists,
+                                (_) => List.generate(
+                                  lengthOfEachList,
+                                  (_) =>
+                                      defaultValue, // Here, you can specify the default value of each element in the inner list
+                                ),
+                              );
+                            }
+
+                            late List<List> seriesCompletedChecked = [];
+                            seriesCompletedChecked = generateListOfLists(
+                              widget.planToDo.nbrsSeries.length,
+                              1,
+                              false,
+                            );
+                            for (int i = 0;
+                                i < widget.planToDo.nbrsSeries.length;
+                                i++) {
+                              for (int j = 0;
+                                  j <
+                                      (int.parse(
+                                              widget.planToDo.nbrsSeries[i]) -
+                                          1);
+                                  j++) {
+                                seriesCompletedChecked[i].add(false);
+                              }
+                            }
+                            // for (int i = 0; i < (widget.planDoing.nbrsSeries).length; i++) {
+                            //   List<dynamic> k = [];
+                            //   for (int j = 0; j < int.parse(widget.planDoing.nbrsSeries[i]); j++) {
+                            //     k.add(["", ""]);
+                            //   }
+                            //   seriesCompleted.add(k);
+                            // }
+                            //print(seriesCompleted);
+                            //bool pauseTimer = context.watch<TimerProvider>().isTimerStarted;
+                            ab = seriesCompletedChecked;
+                            print("object");
+                            print(ab);
+                            //tohere
+                            context
+                                .read<CheckedProvider>()
+                                .updateSeriesChecked(ab);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
