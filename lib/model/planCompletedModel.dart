@@ -5,6 +5,7 @@ class PlanCompleted {
   List exercises;
   List nbrsSeries;
   List<List<dynamic>> seriesCompleted;
+  String time;
   // lista dynamique mch string
 
 //constructor
@@ -12,6 +13,7 @@ class PlanCompleted {
     this.id = "",
     this.planName = "",
     this.nbrExercises = "",
+    this.time = "",
     this.exercises = const [],
     this.nbrsSeries = const [],
     this.seriesCompleted = const [

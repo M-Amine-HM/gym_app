@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:gym_app/core/doingPlan.dart';
 import 'package:gym_app/model/planModel.dart';
 import 'package:gym_app/providers/checked_provider.dart';
@@ -244,6 +245,7 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
                             widget.planDoing.nbrsSeries.join(',');
 
                         Map<String, String> thedata = {
+                          "time": timerProvider.formatTime(),
                           "planName": widget.planDoing.planName,
                           "nbrExercises":
                               (widget.planDoing.exercises.length).toString(),
@@ -268,7 +270,7 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
   }
 }
 
-class ExerciceWidget extends StatelessWidget {
+class ExerciceWidget extends StatefulWidget {
   ExerciceWidget({
     super.key,
     required this.exerciseImage,
@@ -290,7 +292,12 @@ class ExerciceWidget extends StatelessWidget {
   List weightsAndrepetitions;
   int theEx;
 
-  bool clicked = true;
+  @override
+  State<ExerciceWidget> createState() => _ExerciceWidgetState();
+}
+
+class _ExerciceWidgetState extends State<ExerciceWidget> {
+  bool clicked = false;
 
   //List repetitions;
   @override
@@ -298,7 +305,7 @@ class ExerciceWidget extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.only(left: 7, right: 7, top: 5, bottom: 2),
         child: Container(
-          height: clicked ? (100 + (65 * double.parse(nbrSer))) : 80,
+          height: clicked ? (100 + (65 * double.parse(widget.nbrSer))) : 80,
           decoration: BoxDecoration(
             //shape: BoxShape.rectangle,
             color: Colors.white,
@@ -315,9 +322,9 @@ class ExerciceWidget extends StatelessWidget {
 
                     //},
                     //);
-                    //setState(() {
-                    clicked = !clicked;
-                    // });
+                    setState(() {
+                      clicked = !clicked;
+                    });
                   },
                   child: Row(
                     children: [
@@ -342,23 +349,23 @@ class ExerciceWidget extends StatelessWidget {
                             //   maxHeight: 90,
                             // ),
                             child: Image.network(
-                              exerciseImage,
+                              widget.exerciseImage,
                               fit: BoxFit.cover,
                             ),
                           ),
                           title: Text(
-                            exerciseName,
+                            widget.exerciseName,
                             style: const TextStyle(
                                 fontSize: 13, fontWeight: FontWeight.w600),
                           ),
                           subtitle: Text(
-                            bodyPartName,
+                            widget.bodyPartName,
                             style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black45),
                           ),
-                          trailing: Text("Series : ${nbrSer}"),
+                          trailing: Text("Series : ${widget.nbrSer}"),
                         ),
                       ),
                     ],
@@ -378,14 +385,16 @@ class ExerciceWidget extends StatelessWidget {
                           ),
                           shrinkWrap: true,
                           itemBuilder: ((context, index) => SetContainer(
-                                contentRep: "",
-                                contentWeight: "",
+                                contentRep: widget.weightsAndrepetitions[index]
+                                    [1],
+                                contentWeight:
+                                    widget.weightsAndrepetitions[index][0],
                                 //TODO: l checkbox matet3ada kan maykunu l donnes m3ebiin;
                                 //weightController: controllers[index],
                                 // weight: widget.weightsAndrepetitions[index],
                                 // repetition: widget.weightsAndrepetitions[index],
                                 weightFunction: (p0) {
-                                  weightsAndrepetitions[index][0] = p0;
+                                  widget.weightsAndrepetitions[index][0] = p0;
                                   // String a = p0;
                                   // int i = widget.weightsAndrepetitions[index]
                                   //     .indexOf(';');
@@ -412,7 +421,7 @@ class ExerciceWidget extends StatelessWidget {
                                 },
                                 repetetionFunction: (p1) {
                                   //print("fl setcontainer  " + index.toString());
-                                  weightsAndrepetitions[index][1] = p1;
+                                  widget.weightsAndrepetitions[index][1] = p1;
                                   // int i = widget.weightsAndrepetitions[index]
                                   //     .indexOf(';');
                                   // late String sliced;
@@ -435,23 +444,24 @@ class ExerciceWidget extends StatelessWidget {
                                   // }
                                   return p1;
                                 },
-                                isChecked: serieChecked[index],
-                                theEX: theEx,
+                                isChecked: widget.serieChecked[index],
+                                theEX: widget.theEx,
                                 theindex: index,
                                 chekedSetFunction: (p0) {
                                   context.read<CheckedProvider>().changeChecked(
-                                      checked: p0, i: theEx, j: index);
-                                  serieChecked[index] = p0;
+                                      checked: p0, i: widget.theEx, j: index);
+                                  widget.serieChecked[index] = p0;
                                   return p0;
                                 },
 
                                 serieNumber: (index + 1).toString(),
-                                onTap: () {
-                                  serieChecked[index] = !serieChecked[index];
-                                  // setState(() {});
-                                },
+                                // onTap: () {
+                                //   widget.serieChecked[index] =
+                                //       !widget.serieChecked[index];
+                                //   // setState(() {});
+                                // },
                               )),
-                          itemCount: int.parse(nbrSer),
+                          itemCount: int.parse(widget.nbrSer),
                         ),
                       ),
                     ],
@@ -463,7 +473,7 @@ class ExerciceWidget extends StatelessWidget {
   }
 }
 
-class SetContainer extends StatelessWidget {
+class SetContainer extends StatefulWidget {
   SetContainer({
     super.key,
     required this.serieNumber,
@@ -475,7 +485,7 @@ class SetContainer extends StatelessWidget {
     required this.repetetionFunction,
     required this.contentWeight,
     required this.contentRep,
-    required this.onTap,
+    //required this.onTap,
     required this.theindex,
     required this.theEX,
     //required this.weightController,
@@ -489,198 +499,215 @@ class SetContainer extends StatelessWidget {
   String Function(String) repetetionFunction;
   String serieNumber;
   bool isChecked;
-  String contentWeight;
   String contentRep;
-  void Function() onTap;
+  String contentWeight;
+  //void Function() onTap;
   int theindex;
   int theEX;
 
-  TextEditingController _weightController = TextEditingController();
+  @override
+  State<SetContainer> createState() => _SetContainerState();
+}
 
+class _SetContainerState extends State<SetContainer> {
+  TextEditingController _weightController = TextEditingController();
+  late String contentRep;
+  late String contentWeight;
+  @override
+  void initState() {
+    super.initState();
+    contentWeight = widget.contentWeight;
+
+    contentRep = widget.contentRep;
+  }
   //bool serieChecked = isChecked;
 
-  //TextEditingController weightController;
   @override
   Widget build(BuildContext context) {
-    bool serieChecked =
-        context.watch<CheckedProvider>().seriesChecked[theEX][theindex];
+    bool serieChecked = context
+        .watch<CheckedProvider>()
+        .seriesChecked[widget.theEX][widget.theindex];
+
     //serieChecked = isChecked;
     //return StatefulBuilder(builder: (context, statefunc) {
-    return InkWell(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            //shape: BoxShape.rectangle,
-            color: serieChecked ? Colors.green : Colors.black.withOpacity(0.7),
+    return Container(
+      decoration: BoxDecoration(
+        //shape: BoxShape.rectangle,
+        color: serieChecked ? Colors.green : Colors.black.withOpacity(0.7),
 
-            borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      width: MediaQuery.sizeOf(context).width * 0.88,
+      height: 55,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          //TODO: maynajmch ya3di set
+          CupertinoCheckbox(
+            value: serieChecked,
+            onChanged: (newBool) {
+              //ndhaer toast wela nbadel lon l setcontainer kan l fields far8iin
+              //if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
+              //  statefunc(
+              //() {
+              //serieChecked = newBool!;
+              if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
+                widget.chekedSetFunction(newBool!);
+                serieChecked = newBool;
+              } else {
+                showToast('Remplir les champs !!',
+                    context: context,
+                    animation: StyledToastAnimation.fade,
+                    duration: Duration(seconds: 3),
+                    reverseAnimation: StyledToastAnimation.fade,
+                    alignment: Alignment.center,
+                    position: StyledToastPosition(
+                        align: Alignment.center, offset: 20.0));
+              }
+              // });
+            },
+            checkColor: Colors.green, // Color of the check icon
+            activeColor: Colors.white,
+            inactiveColor: Colors.white,
           ),
-          width: MediaQuery.sizeOf(context).width * 0.88,
-          height: 55,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              //TODO: maynajmch ya3di set
-              CupertinoCheckbox(
-                value: serieChecked,
-                onChanged: (newBool) {
-                  //ndhaer toast wela nbadel lon l setcontainer kan l fields far8iin
-                  //if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
-                  //  statefunc(
-                  //() {
-                  //serieChecked = newBool!;
-                  if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
-                    chekedSetFunction(newBool!);
-                    serieChecked = newBool;
-                  }
-                  // });
-                },
-                checkColor: Colors.green, // Color of the check icon
-                activeColor: Colors.white,
-                inactiveColor: Colors.white,
-              ),
-              Text(
-                serieNumber,
-                style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                height: 43,
-                width: 60,
-                child: TextFormField(
-                  //controller: _weightController,
-                  onChanged: (value) {
-                    //statefunc(
-                    //() {
-                    contentWeight = value;
-                    weightFunction(value);
-                    // },
-                    //);
-                  },
-                  textAlignVertical: TextAlignVertical.top,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                  //maxLength: 2,
-                  showCursor: true,
-                  cursorColor: Colors.white,
-
-                  //textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.center,
-
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: serieChecked
-                        ? Colors.green.shade300
-                        : Colors.black.withOpacity(0.5),
-                    border: InputBorder.none,
-                    //errorText: newPlanName ? null : "error",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      // borderSide: BorderSide(
-                      //   color: widget.serieChecked
-                      //       ? Colors.green
-                      //       : Colors.black.withOpacity(0.7),
-                      // ),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      // borderSide: BorderSide(
-                      //   color: widget.serieChecked
-                      //       ? Colors.green
-                      //       : Colors.black.withOpacity(0.7),
-                      // ),
-                      borderSide: BorderSide.none,
-                    ),
-                    // hintText: "eg: Plan 1",
-                    //border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              Text(
-                "KG",
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 43,
-                width: 60,
-                child: TextFormField(
-                  onChanged: (value) {
-                    //statefunc(
-                    //() {
-                    contentRep = value;
-                    repetetionFunction(value);
-                    //},
-                    //);
-                  },
-                  textAlignVertical: TextAlignVertical.top,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                  //maxLength: 2,
-                  showCursor: true,
-                  cursorColor: Colors.white,
-
-                  //textAlignVertical: TextAlignVertical.center,
-                  textAlign: TextAlign.center,
-
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: serieChecked
-                        ? Colors.green.shade300
-                        : Colors.black.withOpacity(0.5),
-                    border: InputBorder.none,
-                    //errorText: newPlanName ? null : "error",
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                      // borderSide: BorderSide(
-                      //   color: widget.serieChecked
-                      //       ? Colors.green
-                      //       : Colors.black.withOpacity(0.7),
-                      // ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                      // borderSide: BorderSide(
-                      //   color: widget.serieChecked
-                      //       ? Colors.green
-                      //       : Colors.black.withOpacity(0.7),
-                      // ),
-                    ),
-                    // hintText: "eg: Plan 1",
-                    //border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              Text(
-                "REP",
-                style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                width: 10,
-              )
-            ],
+          Text(
+            widget.serieNumber,
+            style: TextStyle(
+                fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
           ),
-        ));
+          SizedBox(
+            width: 10,
+          ),
+          SizedBox(
+            height: 43,
+            width: 60,
+            child: TextFormField(
+              initialValue: contentWeight,
+              //controller: _weightController,
+              onChanged: (value) {
+                //statefunc(
+                //() {
+                contentWeight = value;
+                widget.weightFunction(value);
+                // },
+                //);
+              },
+              textAlignVertical: TextAlignVertical.top,
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+              //maxLength: 2,
+              showCursor: true,
+              cursorColor: Colors.white,
+
+              //textAlignVertical: TextAlignVertical.center,
+              textAlign: TextAlign.center,
+
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: serieChecked
+                    ? Colors.green.shade300
+                    : Colors.black.withOpacity(0.5),
+                border: InputBorder.none,
+                //errorText: newPlanName ? null : "error",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  // borderSide: BorderSide(
+                  //   color: widget.serieChecked
+                  //       ? Colors.green
+                  //       : Colors.black.withOpacity(0.7),
+                  // ),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  // borderSide: BorderSide(
+                  //   color: widget.serieChecked
+                  //       ? Colors.green
+                  //       : Colors.black.withOpacity(0.7),
+                  // ),
+                  borderSide: BorderSide.none,
+                ),
+                // hintText: "eg: Plan 1",
+                //border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          Text(
+            "KG",
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 43,
+            width: 60,
+            child: TextFormField(
+              initialValue: contentRep,
+              onChanged: (value) {
+                //statefunc(
+                //() {
+                contentRep = value;
+                widget.repetetionFunction(value);
+                //},
+                //);
+              },
+              textAlignVertical: TextAlignVertical.top,
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+              //maxLength: 2,
+              showCursor: true,
+              cursorColor: Colors.white,
+
+              //textAlignVertical: TextAlignVertical.center,
+              textAlign: TextAlign.center,
+
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: serieChecked
+                    ? Colors.green.shade300
+                    : Colors.black.withOpacity(0.5),
+                border: InputBorder.none,
+                //errorText: newPlanName ? null : "error",
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                  // borderSide: BorderSide(
+                  //   color: widget.serieChecked
+                  //       ? Colors.green
+                  //       : Colors.black.withOpacity(0.7),
+                  // ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                  // borderSide: BorderSide(
+                  //   color: widget.serieChecked
+                  //       ? Colors.green
+                  //       : Colors.black.withOpacity(0.7),
+                  // ),
+                ),
+                // hintText: "eg: Plan 1",
+                //border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          Text(
+            "REP",
+            style: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: 10,
+          )
+        ],
+      ),
+    );
     //});
   }
 }
