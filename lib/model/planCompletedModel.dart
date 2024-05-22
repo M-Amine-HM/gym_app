@@ -4,8 +4,10 @@ class PlanCompleted {
   String nbrExercises;
   List exercises;
   List nbrsSeries;
-  List<List<dynamic>> seriesCompleted;
+  List<dynamic> seriesCompleted;
   String time;
+  String currentTime;
+
   // lista dynamique mch string
 
 //constructor
@@ -14,6 +16,7 @@ class PlanCompleted {
     this.planName = "",
     this.nbrExercises = "",
     this.time = "",
+    this.currentTime = "",
     this.exercises = const [],
     this.nbrsSeries = const [],
     this.seriesCompleted = const [

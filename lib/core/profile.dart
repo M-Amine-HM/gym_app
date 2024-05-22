@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_app/auth/firstPage.dart';
 import 'package:gym_app/core/community.dart';
 import 'package:gym_app/core/updateProfile.dart';
 import 'package:gym_app/model/userModel.dart';
@@ -243,6 +245,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       textColor: Colors.red,
                       endIcon: false,
                       onPress: () {
+                        //TODO: na9esa toast bch y9lu mathabet t7eb to5rej
+                        Navigator.of(context, rootNavigator: true)
+                            .pushAndRemoveUntil(
+                                CupertinoPageRoute(
+                                    builder: (context) => FirstPage()),
+                                (route) => false);
                         //TODO: logout take the user to first page
                         // User user = User();
                         // Navigator.pushAndRemoveUntil(

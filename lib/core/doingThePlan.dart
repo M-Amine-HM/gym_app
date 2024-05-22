@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:gym_app/auth/firstPage.dart';
 import 'package:gym_app/core/doingPlan.dart';
+import 'package:gym_app/core/rapport.dart';
+import 'package:gym_app/home.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/providers/checked_provider.dart';
 import 'package:gym_app/providers/timer_provider.dart';
 import 'package:gym_app/services/Api.dart';
@@ -243,8 +247,11 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
                             widget.planDoing.exercises.join(',');
                         String nbrsSeriesTostring =
                             widget.planDoing.nbrsSeries.join(',');
-
+                        String currentTime =
+                            (DateTime.now().toLocal().toString())
+                                .substring(0, 16);
                         Map<String, String> thedata = {
+                          "currentTime": currentTime,
                           "time": timerProvider.formatTime(),
                           "planName": widget.planDoing.planName,
                           "nbrExercises":
@@ -257,6 +264,34 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
 
                         print(seriesCompletedChecked);
                         print(thedata);
+                        // Navigator.of(context, rootNavigator: false).push(
+                        //   CupertinoPageRoute(
+                        //       builder: (context) => RapportScreen()),
+                        //   //(route) => false
+                        // );
+                        // Navigator.of(context, rootNavigator: true)
+                        //     .pushAndRemoveUntil(
+                        //         CupertinoPageRoute(
+                        //             builder: (context) => FirstPage()),
+                        //         (route) => false);
+                        //User user = User();
+                        //timerProvider.timerOn = false;
+                        timerProvider.resetTimer();
+                        //sseriesCompletedChecked = [];
+
+                        Navigator.pop(context);
+
+                        // CupertinoTabView(
+                        //   builder: (context) {
+                        //     return const CupertinoPageScaffold(
+                        //         child: RapportScreen());
+                        //   },
+                        // );
+                        // Navigator.of(context).push(
+                        //   CupertinoPageRoute(
+                        //     builder: (context) => RapportScreen(),
+                        //   ),
+                        // );
                       },
                     ),
                   ],

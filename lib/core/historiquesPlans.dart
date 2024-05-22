@@ -1,115 +1,99 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gym_app/core/historiquesPlans.dart';
+import 'package:gym_app/core/rapport.dart';
 import 'package:gym_app/services/Api.dart';
 
-class RapportScreen extends StatefulWidget {
-  const RapportScreen({super.key});
+class historiquePlansScreen extends StatefulWidget {
+  const historiquePlansScreen({super.key});
 
   @override
-  State<RapportScreen> createState() => _RapportScreenState();
+  State<historiquePlansScreen> createState() => _historiquePlansScreenState();
 }
 
-class _RapportScreenState extends State<RapportScreen> {
+class _historiquePlansScreenState extends State<historiquePlansScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
+        // leading: IconButton(
+        //   onPressed: () {
+        //     setState(() {
+        //       Navigator.pop(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => RapportScreen()),
+        //       );
+        //       // Navigator.pushAndRemoveUntil(
+        //       //     context,
+        //       //     CupertinoPageRoute(
+        //       //       builder: (context) => RapportScreen(),
+        //       //     ),
+        //       //     (route) => false);
+        //     });
+        //   },
+        //   icon: const Icon(Icons.arrow_back_sharp),
+        // ),
+        surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         title: Text(
-          "Rapport",
+          "Historques",
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Historique",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
-                ),
-                TextButton(
-                  child: Text(
-                    "Voir tout",
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.blue.shade800,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => historiquePlansScreen()));
-                  },
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: SizedBox(
-                child: FutureBuilder(
-                  future: Api.getCompletedPlans(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: SizedBox(
+              child: FutureBuilder(
+                future: Api.getCompletedPlans(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    //TODO: if it return null , must handle the error
+                    List<dynamic> plans = snapshot.data;
+                    if (plans.isEmpty) {
+                      return Center(
+                        //TODO: image tbayen anou mafama 7ata plan ma5doum
+                        child: Text(
+                          "Vous n'avez pas fait aucun plan pour le moment !",
+                          style: TextStyle(fontSize: 15),
+                        ),
                       );
-                    } else {
-                      //TODO: if it return null , must handle the error
-                      List<dynamic> plans = snapshot.data;
-                      int count = plans.length;
-                      if (plans.length >= 2) {
-                        count = 2;
-                      }
-                      if (plans.length == 1) {
-                        count = 1;
-                      }
-                      if (plans.isEmpty) {
-                        return Center(
-                          child: Text(
-                            "Vous n'avez pas fait aucun plan pour le moment !",
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        );
-                      }
-                      return ListView.builder(
-                          //physics: AlwaysScrollableScrollPhysics(),
-                          //shrinkWrap: true,
-                          itemBuilder: ((context, index) => completedPlanWidget(
-                                hour: (plans[plans.length - 1 - index]
-                                        .currentTime)
-                                    .toString()
-                                    .substring(11, 16),
-                                date: (plans[plans.length - 1 - index]
-                                        .currentTime)
-                                    .toString()
-                                    .substring(5, 10),
-                                time: plans[plans.length - 1 - index].time,
-                                planName:
-                                    (plans[plans.length - 1 - index].planName),
-                                poids: plans[plans.length - 1 - index]
-                                    .seriesCompleted,
-                              )),
-                          // separatorBuilder: (context, index) => const SizedBox(
-                          //       height: 0,
-                          //     ),
-                          itemCount: count);
                     }
-                  },
-                ),
+
+                    return ListView.builder(
+                        //physics: AlwaysScrollableScrollPhysics(),
+                        //shrinkWrap: true,
+                        itemBuilder: ((context, index) => completedPlanWidget(
+                              hour:
+                                  (plans[plans.length - 1 - index].currentTime)
+                                      .toString()
+                                      .substring(11, 16),
+                              date:
+                                  (plans[plans.length - 1 - index].currentTime)
+                                      .toString()
+                                      .substring(5, 10),
+                              time: plans[plans.length - 1 - index].time,
+                              planName:
+                                  (plans[plans.length - 1 - index].planName),
+                              poids: plans[plans.length - 1 - index]
+                                  .seriesCompleted,
+                            )),
+                        // separatorBuilder: (context, index) => const SizedBox(
+                        //       height: 0,
+                        //     ),
+                        itemCount: plans.length);
+                  }
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
