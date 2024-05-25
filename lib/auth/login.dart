@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:gym_app/auth/signup.dart';
 import 'package:gym_app/home.dart';
 import 'package:gym_app/model/userModel.dart';
@@ -149,11 +150,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(color: Colors.white, fontSize: 17),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.indigo.shade700,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
+                      borderRadius: BorderRadius.circular(10)),
                   fixedSize:
-                      Size.fromWidth(MediaQuery.of(context).size.width * 1),
+                      Size.fromWidth(MediaQuery.of(context).size.width * 0.8),
                 ),
                 onPressed: () async {
                   if (_textVerifyEmail &&
@@ -168,15 +169,31 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     if (_userdata.isEmpty) {
                       //case : there no user
-                      setState(() {
-                        _erreurText = "user doesn't exist go sign in";
-                      });
+                      //setState(() {
+                      _erreurText = "Compte n'existe pas , il faut s'inscrire";
+                      showToast(_erreurText,
+                          context: context,
+                          animation: StyledToastAnimation.fade,
+                          duration: Duration(seconds: 5),
+                          reverseAnimation: StyledToastAnimation.fade,
+                          alignment: Alignment.center,
+                          position: StyledToastPosition(
+                              align: Alignment.center, offset: 100));
+                      // });
                     } else {
                       if (_userdata[0].password != (_password.text)) {
-                        setState(() {
-                          _erreurText =
-                              "password ${_userdata[0].password} is incorrect";
-                        });
+                        // setState(() {
+                        _erreurText =
+                            "Le mot de passe ${_userdata[0].password} est incorrect";
+                        showToast(_erreurText,
+                            context: context,
+                            animation: StyledToastAnimation.fade,
+                            duration: Duration(seconds: 5),
+                            reverseAnimation: StyledToastAnimation.fade,
+                            alignment: Alignment.center,
+                            position: StyledToastPosition(
+                                align: Alignment.center, offset: 100));
+                        // });
                       } else {
                         // Navigator.push(
                         //   context,
@@ -236,9 +253,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
+                      borderRadius: BorderRadius.circular(8)),
                   fixedSize:
-                      Size.fromWidth(MediaQuery.of(context).size.width * 1),
+                      Size.fromWidth(MediaQuery.of(context).size.width * 0.8),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -261,10 +278,10 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 20,
               ),
-              Text(
-                _erreurText,
-                style: TextStyle(fontSize: 25, color: Colors.red),
-              )
+              // Text(
+              //   _erreurText,
+              //   style: TextStyle(fontSize: 25, color: Colors.red),
+              // )
             ],
           ),
         ),

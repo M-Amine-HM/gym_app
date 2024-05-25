@@ -41,7 +41,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           child: FutureBuilder(
             future: _name.text.isEmpty
                 ? Api.getUsers()
@@ -89,8 +89,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
                         decoration: BoxDecoration(
                           //shape: BoxShape.rectangle,
                           color: Colors.white,
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(15)),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: ListView.builder(
                           // scrollDirection: Axis.vertical,

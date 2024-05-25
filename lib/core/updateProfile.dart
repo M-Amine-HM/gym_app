@@ -32,13 +32,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController _name = TextEditingController();
   TextEditingController _adress = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
-
+  TextEditingController _password = TextEditingController();
+  TextEditingController _height = TextEditingController();
+  TextEditingController _weight = TextEditingController();
   @override
   void initState() {
     _name.text = widget.theUser!.name;
     _adress.text = widget.theUser!.adress;
     _phoneNumber.text = widget.theUser!.phoneNumber;
     _userID = widget.theUser!.id;
+    _password.text = widget.theUser!.password;
+    _height.text = widget.theUser!.height;
+    _weight.text = widget.theUser!.weight;
 
     super.initState();
   }
@@ -56,6 +61,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
+        surfaceTintColor: Colors.grey.shade200,
         leading: IconButton(
           onPressed: () {
             setState(() {
@@ -121,7 +127,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         height: 35,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            color: Colors.blue),
+                            color: Colors.indigo[600]),
                         child: const Icon(
                           LineAwesomeIcons.camera,
                           color: Colors.white,
@@ -132,7 +138,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 15),
               FutureBuilder(
                   future: Api.getUserByEmail(widget.userEmail),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -217,14 +223,69 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                           Icon(Icons.location_on_outlined),
                                     ),
                                   ),
+                                  TextFormField(
+                                    cursorColor: Colors.black,
+                                    obscureText: true,
+                                    controller: _password,
+                                    decoration: const InputDecoration(
+                                      // floatingLabelStyle:
+                                      //     TextStyle(color: Colors.red),
+                                      border: InputBorder.none,
+                                      //contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      label: Text("Mot de Passe"),
+                                      prefixIcon: Icon(LineAwesomeIcons.key),
+                                      //suffixIcon: Icon(LineAwesomeIcons.pen),
+                                    ),
+                                  ),
                                   SizedBox(
-                                    height: 20,
+                                    height: 5,
                                   )
                                 ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 10),
+                          Container(
+                            decoration: BoxDecoration(
+                              //shape: BoxShape.rectangle,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    controller: _height,
+                                    keyboardType: TextInputType.number,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      label: Text("Taille (cm)"),
+                                      prefixIcon: Icon(Icons.height),
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    cursorColor: Colors.black,
+                                    controller: _weight,
+                                    decoration: const InputDecoration(
+                                      // floatingLabelStyle:
+                                      //     TextStyle(color: Colors.red),
+                                      border: InputBorder.none,
+                                      //contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      label: Text("Poids (KG)"),
+                                      prefixIcon: Icon(LineAwesomeIcons.weight),
+                                      //suffixIcon: Icon(LineAwesomeIcons.pen),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
                           SizedBox(
                             width: MediaQuery.sizeOf(context).width * 0.6,
                             child: ElevatedButton(
@@ -232,7 +293,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 Map Data = {
                                   "name": _name.text,
                                   "phoneNumber": _phoneNumber.text,
-                                  "adress": _adress.text
+                                  "adress": _adress.text,
+                                  "password": _password.text,
+                                  "weight": _weight.text,
+                                  "height": _height.text,
                                 };
                                 await Api.updateUser(_userID, Data);
                                 setState(() {
@@ -242,7 +306,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: Colors.indigo[600],
                                   side: BorderSide.none,
                                   shape: const StadiumBorder()),
                               child: const Text("Confirmer",

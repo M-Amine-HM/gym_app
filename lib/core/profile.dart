@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/auth/firstPage.dart';
 import 'package:gym_app/core/community.dart';
+import 'package:gym_app/core/salleDeSport.dart';
 import 'package:gym_app/core/updateProfile.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
@@ -19,7 +20,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
-  List<User> userdata = [];
+  List? userdata = [];
   User theUser = User();
 
   // @override
@@ -49,7 +50,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
         centerTitle: true,
-        title: Text("Profil", style: Theme.of(context).textTheme.headline4),
+        title: Text(
+          "Profil",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+        ),
       ),
       body: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
@@ -101,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     } else {
                       userdata = snapshot.data;
-                      theUser = userdata[0];
+                      theUser = userdata![0];
 
                       return Column(
                         children: [
@@ -142,11 +146,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xffffe501),
+                                  backgroundColor: Colors.indigo[600],
                                   side: BorderSide.none,
                                   shape: const StadiumBorder()),
                               child: const Text("Modifier Profile",
-                                  style: TextStyle(color: Colors.black)),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.w500)),
                             ),
                           ),
                         ],
@@ -156,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               //name field
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
               // const Divider(),
               //const SizedBox(height: 10),
               Container(
@@ -170,10 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 5,
                     ),
-                    ProfileMenuWidget(
-                        title: "Calendrier",
-                        icon: LineAwesomeIcons.calendar,
-                        onPress: () {}),
+
                     // const Divider(
                     //   height: 0,
                     //   thickness: 0.5,
@@ -190,25 +194,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 builder: (context) => coummunityScreen()),
                           );
                         }),
+                    ProfileMenuWidget(
+                        title: "Salle de Sport",
+                        icon: LineAwesomeIcons.dumbbell,
+                        onPress: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => salleDeSportScreen()));
+                        }),
                     // const Divider(
                     //   height: 0,
                     //   thickness: 0.5,
                     //   indent: 40,
                     //   endIndent: 40,
                     // ),
-                    ProfileMenuWidget(
-                        title: "Statistiques",
-                        icon: LineAwesomeIcons.chalkboard,
-                        onPress: () {}),
+
                     // const Divider(
                     //   height: 0,
                     //   thickness: 0.5,
                     //   indent: 40,
                     //   endIndent: 40,
                     // ),
+
+                    // ProfileMenuWidget(
+                    //     title: "Mesures",
+                    //     icon: LineAwesomeIcons.horizontal_sliders,
+                    //     onPress: () {}),
                     ProfileMenuWidget(
-                        title: "Mesures",
-                        icon: LineAwesomeIcons.horizontal_sliders,
+                        title: "Informations sur l'App",
+                        icon: LineAwesomeIcons.info,
                         onPress: () {}),
                     SizedBox(
                       height: 5,
@@ -229,10 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    ProfileMenuWidget(
-                        title: "Informations",
-                        icon: LineAwesomeIcons.info,
-                        onPress: () {}),
+
                     // const Divider(
                     //   height: 0,
                     //   thickness: 0.5,
@@ -243,6 +255,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       title: "Logout",
                       icon: LineAwesomeIcons.alternate_sign_out,
                       textColor: Colors.red,
+                      fontWeight: FontWeight.w500,
                       endIcon: false,
                       onPress: () {
                         //TODO: na9esa toast bch y9lu mathabet t7eb to5rej
@@ -265,6 +278,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // Navigator.push(context, MaterialPageRoute(builder: (context)=>FirstPage()));
                       },
                     ),
+                    ProfileMenuWidget(
+                        title: "Supprimer le Compte",
+                        icon: LineAwesomeIcons.alternate_trash_1,
+                        textColor: Colors.red,
+                        fontWeight: FontWeight.w500,
+                        endIcon: false,
+                        onPress: () {}),
                     SizedBox(
                       height: 10,
                     ),
@@ -288,9 +308,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           } else {
             userdata = snapshot.data;
-            theUser = userdata[0];
+            theUser = userdata![0];
 
-            return Text(userdata[0].email.toString());
+            return Text(userdata![0].email.toString());
           }
         });
   }
@@ -308,10 +328,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             return Column(
               children: [
-                Text((userdata[0].name),
-                    style: Theme.of(context).textTheme.headline4),
+                Text(
+                  (userdata![0].name),
+                ),
                 //email field
-                Text("Email: ${(userdata[0].email).toString()}",
+                Text("Email: ${(userdata![0].name).toString()}",
                     style: Theme.of(context).textTheme.bodyText2),
               ],
             );
@@ -328,6 +349,7 @@ class ProfileMenuWidget extends StatelessWidget {
     required this.onPress,
     this.endIcon = true,
     this.textColor,
+    this.fontWeight,
   }) : super(key: key);
 
   final String title;
@@ -335,12 +357,13 @@ class ProfileMenuWidget extends StatelessWidget {
   final VoidCallback onPress;
   final bool endIcon;
   final Color? textColor;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
-    var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
-    var iconColor = isDark ? Color(0xffffe501) : Colors.black;
-
+    // var isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+    //var iconColor = isDark ? Color(0xffffe501) : Colors.black;
+    var iconColor = Colors.black;
     return ListTile(
       //contentPadding: EdgeInsets.only(bottom: 5, left: 20, right: 20, top: 5),
       onTap: onPress,
@@ -351,11 +374,15 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: iconColor.withOpacity(0.1),
         ),
-        child: Icon(icon, color: iconColor),
+        child: Icon(
+          icon,
+          color: iconColor,
+        ),
       ),
-      title: Text(title,
-          style:
-              Theme.of(context).textTheme.bodyText1?.apply(color: textColor)),
+      title: Text(
+        title,
+        style: TextStyle(color: textColor, fontWeight: fontWeight),
+      ),
       trailing: endIcon
           ? Container(
               width: 30,

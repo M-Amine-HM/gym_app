@@ -278,8 +278,10 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
                         //timerProvider.timerOn = false;
                         timerProvider.resetTimer();
                         //sseriesCompletedChecked = [];
-
                         Navigator.pop(context);
+                        setState(() {
+                          RapportScreen();
+                        });
 
                         // CupertinoTabView(
                         //   builder: (context) {

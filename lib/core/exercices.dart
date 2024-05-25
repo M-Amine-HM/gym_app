@@ -51,7 +51,7 @@ class _ExercicesScreenState extends State<ExercicesScreen> {
         surfaceTintColor: Colors.grey.shade200,
         title: const Text(
           "Exercices",
-          style: TextStyle(fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
       ),

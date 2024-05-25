@@ -13,26 +13,43 @@ class heightScreen extends StatefulWidget {
   _heightScreenState createState() => _heightScreenState();
 }
 
+//late bool sexe;
+late Color theColor;
+
 class _heightScreenState extends State<heightScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.oneUser.sexe == "homme") {
+      theColor = Colors.indigo.shade700;
+    } else {
+      theColor = Colors.red.shade600;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFf1faee),
+      appBar: AppBar(
+        surfaceTintColor: Colors.grey.shade200,
+        backgroundColor: Colors.grey.shade200,
+      ),
+      backgroundColor: Colors.grey.shade200,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
                 "Quelle taille faites-vous?",
                 style: TextStyle(
-                  color: Color(0xff1d3557),
+                  color: Colors.black,
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
               Container(
                 // height: 600,
                 child: Row(
@@ -40,18 +57,15 @@ class _heightScreenState extends State<heightScreen> {
                   children: [
                     Column(
                       children: [
-                        TextButton(
-                          // TODO : chbeha button
-                          child: Text(
-                            "$taile cm",
-                            style: TextStyle(
-                              fontSize: 45,
-                              fontWeight: FontWeight.w900,
-                              color: c,
-                            ),
+                        Text(
+                          "$taile cm",
+                          style: TextStyle(
+                            fontSize: 45,
+                            fontWeight: FontWeight.w900,
+                            color: theColor,
                           ),
-                          onPressed: () {},
                         ),
+
                         // SizedBox(
                         //   height: 8,
                         // ),
@@ -107,31 +121,29 @@ class _heightScreenState extends State<heightScreen> {
               // SizedBox(
               //   height: 40,
               // ),
-              CupertinoButton(
-                borderRadius: BorderRadius.circular(25),
-                color: c,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Continuer",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width * 0.8,
+                child: CupertinoButton(
+                  borderRadius: BorderRadius.circular(25),
+                  color: theColor,
+                  child: Text(
+                    "Continuer",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
+                  ),
+                  onPressed: () {
+                    String userHeight = taile.toString();
+                    widget.oneUser.height = userHeight;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                weightScreen(oneUser: widget.oneUser)));
+                  },
                 ),
-                onPressed: () {
-                  String userHeight = taile.toString();
-                  widget.oneUser.height = userHeight;
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              weightScreen(oneUser: widget.oneUser)));
-                },
               ),
             ],
           ),

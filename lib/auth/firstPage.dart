@@ -25,7 +25,7 @@ class _FirstPageState extends State<FirstPage> {
           height: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/images/image1.png"),
+                image: AssetImage("assets/images/abdos.jpg"),
                 fit: BoxFit.cover),
           ),
           child: Padding(
@@ -44,9 +44,9 @@ class _FirstPageState extends State<FirstPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(10)),
                     fixedSize:
-                        Size.fromWidth(MediaQuery.of(context).size.width * 1),
+                        Size.fromWidth(MediaQuery.of(context).size.width * 0.8),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -63,7 +63,7 @@ class _FirstPageState extends State<FirstPage> {
                     height: 20,
                   ),
                   label: Text("S'inscrire avec Google",
-                      style: TextStyle(color: Colors.black)),
+                      style: TextStyle(color: Colors.black, fontSize: 16)),
                   // child: Row(
                   //   children: [
                   //     Icon(Icons.home),
@@ -76,11 +76,11 @@ class _FirstPageState extends State<FirstPage> {
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.indigo.shade600,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
+                        borderRadius: BorderRadius.circular(10)),
                     fixedSize:
-                        Size.fromWidth(MediaQuery.of(context).size.width * 1),
+                        Size.fromWidth(MediaQuery.of(context).size.width * 0.8),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -92,7 +92,7 @@ class _FirstPageState extends State<FirstPage> {
                   },
                   child: Text(
                     "S'inscrire avec un Email",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
                 TextButton(
@@ -107,7 +107,7 @@ class _FirstPageState extends State<FirstPage> {
                   },
                   child: Text(
                     "Vous Avez déja un compte ? Se Connecter",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 )
               ],

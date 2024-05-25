@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gym_app/core/historiquesPlans.dart';
 import 'package:gym_app/services/Api.dart';
 
+late int pageVar;
+
 class RapportScreen extends StatefulWidget {
   const RapportScreen({super.key});
 
@@ -11,14 +13,34 @@ class RapportScreen extends StatefulWidget {
 
 class _RapportScreenState extends State<RapportScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pageVar = 1;
+  }
+
+  // @override
+  // void setState(VoidCallback fn) {
+  //   // TODO: implement setState
+
+  //   if (pageVar != 0) {
+  //     super.setState(fn);
+  //   }
+  // }
+
+  @override
   Widget build(BuildContext context) {
+    if (pageVar != 0) {
+      setState(() {});
+    }
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade200,
+        surfaceTintColor: Colors.grey.shade200,
         title: Text(
           "Rapport",
-          style: TextStyle(fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
       ),

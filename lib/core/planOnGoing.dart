@@ -24,7 +24,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blue[700],
+        backgroundColor: Colors.indigo[600], //Colors.blue[700],
         appBar: AppBar(
           leading: IconButton(
               onPressed: () async {
@@ -40,11 +40,11 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                 Icons.arrow_back,
                 color: Colors.white,
               )),
-          backgroundColor: Colors.blue[700],
+          backgroundColor: Colors.indigo[600], // Colors.blue[700],
           actions: [
             ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: Colors.red[500],
                   side: BorderSide.none,
                 ),
                 icon: const Icon(
@@ -528,7 +528,8 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                             style: TextStyle(fontSize: 20, color: Colors.white),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue[700],
+                            backgroundColor:
+                                Colors.indigo[600], //Colors.blue[700],
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             fixedSize: Size(

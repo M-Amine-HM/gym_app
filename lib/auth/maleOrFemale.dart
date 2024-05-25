@@ -51,7 +51,7 @@ class _MyWidgetState extends State<maleOrFemaleScreen>
     ).animate(controller1);
   }
 
-  final List<Image> img = [
+  final List img = [
     Image.asset("assets/images/null.jpg"),
     Image.asset("assets/images/homme_logo.png"),
     Image.asset("assets/images/femme_logo.png")
@@ -72,9 +72,9 @@ class _MyWidgetState extends State<maleOrFemaleScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFf1faee),
+        backgroundColor: Colors.grey.shade200,
       ),
-      backgroundColor: Color(0xFFf1faee),
+      backgroundColor: Colors.grey.shade200,
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(15),
@@ -93,7 +93,7 @@ class _MyWidgetState extends State<maleOrFemaleScreen>
                     Text(
                       "Quel est votre sexe ?",
                       style: TextStyle(
-                        color: Color(0xFF1d3557),
+                        color: Colors.black,
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
@@ -116,7 +116,7 @@ class _MyWidgetState extends State<maleOrFemaleScreen>
                                 setState(() {
                                   controller1.reverse();
                                   i = 1;
-                                  c = Color(0xff457b9d);
+                                  c = Colors.indigo.shade700;
                                   //TODO :gender true = male ?
                                   gender = true;
                                   homme_ou_femme = "homme";
@@ -184,8 +184,9 @@ class _MyWidgetState extends State<maleOrFemaleScreen>
                             height: 30,
                           )
                         : Container(
-                            child: img[0],
-                            height: 1,
+                            color: Colors.green,
+                            //child: img[0],
+                            height: 100,
                           ),
                     Spacer(),
                     i == 0
@@ -194,8 +195,9 @@ class _MyWidgetState extends State<maleOrFemaleScreen>
                             height: 30,
                           )
                         : Container(
-                            child: img[0],
-                            height: 1,
+                            color: Colors.green,
+                            //child: img[0],
+                            height: 100,
                           ),
                     SizedBox(
                       width: 30,
@@ -203,45 +205,50 @@ class _MyWidgetState extends State<maleOrFemaleScreen>
                   ],
                 ),
               ),
-              Container(
-                child: img[i],
-                height: 80,
-              ),
-              // Spacer(),
-              CupertinoButton(
-                borderRadius: BorderRadius.circular(25),
-                color: c,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Continuer",
-                      style: TextStyle(
-                          color: Color(0xff1d3557),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+              i == 0
+                  ? Container(
+                      height: 80,
+                      color: Colors.grey.shade200,
+                    )
+                  : Container(
+                      child: img[i],
+                      height: 80,
                     ),
-                  ],
+              SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width * 0.8,
+                child: CupertinoButton(
+                  borderRadius: BorderRadius.circular(25),
+                  color: c,
+                  child: Text(
+                    "Continuer",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    //kanet gender de type bool radetha String 5atr maynajm yet3ada lil page lo5ra kan maya5tar l sexe
+                    // String maleOrfemale = "";
+                    // if (gender) {
+                    //   maleOrfemale = "homme";
+                    // } else {
+                    //   maleOrfemale = "femme";
+                    // }
+                    if (homme_ou_femme != "") {
+                      widget.oneUser.sexe = homme_ou_femme;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => heightScreen(
+                                  oneUser: widget.oneUser,
+                                )),
+                      );
+                    }
+                  },
                 ),
-                onPressed: () {
-                  //kanet gender de type bool radetha String 5atr maynajm yet3ada lil page lo5ra kan maya5tar l sexe
-                  // String maleOrfemale = "";
-                  // if (gender) {
-                  //   maleOrfemale = "homme";
-                  // } else {
-                  //   maleOrfemale = "femme";
-                  // }
-                  if (homme_ou_femme != "") {
-                    widget.oneUser.sexe = homme_ou_femme;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => heightScreen(
-                                oneUser: widget.oneUser,
-                              )),
-                    );
-                  }
-                },
               ),
               SizedBox(
                 height: 30,

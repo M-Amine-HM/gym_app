@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class friendProfileScreen extends StatefulWidget {
   const friendProfileScreen({super.key, required this.email});
@@ -73,21 +74,57 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                     const SizedBox(
                       height: 40,
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        fixedSize: Size.fromWidth(
-                            MediaQuery.of(context).size.width * 0.4),
+                    SizedBox(
+                      width: 250,
+                      child: ElevatedButton.icon(
+                        icon: Icon(
+                          LineAwesomeIcons.sms,
+                          size: 25,
+                          color: Colors.white,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          fixedSize: Size.fromWidth(
+                              MediaQuery.of(context).size.width * 0.4),
+                        ),
+                        onPressed: () {},
+                        label: const Text(
+                          "Messages",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
                       ),
-                      onPressed: () {},
-                      child: const Text(
-                        "Add friend",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                      width: 250,
+                      child: ElevatedButton.icon(
+                        icon: Icon(
+                          LineAwesomeIcons.dumbbell,
+                          size: 25,
+                          color: Colors.white,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          fixedSize: Size.fromWidth(
+                              MediaQuery.of(context).size.width * 0.4),
+                        ),
+                        onPressed: () {},
+                        label: const Text(
+                          "Envoyer Plan",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
                       ),
                     )
                   ],

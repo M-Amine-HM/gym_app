@@ -50,7 +50,7 @@ class _PlanScreenState extends State<PlansScreen> {
         //shadowColor: Colors.grey.shade50,
         title: const Text(
           "Plans",
-          style: TextStyle(fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
       ),
@@ -75,7 +75,7 @@ class _PlanScreenState extends State<PlansScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[700],
+                    backgroundColor: Colors.indigo[600], //Colors.blue[700],
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
@@ -92,7 +92,7 @@ class _PlanScreenState extends State<PlansScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[700],
+                    backgroundColor: Colors.indigo[600], //Colors.blue[700],
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
@@ -109,7 +109,7 @@ class _PlanScreenState extends State<PlansScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[700],
+                    backgroundColor: Colors.indigo[600], //Colors.blue[700],
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
@@ -176,7 +176,7 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                 color: Colors.white,
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.green[500],
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 fixedSize: Size((MediaQuery.of(context).size.width * 0.55), 45),
@@ -450,7 +450,7 @@ class _PlanWidgetState extends State<PlanWidget> {
                           color: Colors.white),
                     ),
                     radius: 30,
-                    backgroundColor: Colors.red.shade500,
+                    backgroundColor: Colors.red[600],
                   )
                 ],
               ),

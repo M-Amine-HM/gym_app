@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:gym_app/auth/signup.dart';
 //import 'package:gym_app/auth/width.dart';
 import 'package:gym_app/model/userModel.dart';
@@ -142,7 +143,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 0, right: 25),
                 leading: Checkbox(
-                    activeColor: Colors.blue,
+                    activeColor: Colors.indigo.shade700,
                     value: _ischecked,
                     onChanged: (newBool) {
                       setState(() {
@@ -159,7 +160,10 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                       ),
                       TextSpan(
                         text: "conditions génerales ",
-                        style: const TextStyle(color: Colors.blue),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.indigo.shade600,
+                        ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             //TODO: page qui contient les conditons generales
@@ -171,7 +175,10 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                       ),
                       TextSpan(
                         text: "politique de la confidentialité",
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.indigo.shade600,
+                        ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             //TODO: page qui contient les conditons generales
@@ -186,11 +193,11 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.indigo.shade700,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
+                      borderRadius: BorderRadius.circular(10)),
                   fixedSize:
-                      Size.fromWidth(MediaQuery.of(context).size.width * 1),
+                      Size.fromWidth(MediaQuery.of(context).size.width * 0.8),
                 ),
                 onPressed: () async {
                   if (_textVerifyEmail &&
@@ -219,9 +226,17 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                     } else {
                       if (_userdata![0].email == (_email.text)) {
                         //case : there no user
-                        setState(() {
-                          _erreurText = "user is already exist try to connect";
-                        });
+                        //setState(() {
+                        _erreurText = "Le compte est déja utilisé ";
+                        showToast(_erreurText,
+                            context: context,
+                            animation: StyledToastAnimation.fade,
+                            duration: Duration(seconds: 3),
+                            reverseAnimation: StyledToastAnimation.fade,
+                            alignment: Alignment.center,
+                            position: StyledToastPosition(
+                                align: Alignment.center, offset: 100));
+                        //});
                       }
                       // Navigator.push(
                       //   context,
@@ -245,10 +260,10 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
               const SizedBox(
                 height: 15,
               ),
-              Text(
-                _erreurText,
-                style: TextStyle(fontSize: 25, color: Colors.red),
-              )
+              // Text(
+              //   _erreurText,
+              //   style: TextStyle(fontSize: 25, color: Colors.red),
+              // )
             ],
           ),
         ),
