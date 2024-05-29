@@ -237,7 +237,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                               //   "nbrsSeries": "exes",
                               // };
 
-// Create a Plan object using the fromMap function
+                              // Create a Plan object using the fromMap function
                               //Plan plan = Plan.fromMap(planData);
                               //TODO: esm l plan ylzem ykun unique
 

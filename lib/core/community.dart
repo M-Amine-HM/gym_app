@@ -6,8 +6,8 @@ import 'package:gym_app/services/Api.dart';
 
 // TODO: y9bl kan png wel jpg images khw
 class coummunityScreen extends StatefulWidget {
-  const coummunityScreen({super.key});
-
+  coummunityScreen({super.key, required this.theUser});
+  final User theUser;
   @override
   State<coummunityScreen> createState() => _coummunityScreenState();
 }
@@ -103,6 +103,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => friendProfileScreen(
                                           email: (thedata[index]).email,
+                                          theUser: widget.theUser,
                                         )),
                               );
                             },

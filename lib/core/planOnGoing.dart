@@ -13,9 +13,14 @@ import 'package:gym_app/services/Api.dart';
 import 'package:provider/provider.dart';
 
 class OnGoingPlanScreen extends StatefulWidget {
-  OnGoingPlanScreen({super.key, required this.planToDo, required this.theUser});
-  Plan planToDo;
+  OnGoingPlanScreen(
+      {super.key,
+      this.planToDo,
+      required this.theUser,
+      required this.planType});
+  Plan? planToDo;
   User theUser;
+  String planType;
 
   @override
   State<OnGoingPlanScreen> createState() => _OnGoingPlanScreenState();
@@ -139,7 +144,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(10))),
                                     onPressed: () async {
-                                      await Api.deletePlan(widget.planToDo.id);
+                                      await Api.deletePlan(widget.planToDo!.id);
                                       dismissAllToast(showAnim: false);
 
                                       Navigator.pushAndRemoveUntil(
@@ -454,16 +459,16 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.planToDo.planName,
+                    widget.planToDo!.planName,
                     style: const TextStyle(
                         fontSize: 25,
                         color: Colors.white,
                         fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    widget.planToDo.nbrExercises == "1"
-                        ? "${widget.planToDo.nbrExercises} exercice"
-                        : "${widget.planToDo.nbrExercises} exercices",
+                    widget.planToDo!.nbrExercises == "1"
+                        ? "${widget.planToDo!.nbrExercises} exercice"
+                        : "${widget.planToDo!.nbrExercises} exercices",
                     style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -484,7 +489,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                     // borderRadius: BorderRadius.circular(18),
                   ),
                   child: FutureBuilder(
-                      future: Api.getExercisesByPlan(widget.planToDo.planName),
+                      future: Api.getExercisesByPlan(widget.planToDo!.planName),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
                           return const Center(
@@ -507,7 +512,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                                         data[index].image,
                                     exerciseName: data[index].name,
                                     bodyPartName: data[index].bodyPart,
-                                    nbrSer: widget.planToDo.nbrsSeries[index],
+                                    nbrSer: widget.planToDo!.nbrsSeries[index],
                                   )),
                               // separatorBuilder: (context, index) => const SizedBox(
                               //       height: 0,
@@ -623,7 +628,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                             //print(seriesCompletedChecked);
                             List? data;
                             data = await Api.getExercisesByPlan(
-                                widget.planToDo.planName);
+                                widget.planToDo!.planName);
                             //here
                             List<List<dynamic>> generateListOfLists(
                                 int numberOfLists,
@@ -642,17 +647,17 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
 
                             late List<List> seriesCompletedChecked = [];
                             seriesCompletedChecked = generateListOfLists(
-                              widget.planToDo.nbrsSeries.length,
+                              widget.planToDo!.nbrsSeries.length,
                               1,
                               false,
                             );
                             for (int i = 0;
-                                i < widget.planToDo.nbrsSeries.length;
+                                i < widget.planToDo!.nbrsSeries.length;
                                 i++) {
                               for (int j = 0;
                                   j <
                                       (int.parse(
-                                              widget.planToDo.nbrsSeries[i]) -
+                                              widget.planToDo!.nbrsSeries[i]) -
                                           1);
                                   j++) {
                                 seriesCompletedChecked[i].add(false);
@@ -679,7 +684,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => doingThePlanScreen(
                                           data: data!,
-                                          planDoing: widget.planToDo,
+                                          planDoing: widget.planToDo!,
                                           theuser: widget.theUser,
                                           // seriesCompleted: list,
                                           // seriesCompletedChecked:
@@ -713,11 +718,11 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                             // });
 
                             for (int i = 0;
-                                i < (widget.planToDo.exercises.length);
+                                i < (widget.planToDo!.exercises.length);
                                 i++) {
-                              chosed[widget.planToDo.exercises[i]][0] = true;
-                              chosed[widget.planToDo.exercises[i]][1] =
-                                  widget.planToDo.nbrsSeries[i];
+                              chosed[widget.planToDo!.exercises[i]][0] = true;
+                              chosed[widget.planToDo!.exercises[i]][1] =
+                                  widget.planToDo!.nbrsSeries[i];
                             }
                             // widget.planToDo.nbrsSeries.forEach((element) {
                             //   chosed[element][1] = element;
@@ -728,9 +733,9 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => UpdatePlanScreen(
-                                  PlanID: widget.planToDo.id,
+                                  PlanID: widget.planToDo!.id,
                                   chosed: chosed,
-                                  PlanName: widget.planToDo.planName,
+                                  PlanName: widget.planToDo!.planName,
                                   theuser: widget.theUser,
                                 ),
                               ),

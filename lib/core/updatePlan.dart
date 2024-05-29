@@ -443,6 +443,7 @@ class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               OnGoingPlanScreen(
+                                                planType: "1",
                                                 planToDo: planToDo![0],
                                                 theUser: widget.theuser,
                                               )),

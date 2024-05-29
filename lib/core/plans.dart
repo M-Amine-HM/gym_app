@@ -17,7 +17,7 @@ class PlansScreen extends StatefulWidget {
 
 class _PlanScreenState extends State<PlansScreen> {
   late List<Widget> _screens = [];
-
+  List<String> appBarTitles = ["Mes Plans", "Plans Prédefénis", "Plans amis"];
   late int screenS;
   @override
   void initState() {
@@ -34,7 +34,9 @@ class _PlanScreenState extends State<PlansScreen> {
         color: Colors.green,
       ),
       Container(
-        color: Colors.blue,
+        child: plansFriendContainer(
+          theUser: widget.theuser,
+        ),
       )
     ];
   }
@@ -53,8 +55,8 @@ class _PlanScreenState extends State<PlansScreen> {
         backgroundColor: Colors.grey.shade200,
         surfaceTintColor: Colors.grey.shade200,
         //shadowColor: Colors.grey.shade50,
-        title: const Text(
-          "Plans",
+        title: Text(
+          appBarTitles[screenS],
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
@@ -127,6 +129,72 @@ class _PlanScreenState extends State<PlansScreen> {
             Expanded(child: _screens[screenS])
           ],
         ),
+      ),
+    );
+  }
+}
+
+class plansFriendContainer extends StatefulWidget {
+  plansFriendContainer({super.key, required this.theUser});
+  User theUser;
+  @override
+  State<plansFriendContainer> createState() => _plansFriendContainerState();
+}
+
+class _plansFriendContainerState extends State<plansFriendContainer> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey.shade200,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: Api.getFriendsPlanByUserId(widget.theUser.id),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  //TODO: if it return null , must handle the error
+                  List? data = snapshot.data;
+                  return ListView.separated(
+                      itemBuilder: ((context, index) => GestureDetector(
+                            child: PlanFromFriendWidget(
+                                onTap: () {
+                                  // dismissAllToast(showAnim: false);
+
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             OnGoingPlanScreen(
+                                  //               theUser: widget.theuser,
+                                  //               planToDo: snapshot.data[index],
+                                  //             )));
+                                },
+                                planFrom: snapshot.data[index].planFrom,
+                                nbrExercises: data![index].nbrExercises,
+                                planName: snapshot.data[index].planName,
+                                exercises: snapshot.data[index].exercises,
+                                nbrsSeries: snapshot.data[index].nbrsSeries,
+                                theimage: (index + 1).toString()
+                                // (snapshot.data[index].planName).substring(0, 3),
+                                ),
+                          )),
+                      separatorBuilder: (context, index) => const SizedBox(
+                            height: 13,
+                          ),
+                      itemCount: snapshot.data.length);
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -365,6 +433,7 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               OnGoingPlanScreen(
+                                                planType: "1",
                                                 theUser: widget.theuser,
                                                 planToDo: snapshot.data[index],
                                               )));
@@ -463,6 +532,250 @@ class _PlanWidgetState extends State<PlanWidget> {
                     radius: 30,
                     backgroundColor: Colors.red[600],
                   )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "les exercices : ",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                child: ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: ((context, index) => ExNameAndNbrSetsRow(
+                          exerciseName: widget.exercises![index],
+                          nbrSerie: widget.nbrsSeries![index],
+                        )),
+                    separatorBuilder: (context, index) => const SizedBox(
+                          height: 10,
+                        ),
+                    itemCount: widget.exercises!.length),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PlanFromFriendWidget extends StatefulWidget {
+  PlanFromFriendWidget(
+      {super.key,
+      required this.planName,
+      required this.nbrExercises,
+      required this.exercises,
+      required this.theimage,
+      required this.onTap,
+      required this.planFrom,
+      required this.nbrsSeries});
+  final String planName;
+  final String nbrExercises;
+  final List? exercises;
+  final List? nbrsSeries;
+  final String theimage;
+  void Function() onTap;
+  String planFrom;
+
+  @override
+  State<PlanFromFriendWidget> createState() => _PlanFromFriendWidgetState();
+}
+
+class _PlanFromFriendWidgetState extends State<PlanFromFriendWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: widget.onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          //shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              widget.planName,
+                              style: TextStyle(
+                                  fontSize: 23, fontWeight: FontWeight.w700),
+                              //softWrap: true,
+                            ),
+                            Text(
+                              " de " + widget.planFrom,
+                              style: TextStyle(
+                                  color: Colors.indigo.shade700,
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.w700),
+                              //softWrap: true,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "Nombre des exercices : " + widget.nbrExercises,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w500),
+                          //softWrap: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  CircleAvatar(
+                    child: Text(
+                      widget.theimage,
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    radius: 30,
+                    backgroundColor: Colors.red[600],
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "les exercices : ",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                child: ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: ((context, index) => ExNameAndNbrSetsRow(
+                          exerciseName: widget.exercises![index],
+                          nbrSerie: widget.nbrsSeries![index],
+                        )),
+                    separatorBuilder: (context, index) => const SizedBox(
+                          height: 10,
+                        ),
+                    itemCount: widget.exercises!.length),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PlanFriendWidget extends StatefulWidget {
+  PlanFriendWidget(
+      {super.key,
+      required this.planName,
+      required this.nbrExercises,
+      required this.exercises,
+      required this.theimage,
+      required this.onTap,
+      required this.nbrsSeries});
+  final String planName;
+  final String nbrExercises;
+  final List? exercises;
+  final List? nbrsSeries;
+  final String theimage;
+  void Function() onTap;
+
+  @override
+  State<PlanFriendWidget> createState() => _PlanFriendWidgetState();
+}
+
+bool clicked = false;
+
+class _PlanFriendWidgetState extends State<PlanFriendWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        clicked = !clicked;
+        setState(() {});
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          //shape: BoxShape.rectangle,
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.planName,
+                          style: TextStyle(
+                              fontSize: 23, fontWeight: FontWeight.w700),
+                          //softWrap: true,
+                        ),
+                        Text(
+                          "Nombre des exercices : " + widget.nbrExercises,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w500),
+                          //softWrap: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  clicked
+                      ? Container(
+                          height: 60,
+                          width: 60,
+                          child: Image(
+                            image: AssetImage("assets/images/check.png"),
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(100)),
+                          child: Center(
+                            child: Text(
+                              widget.theimage,
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        )
                 ],
               ),
               SizedBox(

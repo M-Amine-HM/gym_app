@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/chatPage.dart';
+import 'package:gym_app/core/sendPlanPage.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 class friendProfileScreen extends StatefulWidget {
-  const friendProfileScreen({super.key, required this.email});
-
+  const friendProfileScreen(
+      {super.key, required this.email, required this.theUser});
+  final User theUser;
   final String email;
   @override
   State<friendProfileScreen> createState() => _friendProfileScreenState();
@@ -17,12 +19,16 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        centerTitle: true,
+        backgroundColor: Colors.grey.shade200,
+        surfaceTintColor: Colors.grey.shade200,
+        //shadowColor: Colors.grey.shade50,
         title: const Text(
           "Community",
-          style: TextStyle(fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -125,7 +131,23 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                           fixedSize: Size.fromWidth(
                               MediaQuery.of(context).size.width * 0.4),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          List? thelist =
+                              await Api.getPlanByOwner(widget.theUser.id);
+
+                          List<bool> booleanList = List<bool>.generate(
+                              thelist!.length, (index) => false);
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => sendPlanScreen(
+                                        totheUserId: data[0].id,
+                                        TheUserName: widget.theUser.name,
+                                        booleanList: booleanList,
+                                        theUserId: widget.theUser.id,
+                                      )));
+                        },
                         label: const Text(
                           "Envoyer Plan",
                           style: TextStyle(

@@ -7,6 +7,7 @@ import 'dart:io';
 
 //import 'package:crudtest/model/product_model.dart';
 import 'package:gym_app/model/exerciseModel.dart';
+import 'package:gym_app/model/friendPlanModel.dart';
 import 'package:gym_app/model/planCompletedModel.dart';
 import 'package:gym_app/model/planModel.dart';
 import 'package:gym_app/model/userModel.dart';
@@ -65,6 +66,37 @@ class Api {
       }
     } catch (e) {
       print(e.toString() + " erreur add plan function ");
+    }
+  }
+
+  static addFriendPlan(Map<String, dynamic> planData) async {
+    // Map<dynamic, dynamic> planData = plan.toMap();
+
+    // Print the data (optional)
+    print(planData);
+    //ali mawjouda fl post fl nodeJS
+    var url = Uri.parse(baseUrl + "addFriendplan");
+    try {
+      //var data = jsonEncode(planData);
+      //print(data);
+      // Map<String, String> a = {
+      //   "planName": 'p8',
+      //   "nbrExercises": '4',
+      //   "exercises": "Ex1 ,Ex3",
+      //   "nbrsSeries": "1 ,1",
+      //   "userId": 'ff',
+      // };
+      final res = await http.post(url, body: planData);
+
+      if (res.statusCode == 200) {
+        var data = jsonDecode(res.body.toString());
+        print(data);
+        //
+      } else {
+        //
+      }
+    } catch (e) {
+      print(e.toString() + " erreur add friend plan function ");
     }
   }
 
@@ -217,6 +249,32 @@ class Api {
     }
   }
 
+  static deleteFriendPlan(id) async {
+    //List<Product> products = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "deleteFriendPlan/$id");
+    try {
+      final res = await http.delete(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+
+        //tretruni l lista bch nafffichah
+
+        //
+      } else {
+        print("failed delete friend plan");
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   static getPlanByName(name) async {
     //List<Product> products = [];
     List<Plan> plan = [];
@@ -318,12 +376,12 @@ class Api {
         var data = jsonDecode(res.body.toString());
         //print(data);
         //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
-        data['plan'].forEach(
+        data['plans'].forEach(
           (value) => {
             plan.add(
               Plan(
                 id: value['_id'],
-                userId: "ff",
+                userId: value["userId"],
                 planName: value['planName'],
                 nbrExercises: value['nbrExercises'],
                 exercises: value['exercises'],
@@ -348,9 +406,102 @@ class Api {
     }
   }
 
+  static getFriendsPlanByUserId(userID) async {
+    //List<Product> products = [];
+    List<Friendplan> plan = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getFriendsPlansByOwnerId/$userID");
+    try {
+      final res = await http.get(url);
+      await Future.delayed(Duration(milliseconds: 200));
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['plans'].forEach(
+          (value) => {
+            plan.add(
+              Friendplan(
+                id: value['_id'],
+                userId: value["userId"],
+                planName: value['planName'],
+                nbrExercises: value['nbrExercises'],
+                exercises: value['exercises'],
+                nbrsSeries: value['nbrsSeries'],
+                planFrom: value["planFrom"],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        await Future.delayed(Duration(milliseconds: 200));
+        print(plan);
+        //tretruni l lista bch nafffichah
+        return plan;
+        //
+      } else {
+        print("erreur lors la fonctions getByPlanName");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   static updatePlan(id, body) async {
     //ali mawjouda fl get fl nodeJS
     var url = Uri.parse(baseUrl + "updatePlan/$id");
+    try {
+      final res = await http.put(url, body: body);
+      List<Plan> plan = [];
+      Plan? plan1;
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        // plan1!.id = data['plan']._id;
+        // plan1.planName = data['plan'].planName;
+        // plan1.nbrExercises = data['plan'].nbrExercises;
+        // plan1.exercises = data['plan'].exercises;
+        // plan1.nbrsSeries = data['plan'].nbrsSeries;
+        data['plan'].forEach(
+          (value) => {
+            plan.add(
+              Plan(
+                id: value['_id'],
+                planName: value['planName'],
+                nbrExercises: value['nbrExercises'],
+                exercises: value['exercises'],
+                nbrsSeries: value['nbrsSeries'],
+                userId: value['userId'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(plan1);
+
+        //tretruni l lista bch nafffichah
+        return plan[0];
+        //
+      } else {
+        print("erreur lors la fonctions getByPlanName");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static updateFriendPlan(id, body) async {
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "updateFriendPlan/$id");
     try {
       final res = await http.put(url, body: body);
       List<Plan> plan = [];
@@ -419,6 +570,50 @@ class Api {
                   exercises: value['exercises'],
                   nbrsSeries: value['nbrsSeries'],
                   userId: value['userId']),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(plan);
+        //tretruni l lista bch nafffichah
+        return plan;
+        //
+      } else {
+        print("erreur lors la fonctions getPlan");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString() + "erreur lors la fonctions getPlan");
+    }
+  }
+
+  static getFriendsPlans() async {
+    //List<Product> products = [];
+    List<Friendplan> plan = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getFriendplans");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['plans'].forEach(
+          (value) => {
+            plan.add(
+              Friendplan(
+                id: value['_id'],
+                planName: value['planName'],
+                nbrExercises: value['nbrExercises'],
+                exercises: value['exercises'],
+                nbrsSeries: value['nbrsSeries'],
+                userId: value['userId'],
+                planFrom: value['planFrom'],
+              ),
               //id: value['id'].toString()),
             ),
           },

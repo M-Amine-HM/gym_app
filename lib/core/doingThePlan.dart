@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -207,7 +209,7 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
                         style: TextStyle(fontSize: 23, color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[700],
+                        backgroundColor: Colors.indigo[700],
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         fixedSize: Size(

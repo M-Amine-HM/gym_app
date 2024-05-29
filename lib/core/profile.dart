@@ -192,7 +192,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => coummunityScreen()),
+                                builder: (context) => coummunityScreen(
+                                      theUser: widget.oneUser,
+                                    )),
                           );
                         }),
                     ProfileMenuWidget(
