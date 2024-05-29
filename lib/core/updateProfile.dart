@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:gym_app/core/ImageUpload.dart';
 import 'package:gym_app/core/profile.dart';
 import 'package:gym_app/model/userModel.dart';
@@ -35,6 +36,25 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController _password = TextEditingController();
   TextEditingController _height = TextEditingController();
   TextEditingController _weight = TextEditingController();
+  bool isOnlyLetters(String input) {
+    // Regular expression to match only letters (both uppercase and lowercase)
+    final RegExp regex = RegExp(r'^[a-zA-Z]+(?:\s[a-zA-Z]+)*$');
+    // Return true if the input string matches the regular expression
+    return regex.hasMatch(input);
+  }
+
+  bool isEightDigits(String str) {
+    // Cette expression régulière vérifie que la chaîne contient exactement 8 chiffres
+    final eightDigitsRegex = RegExp(r'^\d{8}$');
+    return eightDigitsRegex.hasMatch(str);
+  }
+
+  bool isNumeric(String str) {
+    // Cette expression régulière vérifie que la chaîne contient uniquement des chiffres
+    final numericRegex = RegExp(r'^[0-9]+$');
+    return numericRegex.hasMatch(str);
+  }
+
   @override
   void initState() {
     _name.text = widget.theUser!.name;
@@ -206,6 +226,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
                                   TextFormField(
                                     controller: _phoneNumber,
+                                    keyboardType: TextInputType.number,
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         //contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -290,20 +311,102 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             width: MediaQuery.sizeOf(context).width * 0.6,
                             child: ElevatedButton(
                               onPressed: () async {
-                                Map Data = {
-                                  "name": _name.text,
-                                  "phoneNumber": _phoneNumber.text,
-                                  "adress": _adress.text,
-                                  "password": _password.text,
-                                  "weight": _weight.text,
-                                  "height": _height.text,
-                                };
-                                await Api.updateUser(_userID, Data);
-                                setState(() {
-                                  ProfileScreen(
-                                    oneUser: widget.theUser!,
-                                  );
-                                });
+                                print(_phoneNumber.text.length);
+                                if (!isOnlyLetters(_name.text)) {
+                                  showToast("Le nom n'est pas valide",
+                                      context: context,
+                                      backgroundColor: Colors.red,
+                                      animation: StyledToastAnimation.fade,
+                                      duration: Duration(seconds: 3),
+                                      reverseAnimation:
+                                          StyledToastAnimation.fade,
+                                      alignment: Alignment.center,
+                                      position: StyledToastPosition(
+                                          align: Alignment.center,
+                                          offset: 100));
+                                } else if (((_phoneNumber.text).length != 0) &&
+                                    (!isEightDigits(_phoneNumber.text))) {
+                                  showToast(
+                                      "Le numéro de telephone n'est pas valide",
+                                      context: context,
+                                      backgroundColor: Colors.red,
+                                      animation: StyledToastAnimation.fade,
+                                      duration: Duration(seconds: 3),
+                                      reverseAnimation:
+                                          StyledToastAnimation.fade,
+                                      alignment: Alignment.center,
+                                      position: StyledToastPosition(
+                                          align: Alignment.center,
+                                          offset: 100));
+                                } else if (_password.text.length <= 5) {
+                                  showToast(
+                                      "Le mot de passe doit contient au moins 6 caractéres",
+                                      context: context,
+                                      backgroundColor: Colors.red,
+                                      animation: StyledToastAnimation.fade,
+                                      duration: Duration(seconds: 3),
+                                      reverseAnimation:
+                                          StyledToastAnimation.fade,
+                                      alignment: Alignment.center,
+                                      position: StyledToastPosition(
+                                          align: Alignment.center,
+                                          offset: 100));
+                                } else if ((double.tryParse(_height.text) ==
+                                        null) ||
+                                    (double.parse(_height.text) < 100) ||
+                                    (double.parse(_height.text) > 250)) {
+                                  showToast(
+                                      "La taille doit etre entre 100 et 250",
+                                      context: context,
+                                      backgroundColor: Colors.red,
+                                      animation: StyledToastAnimation.fade,
+                                      duration: Duration(seconds: 3),
+                                      reverseAnimation:
+                                          StyledToastAnimation.fade,
+                                      alignment: Alignment.center,
+                                      position: StyledToastPosition(
+                                          align: Alignment.center,
+                                          offset: 100));
+                                } else if (double.tryParse(_weight.text) ==
+                                    null) {
+                                  showToast("La poids n'est pas valide",
+                                      context: context,
+                                      backgroundColor: Colors.red,
+                                      animation: StyledToastAnimation.fade,
+                                      duration: Duration(seconds: 3),
+                                      reverseAnimation:
+                                          StyledToastAnimation.fade,
+                                      alignment: Alignment.center,
+                                      position: StyledToastPosition(
+                                          align: Alignment.center,
+                                          offset: 100));
+                                } else {
+                                  Map Data = {
+                                    "name": _name.text,
+                                    "phoneNumber": _phoneNumber.text,
+                                    "adress": _adress.text,
+                                    "password": _password.text,
+                                    "weight": _weight.text,
+                                    "height": _height.text,
+                                  };
+                                  await Api.updateUser(_userID, Data);
+                                  // setState(() {
+                                  //   ProfileScreen(
+                                  //     oneUser: widget.theUser!,
+                                  //   );
+                                  // });
+                                  showToast("Modifié avec succés ",
+                                      context: context,
+                                      backgroundColor: Colors.green,
+                                      animation: StyledToastAnimation.fade,
+                                      duration: Duration(seconds: 3),
+                                      reverseAnimation:
+                                          StyledToastAnimation.fade,
+                                      alignment: Alignment.center,
+                                      position: StyledToastPosition(
+                                          align: Alignment.center,
+                                          offset: 100));
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.indigo[600],

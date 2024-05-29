@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:gym_app/auth/firstPage.dart';
 import 'package:gym_app/core/community.dart';
 import 'package:gym_app/core/salleDeSport.dart';
@@ -284,7 +285,125 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         textColor: Colors.red,
                         fontWeight: FontWeight.w500,
                         endIcon: false,
-                        onPress: () {}),
+                        onPress: () {
+                          showToastWidget(
+                            reverseAnimation: StyledToastAnimation.fade,
+                            //dismissOtherToast: false,
+                            // animDuration: Duration(seconds: 4),
+                            context: context,
+                            animation: StyledToastAnimation.fade,
+                            isIgnoring: false,
+                            duration: Duration.zero,
+                            position: const StyledToastPosition(
+                                align: Alignment.center),
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                ModalBarrier(
+                                  color: Colors.black.withOpacity(0.2),
+                                  dismissible:
+                                      false, // Prevents dismissing the toast by tapping outside
+                                ),
+                                // Container(
+                                //   color: Colors.black,
+                                //   height: 50,
+                                //   width: 50,
+                                // ),
+                                Container(
+                                  height:
+                                      MediaQuery.sizeOf(context).height * 0.17,
+                                  width:
+                                      MediaQuery.sizeOf(context).width * 0.92,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(30, 20, 30, 0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 2,
+                                        blurRadius: 7,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Voulez vous supprimer votre Compte?",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+
+                                      //error message in textformfield is not working in the toast so need other way
+
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          TextButton(
+                                            style: TextButton.styleFrom(
+                                                backgroundColor:
+                                                    Colors.blue[700],
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10))),
+                                            onPressed: () {
+                                              dismissAllToast(showAnim: true);
+                                            },
+                                            child: const Text("NON",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ),
+                                          const SizedBox(width: 20),
+                                          TextButton(
+                                            style: TextButton.styleFrom(
+                                                backgroundColor:
+                                                    Colors.red[700],
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10))),
+                                            onPressed: () async {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pushAndRemoveUntil(
+                                                      CupertinoPageRoute(
+                                                          builder: (context) =>
+                                                              FirstPage()),
+                                                      (route) => false);
+                                              await Future.delayed(
+                                                  Duration(seconds: 3));
+                                              await Api.deleteUser(
+                                                  widget.oneUser.id);
+                                              dismissAllToast(showAnim: false);
+                                            },
+                                            child: const Text("OUI",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                     SizedBox(
                       height: 10,
                     ),

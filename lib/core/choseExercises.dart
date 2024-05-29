@@ -4,13 +4,18 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/model/exerciseModel.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 
 class ChooseExercisesScreen extends StatefulWidget {
   ChooseExercisesScreen(
-      {super.key, required this.PlanName, required this.chosed});
+      {super.key,
+      required this.PlanName,
+      required this.chosed,
+      required this.theuser});
   final String PlanName;
   final Map chosed;
+  User theuser;
   @override
   State<ChooseExercisesScreen> createState() => _ChooseExercisesScreenState();
 }
@@ -145,6 +150,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                                   nbrsSerieFunction: (int p0) =>
                                       widget.chosed[data[index].name][1] = p0,
                                   isChecked: widget.chosed[data[index].name][0],
+                                  setNumber: widget.chosed[data[index].name][1],
                                   exerciseName: data[index].name,
                                   bodyPartImage: "${Api.baseUrl}exercise/" +
                                       data[index].image,
@@ -171,7 +177,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                         child: Center(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue[700],
+                              backgroundColor: Colors.indigo[700],
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                               fixedSize: Size(
@@ -221,6 +227,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                                 "nbrExercises": (exercises.length).toString(),
                                 "exercises": exsTostring,
                                 "nbrsSeries": nbrsSeriesTostring,
+                                "userId": widget.theuser.id
                               };
 
                               // Map<dynamic, dynamic> hedata = {
@@ -240,10 +247,12 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PlansScreen()),
+                                        builder: (context) => PlansScreen(
+                                              theuser: widget.theuser,
+                                            )),
                                     (route) => false);
                               } else {
-                                showToast('Chosissez au minimaum un exercice',
+                                showToast('Chosissez au minimum un exercice',
                                     context: context,
                                     animation: StyledToastAnimation.fade,
                                     duration: Duration(seconds: 3),
@@ -255,7 +264,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                               //Navigator.pop(context);
                             },
                             child: Text(
-                              "Comfirmer",
+                              "Confirmer",
                               style:
                                   TextStyle(fontSize: 20, color: Colors.white),
                             ),
@@ -282,6 +291,7 @@ class ExerciceWidget extends StatefulWidget {
       required this.exerciseName,
       required this.isChecked,
       required this.onTap,
+      required this.setNumber,
       required this.nbrsSerieFunction});
   void Function() onTap;
   int Function(int) nbrsSerieFunction;
@@ -289,13 +299,13 @@ class ExerciceWidget extends StatefulWidget {
   final String bodyPartName;
   final String exerciseName;
   bool isChecked;
-
+  int setNumber;
   @override
   State<ExerciceWidget> createState() => _ExerciceWidgetState();
 }
 
 class _ExerciceWidgetState extends State<ExerciceWidget> {
-  int nbrSerie = 1;
+  //int nbrSerie = 1;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -371,10 +381,10 @@ class _ExerciceWidgetState extends State<ExerciceWidget> {
                     ),
                     IconButton(
                       onPressed: () {
-                        if (nbrSerie > 1) {
-                          nbrSerie = nbrSerie - 1;
+                        if (widget.setNumber > 1) {
+                          widget.setNumber = widget.setNumber - 1;
                           //widget.nbrsSerieFunction = widget.nbrSerie as int Function();
-                          widget.nbrsSerieFunction(nbrSerie);
+                          widget.nbrsSerieFunction(widget.setNumber);
                         }
                         setState(() {});
                       },
@@ -382,18 +392,18 @@ class _ExerciceWidgetState extends State<ExerciceWidget> {
                       color: Colors.red[700],
                     ),
                     Text(
-                      (nbrSerie).toString(),
+                      (widget.setNumber).toString(),
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     IconButton(
                       onPressed: () {
-                        nbrSerie = nbrSerie + 1;
-                        widget.nbrsSerieFunction(nbrSerie);
+                        widget.setNumber = widget.setNumber + 1;
+                        widget.nbrsSerieFunction(widget.setNumber);
                         setState(() {});
                       },
                       icon: Icon(CupertinoIcons.add_circled_solid),
-                      color: Colors.blue[700],
+                      color: Colors.indigo[700],
                     ),
                   ],
                 )

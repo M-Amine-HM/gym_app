@@ -47,12 +47,13 @@ class Api {
     try {
       //var data = jsonEncode(planData);
       //print(data);
-      Map<String, dynamic> a = {
-        'planName': "hasta el final",
-        'nbrExercises': "exercises nbrs",
-        'exercises': "a bb cc",
-        'nbrsSeries': "exes",
-      };
+      // Map<String, String> a = {
+      //   "planName": 'p8',
+      //   "nbrExercises": '4',
+      //   "exercises": "Ex1 ,Ex3",
+      //   "nbrsSeries": "1 ,1",
+      //   "userId": 'ff',
+      // };
       final res = await http.post(url, body: planData);
 
       if (res.statusCode == 200) {
@@ -118,6 +119,53 @@ class Api {
               PlanCompleted(
                 id: value['_id'],
                 planName: value['planName'],
+                userId: value['userId'],
+                nbrExercises: value['nbrExercises'],
+                time: value['time'],
+                currentTime: value['currentTime'],
+                exercises: value['exercises'],
+                nbrsSeries: value['nbrsSeries'],
+                seriesCompleted: value['seriesCompleted'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(plans);
+        //tretruni l lista bch nafffichah
+        return plans;
+        //
+      } else {
+        print("erreur lors la fonctions getPlan");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString() + "erreur lors la fonctions getPlan");
+    }
+  }
+
+  static getCompletedPlansByOwnerId(id) async {
+    //List<Product> products = [];
+    List<PlanCompleted> plans = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getCompletedplansByOwnerId/$id");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['plans'].forEach(
+          (value) => {
+            plans.add(
+              PlanCompleted(
+                id: value['_id'],
+                planName: value['planName'],
+                userId: value['userId'],
                 nbrExercises: value['nbrExercises'],
                 time: value['time'],
                 currentTime: value['currentTime'],
@@ -189,6 +237,7 @@ class Api {
               Plan(
                 id: value['_id'],
                 planName: value['planName'],
+                userId: value['userId'],
                 nbrExercises: value['nbrExercises'],
                 exercises: value['exercises'],
                 nbrsSeries: value['nbrsSeries'],
@@ -197,6 +246,94 @@ class Api {
             ),
           },
         );
+        print(plan);
+        //tretruni l lista bch nafffichah
+        return plan;
+        //
+      } else {
+        print("erreur lors la fonctions getByPlanName");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static getPlanByOwner(name) async {
+    //List<Product> products = [];
+    List<Plan> plan = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "get_plan_byOwner/$name");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['plan'].forEach(
+          (value) => {
+            plan.add(
+              Plan(
+                id: value['_id'],
+                planName: value['planName'],
+                userId: value['userId'],
+                nbrExercises: value['nbrExercises'],
+                exercises: value['exercises'],
+                nbrsSeries: value['nbrsSeries'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(plan);
+        //tretruni l lista bch nafffichah
+        return plan;
+        //
+      } else {
+        print("erreur lors la fonctions getByOwner");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static getPlanByUserId(userID) async {
+    //List<Product> products = [];
+    List<Plan> plan = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "get_plansByOwnerId/$userID");
+    try {
+      final res = await http.get(url);
+      await Future.delayed(Duration(milliseconds: 200));
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['plan'].forEach(
+          (value) => {
+            plan.add(
+              Plan(
+                id: value['_id'],
+                userId: "ff",
+                planName: value['planName'],
+                nbrExercises: value['nbrExercises'],
+                exercises: value['exercises'],
+                nbrsSeries: value['nbrsSeries'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        await Future.delayed(Duration(milliseconds: 200));
         print(plan);
         //tretruni l lista bch nafffichah
         return plan;
@@ -237,6 +374,7 @@ class Api {
                 nbrExercises: value['nbrExercises'],
                 exercises: value['exercises'],
                 nbrsSeries: value['nbrsSeries'],
+                userId: value['userId'],
               ),
               //id: value['id'].toString()),
             ),
@@ -275,12 +413,12 @@ class Api {
           (value) => {
             plan.add(
               Plan(
-                id: value['_id'],
-                planName: value['planName'],
-                nbrExercises: value['nbrExercises'],
-                exercises: value['exercises'],
-                nbrsSeries: value['nbrsSeries'],
-              ),
+                  id: value['_id'],
+                  planName: value['planName'],
+                  nbrExercises: value['nbrExercises'],
+                  exercises: value['exercises'],
+                  nbrsSeries: value['nbrsSeries'],
+                  userId: value['userId']),
               //id: value['id'].toString()),
             ),
           },

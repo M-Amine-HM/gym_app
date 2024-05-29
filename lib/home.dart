@@ -102,7 +102,10 @@ class _HomeState extends State<Home> {
               screenH = 1;
               return CupertinoTabView(
                 builder: (context) {
-                  return const CupertinoPageScaffold(child: PlansScreen());
+                  return CupertinoPageScaffold(
+                      child: PlansScreen(
+                    theuser: widget.oneUser,
+                  ));
                 },
               );
             }
@@ -111,7 +114,10 @@ class _HomeState extends State<Home> {
               screenH = 2;
               return CupertinoTabView(
                 builder: (context) {
-                  return const CupertinoPageScaffold(child: RapportScreen());
+                  return CupertinoPageScaffold(
+                      child: RapportScreen(
+                    theuser: widget.oneUser,
+                  ));
                 },
               );
             }

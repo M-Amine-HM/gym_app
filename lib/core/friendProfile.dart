@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_app/core/chatPage.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -89,7 +90,14 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                           fixedSize: Size.fromWidth(
                               MediaQuery.of(context).size.width * 0.4),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => chatScreen(
+                                        theuser: data[0],
+                                      )));
+                        },
                         label: const Text(
                           "Messages",
                           style: TextStyle(

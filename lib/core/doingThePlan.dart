@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:gym_app/auth/firstPage.dart';
 import 'package:gym_app/core/doingPlan.dart';
+import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/core/rapport.dart';
 import 'package:gym_app/home.dart';
 import 'package:gym_app/model/planModel.dart';
@@ -13,9 +14,14 @@ import 'package:gym_app/services/Api.dart';
 import 'package:provider/provider.dart';
 
 class doingThePlanScreen extends StatefulWidget {
-  doingThePlanScreen({super.key, required this.planDoing, required this.data});
+  doingThePlanScreen(
+      {super.key,
+      required this.planDoing,
+      required this.data,
+      required this.theuser});
   Plan planDoing;
   List data;
+  User theuser;
 
   @override
   State<doingThePlanScreen> createState() => _doingThePlanScreenState();
@@ -208,92 +214,177 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
                             (MediaQuery.of(context).size.width * 0.70),
                             (MediaQuery.of(context).size.height * 0.058)),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         print(seriesCompletedChecked);
                         print(seriesCompleted);
-
-                        //[[[1, 2]], [[3, 4], [5, 6]], [[7, 8], [9, 10], [11, 12]]]
-                        List<List<dynamic>> list = seriesCompleted;
-                        List<List<dynamic>> listChecked =
-                            seriesCompletedChecked;
-                        for (int i = 0; i < (listChecked.length); i++) {
-                          for (int j = 0; j < (listChecked[i].length); j++) {
-                            if (listChecked[i][j] == false) {
-                              list[i][j] = ["n", "n"];
+                        bool allNotChecked = true;
+                        for (int i = 0;
+                            i < seriesCompletedChecked.length;
+                            i++) {
+                          for (int j = 0;
+                              j < (seriesCompletedChecked[i].length);
+                              j++) {
+                            if (seriesCompletedChecked[i][j] == true) {
+                              allNotChecked = false;
+                              break;
                             }
                           }
-                        }
-                        print("ahaya");
-                        print(list);
-                        String selonEx = "";
-
-                        //selonEx = list.join(",");
-                        for (int i = 0; i < (list.length); i++) {
-                          for (int j = 0; j < (list[i].length); j++) {
-                            for (int k = 0; k < (list[i][j].length); k++) {
-                              selonEx = selonEx + list[i][j][k];
-                              if (k + 1 == list[i][j].length) continue;
-                              selonEx = selonEx + "*";
-                            }
-                            if (j + 1 == list[i].length) continue;
-                            selonEx = selonEx + ",";
+                          if (allNotChecked == false) {
+                            break;
                           }
-                          if (i + 1 == list.length) continue;
-                          selonEx = selonEx + ";";
                         }
+                        if (allNotChecked == true) {
+                          showToast('faire au moins une serie',
+                              context: context,
+                              animation: StyledToastAnimation.fade,
+                              backgroundColor: Colors.red.shade700,
+                              duration: Duration(seconds: 3),
+                              reverseAnimation: StyledToastAnimation.fade,
+                              alignment: Alignment.center,
+                              position: StyledToastPosition(
+                                  align: Alignment.center, offset: 20.0));
+                        } else {
+                          //[[[1, 2]], [[3, 4], [5, 6]], [[7, 8], [9, 10], [11, 12]]]
+                          List<List<dynamic>> list = seriesCompleted;
+                          List<List<dynamic>> listChecked =
+                              seriesCompletedChecked;
+                          for (int i = 0; i < (listChecked.length); i++) {
+                            for (int j = 0; j < (listChecked[i].length); j++) {
+                              if (listChecked[i][j] == false) {
+                                list[i][j] = ["n", "n"];
+                              }
+                            }
+                          }
+                          print("ahaya");
+                          print(list);
+                          String selonEx = "";
 
-                        print(selonEx);
-                        String exsTostring =
-                            widget.planDoing.exercises.join(',');
-                        String nbrsSeriesTostring =
-                            widget.planDoing.nbrsSeries.join(',');
-                        String currentTime =
-                            (DateTime.now().toLocal().toString())
-                                .substring(0, 16);
-                        Map<String, String> thedata = {
-                          "currentTime": currentTime,
-                          "time": timerProvider.formatTime(),
-                          "planName": widget.planDoing.planName,
-                          "nbrExercises":
-                              (widget.planDoing.exercises.length).toString(),
-                          "exercises": exsTostring,
-                          "nbrsSeries": nbrsSeriesTostring,
-                          "seriesCompleted": selonEx,
-                        };
-                        Api.addPlanCompleted(thedata);
+                          //selonEx = list.join(",");
+                          for (int i = 0; i < (list.length); i++) {
+                            for (int j = 0; j < (list[i].length); j++) {
+                              for (int k = 0; k < (list[i][j].length); k++) {
+                                selonEx = selonEx + list[i][j][k];
+                                if (k + 1 == list[i][j].length) continue;
+                                selonEx = selonEx + "*";
+                              }
+                              if (j + 1 == list[i].length) continue;
+                              selonEx = selonEx + ",";
+                            }
+                            if (i + 1 == list.length) continue;
+                            selonEx = selonEx + ";";
+                          }
 
-                        print(seriesCompletedChecked);
-                        print(thedata);
-                        // Navigator.of(context, rootNavigator: false).push(
-                        //   CupertinoPageRoute(
-                        //       builder: (context) => RapportScreen()),
-                        //   //(route) => false
-                        // );
-                        // Navigator.of(context, rootNavigator: true)
-                        //     .pushAndRemoveUntil(
-                        //         CupertinoPageRoute(
-                        //             builder: (context) => FirstPage()),
-                        //         (route) => false);
-                        //User user = User();
-                        //timerProvider.timerOn = false;
-                        timerProvider.resetTimer();
-                        //sseriesCompletedChecked = [];
-                        Navigator.pop(context);
-                        setState(() {
-                          RapportScreen();
-                        });
+                          print(selonEx);
+                          String exsTostring =
+                              widget.planDoing.exercises.join(',');
+                          String nbrsSeriesTostring =
+                              widget.planDoing.nbrsSeries.join(',');
+                          String currentTime =
+                              (DateTime.now().toLocal().toString())
+                                  .substring(0, 16);
+                          Map<String, String> thedata = {
+                            "currentTime": currentTime,
+                            "time": timerProvider.formatTime(),
+                            "planName": widget.planDoing.planName,
+                            "nbrExercises":
+                                (widget.planDoing.exercises.length).toString(),
+                            "exercises": exsTostring,
+                            "nbrsSeries": nbrsSeriesTostring,
+                            "seriesCompleted": selonEx,
+                            "userId": widget.planDoing.userId
+                          };
+                          await Api.addPlanCompleted(thedata);
 
-                        // CupertinoTabView(
-                        //   builder: (context) {
-                        //     return const CupertinoPageScaffold(
-                        //         child: RapportScreen());
-                        //   },
-                        // );
-                        // Navigator.of(context).push(
-                        //   CupertinoPageRoute(
-                        //     builder: (context) => RapportScreen(),
-                        //   ),
-                        // );
+                          print(seriesCompletedChecked);
+                          print(thedata);
+                          // Navigator.of(context, rootNavigator: false).push(
+                          //   CupertinoPageRoute(
+                          //       builder: (context) => RapportScreen()),
+                          //   //(route) => false
+                          // );
+                          // Navigator.of(context, rootNavigator: true)
+                          //     .pushAndRemoveUntil(
+                          //         CupertinoPageRoute(
+                          //             builder: (context) => FirstPage()),
+                          //         (route) => false);
+                          //User user = User();
+                          //timerProvider.timerOn = false;
+                          timerProvider.resetTimer();
+                          //sseriesCompletedChecked = [];
+                          //Navigator.pop(context);
+                          showToastWidget(
+                            reverseAnimation: StyledToastAnimation.fade,
+                            //dismissOtherToast: false,
+                            //animDuration: Duration(seconds: 1),
+                            context: context,
+                            animation: StyledToastAnimation.fade,
+                            isIgnoring: false,
+                            duration: Duration(seconds: 5),
+                            position: const StyledToastPosition(
+                                align: Alignment.center),
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                ModalBarrier(
+                                  color: Colors.black.withOpacity(0.1),
+                                  dismissible:
+                                      false, // Prevents dismissing the toast by tapping outside
+                                ),
+                                // Container(
+                                //   color: Colors.black,
+                                //   height: 50,
+                                //   width: 50,
+                                // ),
+                                Container(
+                                    // height:
+                                    //     MediaQuery.sizeOf(context).height * 0.25,
+                                    // width:
+                                    //     MediaQuery.sizeOf(context).width * 0.78,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 20),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.green,
+                                      // boxShadow: [
+                                      //   BoxShadow(
+                                      //     color: Colors.grey.withOpacity(0.5),
+                                      //     spreadRadius: 2,
+                                      //     blurRadius: 7,
+                                      //     offset: Offset(0, 3),
+                                      //   ),
+                                      // ],
+                                    ),
+                                    child: Text(
+                                      "Plan fait avec succées",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 25),
+                                    )),
+                              ],
+                            ),
+                          );
+                          await Future.delayed(Duration(seconds: 5));
+                          //Navigator.pop(context);
+
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PlansScreen(
+                                  theuser: widget.theuser,
+                                ),
+                              ),
+                              (route) => false);
+                          // CupertinoTabView(
+                          //   builder: (context) {
+                          //     return const CupertinoPageScaffold(
+                          //         child: RapportScreen());
+                          //   },
+                          // );
+                          // Navigator.of(context).push(
+                          //   CupertinoPageRoute(
+                          //     builder: (context) => RapportScreen(),
+                          //   ),
+                          // );
+                        }
                       },
                     ),
                   ],
@@ -589,9 +680,23 @@ class _SetContainerState extends State<SetContainer> {
               //  statefunc(
               //() {
               //serieChecked = newBool!;
+
               if (contentWeight.isNotEmpty && contentRep.isNotEmpty) {
-                widget.chekedSetFunction(newBool!);
-                serieChecked = newBool;
+                if ((double.tryParse(contentWeight) == null) ||
+                    (double.tryParse(contentRep) == null)) {
+                  showToast('les champs nes sont pas valides !!',
+                      context: context,
+                      animation: StyledToastAnimation.fade,
+                      backgroundColor: Colors.red.shade700,
+                      duration: Duration(seconds: 3),
+                      reverseAnimation: StyledToastAnimation.fade,
+                      alignment: Alignment.center,
+                      position: StyledToastPosition(
+                          align: Alignment.center, offset: 20.0));
+                } else {
+                  widget.chekedSetFunction(newBool!);
+                  serieChecked = newBool;
+                }
               } else {
                 showToast('Remplir les champs !!',
                     context: context,

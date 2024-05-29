@@ -1,6 +1,7 @@
 class Plan {
   String id;
   String planName;
+  String userId;
   String nbrExercises;
   List exercises;
   List nbrsSeries;
@@ -13,5 +14,6 @@ class Plan {
     this.nbrExercises = "",
     this.exercises = const [],
     this.nbrsSeries = const [],
+    this.userId = "",
   }); // If warnings is null, initialize it as an empty list
 }

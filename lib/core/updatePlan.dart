@@ -5,6 +5,7 @@ import 'package:gym_app/core/planOnGoing.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/model/exerciseModel.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 
 class UpdatePlanScreen extends StatefulWidget {
@@ -12,9 +13,11 @@ class UpdatePlanScreen extends StatefulWidget {
       {super.key,
       required this.PlanName,
       required this.chosed,
-      required this.PlanID});
+      required this.PlanID,
+      required this.theuser});
   String PlanName;
   String PlanID;
+  User theuser;
   final Map chosed;
   @override
   State<UpdatePlanScreen> createState() => _UpdatePlanScreenState();
@@ -236,7 +239,7 @@ class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
                                               TextButton(
                                                 style: TextButton.styleFrom(
                                                     backgroundColor:
-                                                        Colors.blue[700],
+                                                        Colors.indigo[700],
                                                     shape:
                                                         RoundedRectangleBorder(
                                                             borderRadius:
@@ -348,7 +351,7 @@ class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
                         child: Center(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue[700],
+                              backgroundColor: Colors.indigo[700],
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                               fixedSize: Size(
@@ -434,16 +437,19 @@ class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
                                   List<Plan>? planToDo;
                                   planToDo =
                                       await Api.getPlanByName(changedName);
+
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               OnGoingPlanScreen(
-                                                  planToDo: planToDo![0])),
+                                                planToDo: planToDo![0],
+                                                theUser: widget.theuser,
+                                              )),
                                       (route) => false);
                                 }
                               } else {
-                                showToast('Chosissez au minimaum un exercice',
+                                showToast('Chosissez au minimum un exercice',
                                     context: context,
                                     animation: StyledToastAnimation.fade,
                                     duration: Duration(seconds: 3),
@@ -455,7 +461,7 @@ class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
                               //Navigator.pop(context);
                             },
                             child: Text(
-                              "Comfirmer",
+                              "Confirmer",
                               style:
                                   TextStyle(fontSize: 20, color: Colors.white),
                             ),
@@ -496,14 +502,6 @@ class ExerciceWidget extends StatefulWidget {
 }
 
 class _ExerciceWidgetState extends State<ExerciceWidget> {
-  late int nbrSerie;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    nbrSerie = widget.nnbrSerie;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -579,10 +577,10 @@ class _ExerciceWidgetState extends State<ExerciceWidget> {
                     ),
                     IconButton(
                       onPressed: () {
-                        if (nbrSerie > 1) {
-                          nbrSerie = nbrSerie - 1;
+                        if (widget.nnbrSerie > 1) {
+                          widget.nnbrSerie = widget.nnbrSerie - 1;
                           //widget.nbrsSerieFunction = widget.nbrSerie as int Function();
-                          widget.nbrsSerieFunction(nbrSerie);
+                          widget.nbrsSerieFunction(widget.nnbrSerie);
                         }
                         setState(() {});
                       },
@@ -590,18 +588,18 @@ class _ExerciceWidgetState extends State<ExerciceWidget> {
                       color: Colors.red[700],
                     ),
                     Text(
-                      (nbrSerie).toString(),
+                      (widget.nnbrSerie).toString(),
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     IconButton(
                       onPressed: () {
-                        nbrSerie = nbrSerie + 1;
-                        widget.nbrsSerieFunction(nbrSerie);
+                        widget.nnbrSerie = widget.nnbrSerie + 1;
+                        widget.nbrsSerieFunction(widget.nnbrSerie);
                         setState(() {});
                       },
                       icon: Icon(CupertinoIcons.add_circled_solid),
-                      color: Colors.blue[700],
+                      color: Colors.indigo[700],
                     ),
                   ],
                 )

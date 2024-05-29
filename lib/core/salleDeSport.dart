@@ -15,6 +15,7 @@ class _salleDeSportScreenState extends State<salleDeSportScreen> {
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade200,
+        surfaceTintColor: Colors.grey.shade200,
         centerTitle: true,
         title: Text(
           "Salle de Sport",

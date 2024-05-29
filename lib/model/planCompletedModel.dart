@@ -7,12 +7,14 @@ class PlanCompleted {
   List<dynamic> seriesCompleted;
   String time;
   String currentTime;
+  String userId;
 
   // lista dynamique mch string
 
 //constructor
   PlanCompleted({
     this.id = "",
+    this.userId = "",
     this.planName = "",
     this.nbrExercises = "",
     this.time = "",

@@ -3,35 +3,40 @@ import 'package:gym_app/core/choseExercises.dart';
 import 'package:gym_app/core/planOnGoing.dart';
 import 'package:gym_app/model/exerciseModel.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class PlansScreen extends StatefulWidget {
-  const PlansScreen({super.key});
+  PlansScreen({super.key, required this.theuser});
+  User theuser;
 
   @override
   State<PlansScreen> createState() => _PlanScreenState();
 }
 
 class _PlanScreenState extends State<PlansScreen> {
-  final List<Widget> _screens = [
-    Container(
-      color: Colors.grey.shade200,
-      child: PlanContainerWidget(),
-    ),
-    Container(
-      color: Colors.green,
-    ),
-    Container(
-      color: Colors.blue,
-    )
-  ];
+  late List<Widget> _screens = [];
 
   late int screenS;
   @override
   void initState() {
     screenS = 0;
     super.initState();
+    _screens = [
+      Container(
+        color: Colors.grey.shade200,
+        child: PlanContainerWidget(
+          theuser: widget.theuser,
+        ),
+      ),
+      Container(
+        color: Colors.green,
+      ),
+      Container(
+        color: Colors.blue,
+      )
+    ];
   }
 
   void screenChanger(int screen) {
@@ -128,10 +133,8 @@ class _PlanScreenState extends State<PlansScreen> {
 }
 
 class PlanContainerWidget extends StatefulWidget {
-  const PlanContainerWidget({
-    super.key,
-  });
-
+  PlanContainerWidget({super.key, required this.theuser});
+  User theuser;
   @override
   State<PlanContainerWidget> createState() => _PlanContainerWidgetState();
 }
@@ -282,11 +285,17 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                                     //bool notExist = true;
                                     late List<dynamic>? allPlans;
 
-                                    allPlans =
-                                        await Api.getPlanByName(_planName.text);
-
-                                    if (_planName.text.isNotEmpty &&
-                                        allPlans!.isEmpty) {
+                                    allPlans = await Api.getPlanByOwner(
+                                        widget.theuser.id);
+                                    //await Api.getPlanByName(_planName.text);
+                                    bool notExist = true;
+                                    for (int k = 0; k < allPlans!.length; k++) {
+                                      if (allPlans[k].planName ==
+                                          _planName.text) {
+                                        notExist = false;
+                                      }
+                                    }
+                                    if (_planName.text.isNotEmpty && notExist) {
                                       dismissAllToast(showAnim: false);
                                       late List<dynamic>? exercisesData;
                                       Map chosed = {};
@@ -300,6 +309,7 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               ChooseExercisesScreen(
+                                                  theuser: widget.theuser,
                                                   chosed: chosed,
                                                   PlanName: _planName.text),
                                         ),
@@ -309,7 +319,7 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                                         newPlanName = false;
                                       });
                                       print("error message");
-                                      print(newPlanName);
+                                      //print(newPlanName);
                                     }
                                   },
                                   child: Text("Choisir des exercices",
@@ -335,7 +345,7 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: Api.getPlans(),
+              future: Api.getPlanByOwner(widget.theuser.id),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -355,6 +365,7 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               OnGoingPlanScreen(
+                                                theUser: widget.theuser,
                                                 planToDo: snapshot.data[index],
                                               )));
                                 },

@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/historiquesPlans.dart';
+import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 
-late int pageVar;
-
 class RapportScreen extends StatefulWidget {
-  const RapportScreen({super.key});
-
+  RapportScreen({super.key, required this.theuser});
+  User theuser;
   @override
   State<RapportScreen> createState() => _RapportScreenState();
 }
 
 class _RapportScreenState extends State<RapportScreen> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    pageVar = 1;
-  }
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   pageVar = 1;
+  // }
 
   // @override
   // void setState(VoidCallback fn) {
@@ -30,9 +29,9 @@ class _RapportScreenState extends State<RapportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (pageVar != 0) {
-      setState(() {});
-    }
+    // if (pageVar != 0) {
+    //   setState(() {});
+    // }
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
@@ -49,12 +48,26 @@ class _RapportScreenState extends State<RapportScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Total",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w800),
+                ),
+                // IconButton(
+                //   onPressed: () {
+                //     // setState(() {});
+                //   },
+                //   icon: Icon(
+                //     Icons.refresh_sharp,
+                //     color: Colors.indigo.shade700,
+                //   ),
+                // )
+              ],
             ),
             FutureBuilder(
-              future: Api.getCompletedPlans(),
+              future: Api.getCompletedPlansByOwnerId(widget.theuser.id),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -90,14 +103,13 @@ class _RapportScreenState extends State<RapportScreen> {
                   if (plans.length == 1) {
                     count = 1;
                   }
-                  if (plans.isEmpty) {
-                    return Center(
-                      child: Text(
-                        "Vous n'avez pas fait aucun plan pour le moment !",
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    );
-                  }
+                  // if (plans.isEmpty) {
+                  //   return totalContainer(
+                  //     plansNumber: (plans.length).toString(),
+                  //     time: s.toString(),
+                  //     allWeights: s1.toString(),
+                  //   );
+                  // }
                   return totalContainer(
                     plansNumber: (plans.length).toString(),
                     time: s.toString(),
@@ -122,14 +134,16 @@ class _RapportScreenState extends State<RapportScreen> {
                     "Voir tout",
                     style: TextStyle(
                         fontSize: 18,
-                        color: Colors.blue.shade800,
-                        fontWeight: FontWeight.w400),
+                        color: Colors.indigo.shade700,
+                        fontWeight: FontWeight.w500),
                   ),
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => historiquePlansScreen()));
+                            builder: (context) => historiquePlansScreen(
+                                  theuser: widget.theuser,
+                                )));
                   },
                 ),
               ],
@@ -140,7 +154,7 @@ class _RapportScreenState extends State<RapportScreen> {
             Expanded(
               child: SizedBox(
                 child: FutureBuilder(
-                  future: Api.getCompletedPlans(),
+                  future: Api.getCompletedPlansByOwnerId(widget.theuser.id),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -234,7 +248,7 @@ class totalContainer extends StatelessWidget {
                   Text(
                     plansNumber,
                     style: TextStyle(
-                        color: Colors.blue[700],
+                        color: Colors.indigo[700],
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                   ),
@@ -252,7 +266,7 @@ class totalContainer extends StatelessWidget {
                   Text(
                     time + " min",
                     style: TextStyle(
-                        color: Colors.blue[700],
+                        color: Colors.indigo[700],
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                   ),
@@ -270,7 +284,7 @@ class totalContainer extends StatelessWidget {
                   Text(
                     allWeights + " KG",
                     style: TextStyle(
-                        color: Colors.blue[700],
+                        color: Colors.indigo[700],
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                   ),

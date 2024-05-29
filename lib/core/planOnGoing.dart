@@ -7,13 +7,15 @@ import 'package:gym_app/core/doingThePlan.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/core/updatePlan.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/providers/checked_provider.dart';
 import 'package:gym_app/services/Api.dart';
 import 'package:provider/provider.dart';
 
 class OnGoingPlanScreen extends StatefulWidget {
-  OnGoingPlanScreen({super.key, required this.planToDo});
+  OnGoingPlanScreen({super.key, required this.planToDo, required this.theUser});
   Plan planToDo;
+  User theUser;
 
   @override
   State<OnGoingPlanScreen> createState() => _OnGoingPlanScreenState();
@@ -32,7 +34,9 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PlansScreen(),
+                      builder: (context) => PlansScreen(
+                        theuser: widget.theUser!,
+                      ),
                     ),
                     (route) => false);
               },
@@ -141,8 +145,9 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                const PlansScreen(),
+                                            builder: (context) => PlansScreen(
+                                              theuser: widget.theUser!,
+                                            ),
                                           ),
                                           (route) => false);
                                     },
@@ -675,6 +680,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                                     builder: (context) => doingThePlanScreen(
                                           data: data!,
                                           planDoing: widget.planToDo,
+                                          theuser: widget.theUser,
                                           // seriesCompleted: list,
                                           // seriesCompletedChecked:
                                           //     seriesCompletedChecked,
@@ -722,9 +728,11 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => UpdatePlanScreen(
-                                    PlanID: widget.planToDo.id,
-                                    chosed: chosed,
-                                    PlanName: widget.planToDo.planName),
+                                  PlanID: widget.planToDo.id,
+                                  chosed: chosed,
+                                  PlanName: widget.planToDo.planName,
+                                  theuser: widget.theUser,
+                                ),
                               ),
                             );
                           },

@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/rapport.dart';
+import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
 
 class historiquePlansScreen extends StatefulWidget {
-  const historiquePlansScreen({super.key});
+  historiquePlansScreen({super.key, required this.theuser});
+  User theuser;
 
   @override
   State<historiquePlansScreen> createState() => _historiquePlansScreenState();
@@ -33,8 +35,8 @@ class _historiquePlansScreenState extends State<historiquePlansScreen> {
         //   },
         //   icon: const Icon(Icons.arrow_back_sharp),
         // ),
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.grey.shade200,
+        backgroundColor: Colors.grey.shade200,
         title: Text(
           "Historques",
           style: TextStyle(fontWeight: FontWeight.w600),
@@ -47,7 +49,7 @@ class _historiquePlansScreenState extends State<historiquePlansScreen> {
           Expanded(
             child: SizedBox(
               child: FutureBuilder(
-                future: Api.getCompletedPlans(),
+                future: Api.getCompletedPlansByOwnerId(widget.theuser.id),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
