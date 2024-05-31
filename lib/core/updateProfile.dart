@@ -103,7 +103,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           icon: const Icon(Icons.arrow_back_sharp),
         ),
         centerTitle: true,
-        title: Text("Modifier Profile",
+        title: Text("Modifier Profil",
             style: Theme.of(context).textTheme.headlineMedium),
       ),
       body: SingleChildScrollView(

@@ -33,14 +33,14 @@ class _MyWidgetState extends State<user> {
         backgroundColor: Colors.white, // Background color
         //elevation: 2, // Shadow elevation
         centerTitle: true,
-        // title: Text(
-        //   "S'inscrire",
-        //   style: TextStyle(
-        //     color: Color(0xff1d3557),
-        //     fontSize: 24,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
+        title: Text(
+          "S'inscrire",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),

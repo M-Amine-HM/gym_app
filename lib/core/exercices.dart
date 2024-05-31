@@ -58,7 +58,7 @@ class _ExercicesScreenState extends State<ExercicesScreen> {
       body: Container(
         //color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
           child: ListView.separated(
               itemBuilder: ((context, index) => BodyPartWidget(
                   imageBodyPart: _imagesBodyPart[index],

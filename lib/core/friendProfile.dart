@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/chatPage.dart';
@@ -25,7 +27,7 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
         surfaceTintColor: Colors.grey.shade200,
         //shadowColor: Colors.grey.shade50,
         title: const Text(
-          "Community",
+          "Communité",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
@@ -59,101 +61,120 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                             ),
                     ),
                     const SizedBox(
-                      height: 50,
+                      height: 25,
                     ),
-                    Text(
-                      "Name : ${data[0].name}",
-                      style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Email : ${data[0].email}",
-                      style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black54),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    SizedBox(
-                      width: 250,
-                      child: ElevatedButton.icon(
-                        icon: Icon(
-                          LineAwesomeIcons.sms,
-                          size: 25,
-                          color: Colors.white,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          fixedSize: Size.fromWidth(
-                              MediaQuery.of(context).size.width * 0.4),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => chatScreen(
-                                        theuser: data[0],
-                                      )));
-                        },
-                        label: const Text(
-                          "Messages",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
-                        ),
+                    Container(
+                      width: MediaQuery.sizeOf(context).width * 0.9,
+                      decoration: BoxDecoration(
+                        //shape: BoxShape.rectangle,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    SizedBox(
-                      width: 250,
-                      child: ElevatedButton.icon(
-                        icon: Icon(
-                          LineAwesomeIcons.dumbbell,
-                          size: 25,
-                          color: Colors.white,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          fixedSize: Size.fromWidth(
-                              MediaQuery.of(context).size.width * 0.4),
-                        ),
-                        onPressed: () async {
-                          List? thelist =
-                              await Api.getPlanByOwner(widget.theUser.id);
+                      child: Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Nom : ${data[0].name}",
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "Email : ${data[0].email}",
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black54),
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            SizedBox(
+                              width: 250,
+                              child: ElevatedButton.icon(
+                                icon: const Icon(
+                                  LineAwesomeIcons.sms,
+                                  size: 25,
+                                  color: Colors.white,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.indigo.shade700,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  fixedSize: Size.fromWidth(
+                                      MediaQuery.of(context).size.width * 0.4),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => chatScreen(
+                                                theuser: data[0],
+                                              )));
+                                },
+                                label: const Text(
+                                  "Messages",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            SizedBox(
+                              width: 250,
+                              child: ElevatedButton.icon(
+                                icon: const Icon(
+                                  LineAwesomeIcons.dumbbell,
+                                  size: 25,
+                                  color: Colors.white,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.indigo[700],
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  fixedSize: Size.fromWidth(
+                                      MediaQuery.of(context).size.width * 0.4),
+                                ),
+                                onPressed: () async {
+                                  List? thelist = await Api.getPlanByOwner(
+                                      widget.theUser.id);
 
-                          List<bool> booleanList = List<bool>.generate(
-                              thelist!.length, (index) => false);
+                                  List<bool> booleanList = List<bool>.generate(
+                                      thelist!.length, (index) => false);
 
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => sendPlanScreen(
-                                        totheUserId: data[0].id,
-                                        TheUserName: widget.theUser.name,
-                                        booleanList: booleanList,
-                                        theUserId: widget.theUser.id,
-                                      )));
-                        },
-                        label: const Text(
-                          "Envoyer Plan",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => sendPlanScreen(
+                                                totheUserId: data[0].id,
+                                                TheUserName:
+                                                    widget.theUser.name,
+                                                booleanList: booleanList,
+                                                theUserId: widget.theUser.id,
+                                              )));
+                                },
+                                label: const Text(
+                                  "Envoyer Plan",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            // SizedBox(
+                            //   height: 30,
+                            // ),
+                          ],
                         ),
                       ),
                     )

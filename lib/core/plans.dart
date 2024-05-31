@@ -345,7 +345,7 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                                 SizedBox(width: 10),
                                 TextButton(
                                   style: TextButton.styleFrom(
-                                      backgroundColor: Colors.blue[700],
+                                      backgroundColor: Colors.indigo[700],
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10))),
@@ -530,7 +530,7 @@ class _PlanWidgetState extends State<PlanWidget> {
                           color: Colors.white),
                     ),
                     radius: 30,
-                    backgroundColor: Colors.red[600],
+                    backgroundColor: Colors.red.shade600,
                   )
                 ],
               ),

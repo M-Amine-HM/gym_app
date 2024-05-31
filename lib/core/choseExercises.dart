@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -243,6 +245,59 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
 
                               if (exercises.isNotEmpty) {
                                 await Api.addPlan(thedata);
+                                showToastWidget(
+                                  reverseAnimation: StyledToastAnimation.fade,
+                                  //dismissOtherToast: false,
+                                  //animDuration: Duration(seconds: 1),
+                                  context: context,
+                                  animation: StyledToastAnimation.fade,
+                                  isIgnoring: false,
+                                  duration: Duration(seconds: 3),
+                                  position: const StyledToastPosition(
+                                      align: Alignment.center),
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      ModalBarrier(
+                                        color: Colors.black26,
+                                        dismissible:
+                                            false, // Prevents dismissing the toast by tapping outside
+                                      ),
+                                      // Container(
+                                      //   color: Colors.black,
+                                      //   height: 50,
+                                      //   width: 50,
+                                      // ),
+                                      Container(
+                                          // height:
+                                          //     MediaQuery.sizeOf(context).height * 0.25,
+                                          // width:
+                                          //     MediaQuery.sizeOf(context).width * 0.78,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.green,
+                                            // boxShadow: [
+                                            //   BoxShadow(
+                                            //     color: Colors.grey.withOpacity(0.5),
+                                            //     spreadRadius: 2,
+                                            //     blurRadius: 7,
+                                            //     offset: Offset(0, 3),
+                                            //   ),
+                                            // ],
+                                          ),
+                                          child: const Text(
+                                            "Plan crée avec succées",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20),
+                                          )),
+                                    ],
+                                  ),
+                                );
+                                await Future.delayed(Duration(seconds: 3));
 
                                 Navigator.pushAndRemoveUntil(
                                     context,
@@ -254,6 +309,7 @@ class _ChooseExercisesScreenState extends State<ChooseExercisesScreen> {
                               } else {
                                 showToast('Chosissez au minimum un exercice',
                                     context: context,
+                                    backgroundColor: Colors.red.shade600,
                                     animation: StyledToastAnimation.fade,
                                     duration: Duration(seconds: 3),
                                     reverseAnimation: StyledToastAnimation.fade,

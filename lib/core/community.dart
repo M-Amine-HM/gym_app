@@ -36,7 +36,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
           surfaceTintColor: Colors.grey.shade200,
           centerTitle: true,
           title: Text(
-            "Community",
+            "Communité ",
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
         ),
@@ -57,7 +57,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Search for a user",
+                      "Rechercher un utilisateur",
                       style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,

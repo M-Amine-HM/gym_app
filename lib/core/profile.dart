@@ -150,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   backgroundColor: Colors.indigo[600],
                                   side: BorderSide.none,
                                   shape: const StadiumBorder()),
-                              child: const Text("Modifier Profile",
+                              child: const Text("Modifier Profil",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16.5,

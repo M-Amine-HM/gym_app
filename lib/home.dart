@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
             bottomNavBar("nav11", "nav11_filled", "Exercices"),
             bottomNavBar("nav22", "nav22_filled", "Plan"),
             bottomNavBar("nav3", "nav3_filled", "Rapport"),
-            bottomNavBar("nav4", "nav4_filled", "Profile"),
+            bottomNavBar("nav4", "nav4_filled", "Profil"),
           ]),
       tabBuilder: (context, index) {
         switch (index) {

@@ -126,7 +126,17 @@ class _sendPlanScreenState extends State<sendPlanScreen> {
                             await Api.addFriendPlan(thedata);
                           }
                         }
-                        if (atleastone) {
+                        if (!atleastone) {
+                          showToast('Chosissez au minimum un plan à envoyer',
+                              context: context,
+                              //backgroundColor: Colors.red.shade500,
+                              animation: StyledToastAnimation.fade,
+                              duration: Duration(seconds: 3),
+                              reverseAnimation: StyledToastAnimation.fade,
+                              alignment: Alignment.center,
+                              position: StyledToastPosition(
+                                  align: Alignment.center, offset: 20.0));
+                        } else {
                           showToastWidget(
                             reverseAnimation: StyledToastAnimation.fade,
                             //dismissOtherToast: false,
@@ -271,7 +281,7 @@ class _PlanFriendWidgetState extends State<PlanFriendWidget> {
                           height: 60,
                           width: 60,
                           decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: Colors.red, //Color.fromRGBO(0, 186, 0, 1),
                               borderRadius: BorderRadius.circular(100)),
                           child: Center(
                             child: Text(
