@@ -25,7 +25,7 @@ class _FirstPageState extends State<FirstPage> {
           height: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/images/abdos.jpg"),
+                image: AssetImage("assets/images/fpage2.jpg"),
                 fit: BoxFit.cover),
           ),
           child: Padding(
@@ -33,14 +33,14 @@ class _FirstPageState extends State<FirstPage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 20,
+                  height: 1,
                 ),
                 Image(
-                  image: AssetImage("assets/images/logo2.png"),
-                  width: 100,
+                  image: AssetImage("assets/images/thelogo.png"),
+                  width: 220,
                 ),
                 Spacer(),
-                ElevatedButton.icon(
+                ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -52,17 +52,17 @@ class _FirstPageState extends State<FirstPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => user(
+                          builder: (context) => LoginScreen(
                                 oneUser: oneUser,
                               )),
                     );
                   },
-                  icon: Image.asset(
-                    "assets/images/google.png",
-                    width: 20,
-                    height: 20,
-                  ),
-                  label: Text("S'inscrire avec Google",
+                  // icon: Image.asset(
+                  //   "assets/images/google.png",
+                  //   width: 20,
+                  //   height: 20,
+                  // ),
+                  child: Text("Se connecter",
                       style: TextStyle(color: Colors.black, fontSize: 16)),
                   // child: Row(
                   //   children: [
@@ -95,21 +95,24 @@ class _FirstPageState extends State<FirstPage> {
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LoginScreen(
-                                oneUser: oneUser,
-                              )),
-                    );
-                  },
-                  child: Text(
-                    "Vous Avez déja un compte ? Se Connecter",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+                SizedBox(
+                  height: 35,
                 )
+                // TextButton(
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => LoginScreen(
+                //                 oneUser: oneUser,
+                //               )),
+                //     );
+                //   },
+                //   child: Text(
+                //     "Vous Avez déja un compte ? Se Connecter",
+                //     style: TextStyle(color: Colors.white, fontSize: 16),
+                //   ),
+                // )
               ],
             ),
           ),

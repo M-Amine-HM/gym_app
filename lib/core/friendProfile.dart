@@ -27,7 +27,7 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
         surfaceTintColor: Colors.grey.shade200,
         //shadowColor: Colors.grey.shade50,
         title: const Text(
-          "Communité",
+          "Communauté",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,

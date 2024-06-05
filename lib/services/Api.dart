@@ -11,10 +11,11 @@ import 'package:gym_app/model/friendPlanModel.dart';
 import 'package:gym_app/model/planCompletedModel.dart';
 import 'package:gym_app/model/planModel.dart';
 import 'package:gym_app/model/userModel.dart';
+import 'package:gym_app/model/userSubscription.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String ipAdress = "192.168.236.218";
+  static const String ipAdress = "192.168.56.1";
   static const baseUrl = "http://$ipAdress:2000/api/";
 
   //static String ipAdress = "192.168.81.218";
@@ -780,6 +781,51 @@ class Api {
                   phoneNumber: value['phoneNumber'],
                   adress: value['adress'],
                   image: value['image']),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(user);
+        //tretruni l lista bch nafffichah
+        return user;
+        //
+      } else {
+        print("erreur lors la fonctions getByEmail");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static getUserSubscribedById(id) async {
+    //List<Product> products = [];
+    List<UserSubscription> user = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getUserSubscribedById/$id");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['user'].forEach(
+          (value) => {
+            user.add(
+              UserSubscription(
+                userId: value['userId'],
+                email: value['email'],
+                gymName: value['gymName'],
+                daysLeft: value['daysLeft'],
+                subscription: value['subscription'],
+                entries: value['entries'],
+                id: value['_id'],
+                exits: value['exits'],
+              ),
               //id: value['id'].toString()),
             ),
           },

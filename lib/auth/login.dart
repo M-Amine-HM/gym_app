@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return regex.hasMatch(email);
   }
 
-  List<User> _userdata = [];
+  List? _userdata = [];
   //TODO: erreur text ki famech user wela 8alet fl password
   String _erreurText = "";
 
@@ -167,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                     _userdata = await Api.getUserByEmail((_email.text));
 
-                    if (_userdata.isEmpty) {
+                    if (_userdata!.isEmpty) {
                       //case : there no user
                       //setState(() {
                       _erreurText = "Compte n'existe pas , il faut s'inscrire";
@@ -181,10 +181,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               align: Alignment.center, offset: 100));
                       // });
                     } else {
-                      if (_userdata[0].password != (_password.text)) {
+                      if (_userdata![0].password != (_password.text)) {
                         // setState(() {
                         _erreurText =
-                            "Le mot de passe ${_userdata[0].password} est incorrect";
+                            "Le mot de passe ${_userdata![0].password} est incorrect";
                         showToast(_erreurText,
                             context: context,
                             animation: StyledToastAnimation.fade,
@@ -207,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => Home(
-                                oneUser: _userdata[0],
+                                oneUser: _userdata![0],
                               ),
                             ),
                             (route) => false);
@@ -219,61 +219,61 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 15,
               ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Divider(
-                      // indent: 20,
-                      endIndent: 10,
+              // const Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Expanded(
+              //       child: Divider(
+              //         // indent: 20,
+              //         endIndent: 10,
 
-                      thickness: 1.3,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Text(
-                    "ou",
-                    style: TextStyle(color: Colors.black, fontSize: 20),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      indent: 10,
-                      //endIndent: 20,
+              //         thickness: 1.3,
+              //         color: Colors.black,
+              //       ),
+              //     ),
+              //     Text(
+              //       "ou",
+              //       style: TextStyle(color: Colors.black, fontSize: 20),
+              //     ),
+              //     Expanded(
+              //       child: Divider(
+              //         indent: 10,
+              //         //endIndent: 20,
 
-                      thickness: 1.3,
-                      color: Colors.black,
-                    ),
-                  )
-                ],
-              ),
+              //         thickness: 1.3,
+              //         color: Colors.black,
+              //       ),
+              //     )
+              //   ],
+              // ),
               const SizedBox(
                 height: 15,
               ),
-              OutlinedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  fixedSize:
-                      Size.fromWidth(MediaQuery.of(context).size.width * 0.8),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => user(
-                              oneUser: widget.oneUser,
-                            )),
-                  );
-                },
-                icon: Image.asset(
-                  "assets/images/google.png",
-                  width: 20,
-                  height: 20,
-                ),
-                label: const Text("Se Connecter avec Google",
-                    style: TextStyle(color: Colors.black)),
-              ),
+              // OutlinedButton.icon(
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Colors.white,
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(8)),
+              //     fixedSize:
+              //         Size.fromWidth(MediaQuery.of(context).size.width * 0.8),
+              //   ),
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => user(
+              //                 oneUser: widget.oneUser,
+              //               )),
+              //     );
+              //   },
+              //   icon: Image.asset(
+              //     "assets/images/google.png",
+              //     width: 20,
+              //     height: 20,
+              //   ),
+              //   label: const Text("Se Connecter avec Google",
+              //       style: TextStyle(color: Colors.black)),
+              // ),
               //TODO: autre methode d'afficher les erreurs
               SizedBox(
                 height: 20,

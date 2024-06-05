@@ -36,7 +36,7 @@ class _coummunityScreenState extends State<coummunityScreen> {
           surfaceTintColor: Colors.grey.shade200,
           centerTitle: true,
           title: Text(
-            "Communité ",
+            "Communauté ",
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
         ),

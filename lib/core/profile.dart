@@ -186,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //   endIndent: 40,
                     // ),
                     ProfileMenuWidget(
-                        title: "Communité",
+                        title: "Communauté",
                         icon: LineAwesomeIcons.user_friends,
                         onPress: () {
                           Navigator.push(

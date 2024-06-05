@@ -140,54 +140,54 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
               const SizedBox(
                 height: 15,
               ),
-              ListTile(
-                contentPadding: const EdgeInsets.only(left: 0, right: 25),
-                leading: Checkbox(
-                    activeColor: Colors.indigo.shade700,
-                    value: _ischecked,
-                    onChanged: (newBool) {
-                      setState(() {
-                        _ischecked = newBool;
-                      });
-                    }),
-                title: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(fontSize: 17),
-                    children: [
-                      const TextSpan(
-                        text: "J'accepte les ",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      TextSpan(
-                        text: "conditions génerales ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.indigo.shade600,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            //TODO: page qui contient les conditons generales
-                          },
-                      ),
-                      const TextSpan(
-                        text: "et la ",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      TextSpan(
-                        text: "politique de la confidentialité",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.indigo.shade600,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            //TODO: page qui contient les conditons generales
-                          },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // ListTile(
+              //   contentPadding: const EdgeInsets.only(left: 0, right: 25),
+              //   leading: Checkbox(
+              //       activeColor: Colors.indigo.shade700,
+              //       value: _ischecked,
+              //       onChanged: (newBool) {
+              //         setState(() {
+              //           _ischecked = newBool;
+              //         });
+              //       }),
+              //   title: RichText(
+              //     text: TextSpan(
+              //       style: const TextStyle(fontSize: 17),
+              //       children: [
+              //         const TextSpan(
+              //           text: "J'accepte les ",
+              //           style: TextStyle(color: Colors.black),
+              //         ),
+              //         TextSpan(
+              //           text: "conditions génerales ",
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             color: Colors.indigo.shade600,
+              //           ),
+              //           recognizer: TapGestureRecognizer()
+              //             ..onTap = () {
+              //               //TODO: page qui contient les conditons generales
+              //             },
+              //         ),
+              //         const TextSpan(
+              //           text: "et la ",
+              //           style: TextStyle(color: Colors.black),
+              //         ),
+              //         TextSpan(
+              //           text: "politique de la confidentialité",
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             color: Colors.indigo.shade600,
+              //           ),
+              //           recognizer: TapGestureRecognizer()
+              //             ..onTap = () {
+              //               //TODO: page qui contient les conditons generales
+              //             },
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               const SizedBox(
                 height: 15,
               ),
