@@ -10,12 +10,13 @@ import 'package:gym_app/model/exerciseModel.dart';
 import 'package:gym_app/model/friendPlanModel.dart';
 import 'package:gym_app/model/planCompletedModel.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/model/predefinedPlan.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/model/userSubscription.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String ipAdress = "192.168.56.1";
+  static const String ipAdress = "192.168.1.14";
   static const baseUrl = "http://$ipAdress:2000/api/";
 
   //static String ipAdress = "192.168.81.218";
@@ -589,6 +590,49 @@ class Api {
     }
   }
 
+  static getpredefinedPlans() async {
+    //List<Product> products = [];
+    List<PredefinedPlan> plan = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getpredefinedPlans");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['plans'].forEach(
+          (value) => {
+            plan.add(
+              PredefinedPlan(
+                id: value['_id'],
+                planName: value['planName'],
+                nbrExercises: value['nbrExercises'],
+                exercises: value['exercises'],
+                nbrsSeries: value['nbrsSeries'],
+                //userId: value['userId'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(plan);
+        //tretruni l lista bch nafffichah
+        return plan;
+        //
+      } else {
+        print("erreur lors la fonctions getPredefinedPlan");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString() + "erreur lors la fonctions getPredefinedPlan");
+    }
+  }
+
   static getFriendsPlans() async {
     //List<Product> products = [];
     List<Friendplan> plan = [];
@@ -925,7 +969,52 @@ class Api {
         return exercises;
         //
       } else {
-        print("erreur lors la fonctions getExercisesBybodyPart");
+        print("erreur lors la fonctions getExercisesByPlan");
+        return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static getExercisesByPredefinedPlan(planName) async {
+    //List<Product> products = [];
+    List<Exercise> exercises = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getExercicesBypredefinedPlans/$planName");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        data['exercises'].forEach(
+          (value) => {
+            exercises.add(
+              Exercise(
+                bodyPart: value['bodyPart'],
+                name: value['name'],
+                image: value['image'],
+                video: value['video'],
+                description: value['description'],
+                instructions: value['instructions'],
+                id: value['_id'],
+                warnings: value['warnings'],
+              ),
+              //id: value['id'].toString()),
+            ),
+          },
+        );
+        print(exercises);
+        //tretruni l lista bch nafffichah
+        return exercises;
+        //
+      } else {
+        print("erreur lors la fonctions getExercisesByPredefinedPlan");
         return [];
         //
       }

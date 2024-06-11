@@ -23,6 +23,20 @@ class _MyWidgetState extends State<user> {
     return regex.hasMatch(input);
   }
 
+  bool? _ischecked = false;
+  bool _secureText = true;
+  TextEditingController _email = TextEditingController();
+  bool _textVerifyEmail = true;
+  String _errorTextEmail = "Email forme non valide";
+
+  TextEditingController _password = TextEditingController();
+  bool _textVerifyPassword = true;
+  bool isValidEmail(String email) {
+    // Regular expression pattern for email validation
+    RegExp regex = RegExp(r'^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,}$');
+    return regex.hasMatch(email);
+  }
+
   // User oneUser = User();
   TextEditingController _userName = TextEditingController();
   @override
@@ -45,7 +59,7 @@ class _MyWidgetState extends State<user> {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
         child: Container(
-          height: 300,
+          height: 500,
           decoration: BoxDecoration(
             //shape: BoxShape.rectangle,
             color: Colors.white,
@@ -65,7 +79,7 @@ class _MyWidgetState extends State<user> {
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
                 TextField(
                   controller: _userName,
@@ -73,6 +87,53 @@ class _MyWidgetState extends State<user> {
                     hintText: "Entrez votre nom d'utilisateur",
                     prefixIcon: Icon(
                       Icons.person,
+                      color: Colors.indigo[700],
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide:
+                          BorderSide(color: Colors.indigo.shade700, width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide:
+                          BorderSide(color: Colors.indigo.shade700, width: 2.0),
+                    ),
+                  ),
+                  style: TextStyle(color: Color(0xff1d3557)),
+                  cursorColor: Colors.blueAccent,
+                  keyboardType: TextInputType.text,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Mot de passe",
+                  style: TextStyle(
+                      color: Colors.indigo[700],
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  obscureText: _secureText,
+                  controller: _password,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      icon: Icon(_secureText
+                          ? CupertinoIcons.eye_fill
+                          : CupertinoIcons.eye_slash_fill),
+                      onPressed: () {
+                        setState(() {
+                          _secureText = !_secureText;
+                        });
+                      },
+                    ),
+                    hintText: "Entrez mot de passe",
+                    prefixIcon: Icon(
+                      Icons.key,
                       color: Colors.indigo[700],
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -160,8 +221,9 @@ class _MyWidgetState extends State<user> {
                 //   ),
                 // ),
                 SizedBox(
-                  height: 25,
+                  height: 20,
                 ),
+
                 CupertinoButton(
                   borderRadius: BorderRadius.circular(25),
                   color: Colors.indigo[600],

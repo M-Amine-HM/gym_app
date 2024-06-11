@@ -129,23 +129,23 @@ class _RapportScreenState extends State<RapportScreen> {
                 //   "les 2 plus récents",
                 //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                 // ),
-                TextButton(
-                  child: Text(
-                    "Voir tout",
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.indigo.shade700,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => historiquePlansScreen(
-                                  theuser: widget.theuser,
-                                )));
-                  },
-                ),
+                // TextButton(
+                //   child: Text(
+                //     "Voir tout",
+                //     style: TextStyle(
+                //         fontSize: 18,
+                //         color: Colors.indigo.shade700,
+                //         fontWeight: FontWeight.w500),
+                //   ),
+                //   onPressed: () {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => historiquePlansScreen(
+                //                   theuser: widget.theuser,
+                //                 )));
+                //   },
+                // ),
               ],
             ),
             SizedBox(
@@ -179,7 +179,7 @@ class _RapportScreenState extends State<RapportScreen> {
                         );
                       }
                       return ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          // physics: NeverScrollableScrollPhysics(),
                           //shrinkWrap: true,
                           itemBuilder: ((context, index) => completedPlanWidget(
                                 hour: (plans[plans.length - 1 - index]
@@ -199,7 +199,7 @@ class _RapportScreenState extends State<RapportScreen> {
                           // separatorBuilder: (context, index) => const SizedBox(
                           //       height: 0,
                           //     ),
-                          itemCount: count);
+                          itemCount: plans.length);
                     }
                   },
                 ),

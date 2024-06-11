@@ -8,7 +8,9 @@ import 'package:gym_app/core/doingPlan.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/core/rapport.dart';
 import 'package:gym_app/home.dart';
+import 'package:gym_app/model/friendPlanModel.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/model/predefinedPlan.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/providers/checked_provider.dart';
 import 'package:gym_app/providers/timer_provider.dart';
@@ -18,12 +20,18 @@ import 'package:provider/provider.dart';
 class doingThePlanScreen extends StatefulWidget {
   doingThePlanScreen(
       {super.key,
-      required this.planDoing,
+      this.planDoing,
+      required this.planType,
       required this.data,
-      required this.theuser});
-  Plan planDoing;
+      required this.theuser,
+      this.predefinedPlan,
+      this.friendplan});
+  Plan? planDoing;
   List data;
   User theuser;
+  Friendplan? friendplan;
+  String planType;
+  PredefinedPlan? predefinedPlan;
 
   @override
   State<doingThePlanScreen> createState() => _doingThePlanScreenState();
@@ -45,10 +53,27 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
 
   late List<List> seriesCompletedChecked = [];
   List<List<dynamic>> seriesCompleted = [];
+
+  Plan theplan = Plan();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    if (widget.planType == "1") {
+      theplan = widget.planDoing!;
+    } else if (widget.planType == "3") {
+      theplan.planName = widget.friendplan!.planName;
+      theplan.exercises = widget.friendplan!.exercises;
+      theplan.nbrsSeries = widget.friendplan!.nbrsSeries;
+      theplan.userId = widget.friendplan!.userId;
+    } else if (widget.planType == "2") {
+      theplan.planName = widget.predefinedPlan!.planName;
+      theplan.exercises = widget.predefinedPlan!.exercises;
+      theplan.nbrsSeries = widget.predefinedPlan!.nbrsSeries;
+      theplan.userId = widget.theuser.id;
+    }
+
     //context.read<CheckedProvider>().seriesChecked;
     // final checkedProvider =
     //     Provider.of<CheckedProvider>(context, listen: false);
@@ -63,20 +88,18 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
     // print(sseriesCompletedChecked);
 
     seriesCompletedChecked = generateListOfLists(
-      widget.planDoing.nbrsSeries.length,
+      theplan.nbrsSeries.length,
       1,
       false,
     );
-    for (int i = 0; i < widget.planDoing.nbrsSeries.length; i++) {
-      for (int j = 0;
-          j < (int.parse(widget.planDoing.nbrsSeries[i]) - 1);
-          j++) {
+    for (int i = 0; i < theplan.nbrsSeries.length; i++) {
+      for (int j = 0; j < (int.parse(theplan.nbrsSeries[i]) - 1); j++) {
         seriesCompletedChecked[i].add(false);
       }
     }
-    for (int i = 0; i < (widget.planDoing.nbrsSeries).length; i++) {
+    for (int i = 0; i < (theplan.nbrsSeries).length; i++) {
       List<dynamic> k = [];
-      for (int j = 0; j < int.parse(widget.planDoing.nbrsSeries[i]); j++) {
+      for (int j = 0; j < int.parse(theplan.nbrsSeries[i]); j++) {
         k.add(["", ""]);
       }
       seriesCompleted.add(k);
@@ -107,7 +130,7 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
             },
             icon: Icon(Icons.arrow_back)),
         backgroundColor: Colors.grey.shade200,
-        title: Text(widget.planDoing.planName,
+        title: Text(theplan.planName,
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
         actions: [
           Row(
@@ -187,7 +210,7 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
                               widget.data[index].image,
                           exerciseName: widget.data[index].name,
                           bodyPartName: widget.data[index].bodyPart,
-                          nbrSer: widget.planDoing.nbrsSeries[index],
+                          nbrSer: theplan.nbrsSeries[index],
                           serieChecked: seriesCompletedChecked[index],
                           weightsAndrepetitions: seriesCompleted[index],
                           // repetitions: widget.seriesCompleted[index],
@@ -277,23 +300,22 @@ class _doingThePlanScreenState extends State<doingThePlanScreen> {
                           }
 
                           print(selonEx);
-                          String exsTostring =
-                              widget.planDoing.exercises.join(',');
+                          String exsTostring = theplan.exercises.join(',');
                           String nbrsSeriesTostring =
-                              widget.planDoing.nbrsSeries.join(',');
+                              theplan.nbrsSeries.join(',');
                           String currentTime =
                               (DateTime.now().toLocal().toString())
                                   .substring(0, 16);
                           Map<String, String> thedata = {
                             "currentTime": currentTime,
                             "time": timerProvider.formatTime(),
-                            "planName": widget.planDoing.planName,
+                            "planName": theplan.planName,
                             "nbrExercises":
-                                (widget.planDoing.exercises.length).toString(),
+                                (theplan.exercises.length).toString(),
                             "exercises": exsTostring,
                             "nbrsSeries": nbrsSeriesTostring,
                             "seriesCompleted": selonEx,
-                            "userId": widget.planDoing.userId
+                            "userId": theplan.userId
                           };
                           await Api.addPlanCompleted(thedata);
 

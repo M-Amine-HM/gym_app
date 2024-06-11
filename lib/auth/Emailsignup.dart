@@ -89,13 +89,87 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                   const SizedBox(
                     height: 15,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.indigo.shade700,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          fixedSize: Size.fromWidth(
+                              MediaQuery.of(context).size.width * 0.8),
+                        ),
+                        onPressed: () async {
+                          if (_textVerifyEmail &&
+                              _textVerifyPassword &&
+                              _password.text.isNotEmpty &&
+                              _email.text.isNotEmpty &&
+                              _ischecked == true) {
+                            String email = _email.text;
+                            String password = _password.text;
+                            oneUser.email = email;
+                            oneUser.password = password;
+
+                            _userdata = await Api.getUserByEmail((email));
+                            if (_userdata == null) {
+                              print("no connection with server");
+                              return;
+                            }
+                            if (_userdata!.isEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => user(
+                                          oneUser: oneUser,
+                                        )),
+                              );
+                            } else {
+                              if (_userdata![0].email == (_email.text)) {
+                                //case : there no user
+                                //setState(() {
+                                _erreurText = "Le compte est déja utilisé ";
+                                showToast(_erreurText,
+                                    context: context,
+                                    animation: StyledToastAnimation.fade,
+                                    duration: Duration(seconds: 3),
+                                    reverseAnimation: StyledToastAnimation.fade,
+                                    alignment: Alignment.center,
+                                    position: StyledToastPosition(
+                                        align: Alignment.center, offset: 100));
+                                //});
+                              }
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => Home(
+                              //       oneUser: _userdata[0],
+                              //     ),
+                              //   ),
+                              // );
+                            }
+                          }
+
+                          //TODO : badll esm user screen
+                        },
+                        //amine@gmail.com
+                        child: const Text(
+                          "Envoyer code de vérification",
+                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   const Text(
-                    "Mot de passe",
+                    "Code de vérification",
                     style: TextStyle(color: Colors.black, fontSize: 17),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                      hintText: "Minimum 6 caractéres",
+                      hintText: "Entrer code de vérification",
                       enabledBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
@@ -105,22 +179,22 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                           width: 2,
                         ),
                       ),
-                      suffixIcon: IconButton(
-                        icon: Icon(_secureText
-                            ? CupertinoIcons.eye_fill
-                            : CupertinoIcons.eye_slash_fill),
-                        onPressed: () {
-                          setState(() {
-                            _secureText = !_secureText;
-                          });
-                        },
-                      ),
+                      // suffixIcon: IconButton(
+                      //   icon: Icon(_secureText
+                      //       ? CupertinoIcons.eye_fill
+                      //       : CupertinoIcons.eye_slash_fill),
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       _secureText = !_secureText;
+                      //     });
+                      //   },
+                      // ),
                       //errorText: _textVerifyEmail ? _errorTextEmail : null,
-                      errorText: _textVerifyPassword
-                          ? null
-                          : "Mot de passe doit contenir au plus 6 caractéres",
+                      // errorText: _textVerifyPassword
+                      //     ? null
+                      //     : "Mot de passe doit contenir au plus 6 caractéres",
                     ),
-                    obscureText: _secureText,
+                    //obscureText: _secureText,
                     controller: _password,
                     onTap: () {
                       _textVerifyPassword = false;
@@ -188,9 +262,6 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
               //     ),
               //   ),
               // ),
-              const SizedBox(
-                height: 15,
-              ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.indigo.shade700,
@@ -203,8 +274,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                   if (_textVerifyEmail &&
                       _textVerifyPassword &&
                       _password.text.isNotEmpty &&
-                      _email.text.isNotEmpty &&
-                      _ischecked == true) {
+                      _email.text.isNotEmpty) {
                     String email = _email.text;
                     String password = _password.text;
                     oneUser.email = email;

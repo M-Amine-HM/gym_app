@@ -58,7 +58,7 @@ class _imageUploadScreenState extends State<imageUploadScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   fixedSize:
-                      Size.fromWidth(MediaQuery.of(context).size.width * 0.5),
+                      Size.fromWidth(MediaQuery.of(context).size.width * 0.7),
                 ),
                 onPressed: () {
                   _pickImageFromGallery();
@@ -77,7 +77,7 @@ class _imageUploadScreenState extends State<imageUploadScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   fixedSize:
-                      Size.fromWidth(MediaQuery.of(context).size.width * 0.5),
+                      Size.fromWidth(MediaQuery.of(context).size.width * 0.7),
                 ),
                 onPressed: () {
                   _pickImageFromCamera();
@@ -96,7 +96,7 @@ class _imageUploadScreenState extends State<imageUploadScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   fixedSize:
-                      Size.fromWidth(MediaQuery.of(context).size.width * 0.5),
+                      Size.fromWidth(MediaQuery.of(context).size.width * 0.7),
                 ),
                 onPressed: () async {
                   if (_selectedImage != null) {

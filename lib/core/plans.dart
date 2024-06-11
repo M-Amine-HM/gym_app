@@ -31,7 +31,9 @@ class _PlanScreenState extends State<PlansScreen> {
         ),
       ),
       Container(
-        color: Colors.green,
+        child: predefinedPlansContainer(
+          theUser: widget.theuser,
+        ),
       ),
       Container(
         child: plansFriendContainer(
@@ -166,6 +168,16 @@ class _plansFriendContainerState extends State<plansFriendContainer> {
                       itemBuilder: ((context, index) => GestureDetector(
                             child: PlanFromFriendWidget(
                                 onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              OnGoingPlanScreen(
+                                                planType: "3",
+                                                theUser: widget.theUser,
+                                                friendplan:
+                                                    snapshot.data[index],
+                                              )));
                                   // dismissAllToast(showAnim: false);
 
                                   // Navigator.push(
@@ -178,6 +190,83 @@ class _plansFriendContainerState extends State<plansFriendContainer> {
                                   //             )));
                                 },
                                 planFrom: snapshot.data[index].planFrom,
+                                nbrExercises: data![index].nbrExercises,
+                                planName: snapshot.data[index].planName,
+                                exercises: snapshot.data[index].exercises,
+                                nbrsSeries: snapshot.data[index].nbrsSeries,
+                                theimage: (index + 1).toString()
+                                // (snapshot.data[index].planName).substring(0, 3),
+                                ),
+                          )),
+                      separatorBuilder: (context, index) => const SizedBox(
+                            height: 13,
+                          ),
+                      itemCount: snapshot.data.length);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class predefinedPlansContainer extends StatefulWidget {
+  predefinedPlansContainer({super.key, required this.theUser});
+  User theUser;
+  @override
+  State<predefinedPlansContainer> createState() =>
+      _predefinedPlansContainerState();
+}
+
+class _predefinedPlansContainerState extends State<predefinedPlansContainer> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey.shade200,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: Api.getpredefinedPlans(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  //TODO: if it return null , must handle the error
+                  List? data = snapshot.data;
+                  return ListView.separated(
+                      itemBuilder: ((context, index) => GestureDetector(
+                            child: PlanWidget(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              OnGoingPlanScreen(
+                                                planType: "2",
+                                                theUser: widget.theUser,
+                                                predefinedPlan:
+                                                    snapshot.data[index],
+                                              )));
+                                  // dismissAllToast(showAnim: false);
+
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             OnGoingPlanScreen(
+                                  //               theUser: widget.theuser,
+                                  //               planToDo: snapshot.data[index],
+                                  //             )));
+                                },
+                                //planFrom: snapshot.data[index].planFrom,
                                 nbrExercises: data![index].nbrExercises,
                                 planName: snapshot.data[index].planName,
                                 exercises: snapshot.data[index].exercises,
@@ -278,7 +367,7 @@ class _PlanContainerWidgetState extends State<PlanContainerWidget> {
                       // ),
                       Container(
                         height: MediaQuery.sizeOf(context).height * 0.25,
-                        width: MediaQuery.sizeOf(context).width * 0.78,
+                        width: MediaQuery.sizeOf(context).width * 0.82,
                         padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(18),

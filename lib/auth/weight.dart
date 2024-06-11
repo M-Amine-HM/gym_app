@@ -187,6 +187,7 @@ class _weightScreenState extends State<weightScreen> {
                         "phoneNumber": widget.oneUser.phoneNumber,
                         "adress": widget.oneUser.adress,
                         "image": widget.oneUser.image,
+                        "id": widget.oneUser.id
                       };
 
                       await Api.addUser(data);

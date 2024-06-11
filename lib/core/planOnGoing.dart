@@ -6,7 +6,9 @@ import 'package:gym_app/core/doingPlan.dart';
 import 'package:gym_app/core/doingThePlan.dart';
 import 'package:gym_app/core/plans.dart';
 import 'package:gym_app/core/updatePlan.dart';
+import 'package:gym_app/model/friendPlanModel.dart';
 import 'package:gym_app/model/planModel.dart';
+import 'package:gym_app/model/predefinedPlan.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/providers/checked_provider.dart';
 import 'package:gym_app/services/Api.dart';
@@ -17,10 +19,14 @@ class OnGoingPlanScreen extends StatefulWidget {
       {super.key,
       this.planToDo,
       required this.theUser,
-      required this.planType});
+      required this.planType,
+      this.predefinedPlan,
+      this.friendplan});
   Plan? planToDo;
   User theUser;
   String planType;
+  Friendplan? friendplan;
+  PredefinedPlan? predefinedPlan;
 
   @override
   State<OnGoingPlanScreen> createState() => _OnGoingPlanScreenState();
@@ -28,7 +34,28 @@ class OnGoingPlanScreen extends StatefulWidget {
 
 class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
   TextEditingController _planName = TextEditingController();
+  late String theTitle;
+  late String nbrExercises;
+  late List nbrSeries;
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.planType == "1") {
+      theTitle = widget.planToDo!.planName;
+      nbrExercises = widget.planToDo!.nbrExercises;
+      nbrSeries = widget.planToDo!.nbrsSeries;
+    } else if (widget.planType == "2") {
+      theTitle = widget.predefinedPlan!.planName;
+      nbrExercises = widget.predefinedPlan!.nbrExercises;
+      nbrSeries = widget.predefinedPlan!.nbrsSeries;
+    } else if (widget.planType == "3") {
+      theTitle = widget.friendplan!.planName;
+      nbrExercises = widget.friendplan!.nbrExercises;
+      nbrSeries = widget.friendplan!.nbrsSeries;
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.indigo[600], //Colors.blue[700],
@@ -40,7 +67,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => PlansScreen(
-                        theuser: widget.theUser!,
+                        theuser: widget.theUser,
                       ),
                     ),
                     (route) => false);
@@ -51,129 +78,136 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
               )),
           backgroundColor: Colors.indigo[600], // Colors.blue[700],
           actions: [
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red[500],
-                  side: BorderSide.none,
-                ),
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-                label: const Text(
-                  "Supprimer",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  showToastWidget(
-                    reverseAnimation: StyledToastAnimation.fade,
-                    //dismissOtherToast: false,
-                    // animDuration: Duration(seconds: 4),
-                    context: context,
-                    animation: StyledToastAnimation.fade,
-                    isIgnoring: false,
-                    duration: Duration.zero,
-                    position:
-                        const StyledToastPosition(align: Alignment.center),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ModalBarrier(
-                          color: Colors.black.withOpacity(0.2),
-                          dismissible:
-                              false, // Prevents dismissing the toast by tapping outside
-                        ),
-                        // Container(
-                        //   color: Colors.black,
-                        //   height: 50,
-                        //   width: 50,
-                        // ),
-                        Container(
-                          height: MediaQuery.sizeOf(context).height * 0.17,
-                          width: MediaQuery.sizeOf(context).width * 0.85,
-                          padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 7,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
+            if (widget.planType != "2")
+              ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red[500],
+                    side: BorderSide.none,
+                  ),
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                  label: const Text(
+                    "Supprimer",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    showToastWidget(
+                      reverseAnimation: StyledToastAnimation.fade,
+                      //dismissOtherToast: false,
+                      // animDuration: Duration(seconds: 4),
+                      context: context,
+                      animation: StyledToastAnimation.fade,
+                      isIgnoring: false,
+                      duration: Duration.zero,
+                      position:
+                          const StyledToastPosition(align: Alignment.center),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ModalBarrier(
+                            color: Colors.black.withOpacity(0.2),
+                            dismissible:
+                                false, // Prevents dismissing the toast by tapping outside
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Voulez vous supprimer ce Plan ?",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                          // Container(
+                          //   color: Colors.black,
+                          //   height: 50,
+                          //   width: 50,
+                          // ),
+                          Container(
+                            height: MediaQuery.sizeOf(context).height * 0.17,
+                            width: MediaQuery.sizeOf(context).width * 0.85,
+                            padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 7,
+                                  offset: const Offset(0, 3),
                                 ),
-                              ),
-
-                              //error message in textformfield is not working in the toast so need other way
-
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                        backgroundColor: Colors.blue[700],
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    onPressed: () {
-                                      dismissAllToast(showAnim: true);
-                                    },
-                                    child: const Text("NON",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Voulez vous supprimer ce Plan ?",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const SizedBox(width: 20),
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                        backgroundColor: Colors.red[700],
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    onPressed: () async {
-                                      await Api.deletePlan(widget.planToDo!.id);
-                                      dismissAllToast(showAnim: false);
+                                ),
 
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => PlansScreen(
-                                              theuser: widget.theUser!,
+                                //error message in textformfield is not working in the toast so need other way
+
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: Colors.blue[700],
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10))),
+                                      onPressed: () {
+                                        dismissAllToast(showAnim: true);
+                                      },
+                                      child: const Text("NON",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                          backgroundColor: Colors.red[700],
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10))),
+                                      onPressed: () async {
+                                        if (widget.planType == "1") {
+                                          await Api.deletePlan(
+                                              widget.planToDo!.id);
+                                        } else if (widget.planType == "3") {
+                                          await Api.deleteFriendPlan(
+                                              widget.friendplan!.id);
+                                        }
+                                        dismissAllToast(showAnim: false);
+
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => PlansScreen(
+                                                theuser: widget.theUser!,
+                                              ),
                                             ),
-                                          ),
-                                          (route) => false);
-                                    },
-                                    child: const Text("OUI",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                            (route) => false);
+                                      },
+                                      child: const Text("OUI",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
+                        ],
+                      ),
+                    );
 
-                  // Perform action for Option 2
-                  // Add your code here
-                }),
+                    // Perform action for Option 2
+                    // Add your code here
+                  }),
             const SizedBox(
               width: 30,
             )
@@ -459,16 +493,16 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.planToDo!.planName,
+                    theTitle,
                     style: const TextStyle(
                         fontSize: 25,
                         color: Colors.white,
                         fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    widget.planToDo!.nbrExercises == "1"
-                        ? "${widget.planToDo!.nbrExercises} exercice"
-                        : "${widget.planToDo!.nbrExercises} exercices",
+                    nbrExercises == "1"
+                        ? "${nbrExercises} exercice"
+                        : "${nbrExercises} exercices",
                     style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -489,7 +523,9 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                     // borderRadius: BorderRadius.circular(18),
                   ),
                   child: FutureBuilder(
-                      future: Api.getExercisesByPlan(widget.planToDo!.planName),
+                      future: widget.planType == "2"
+                          ? Api.getExercisesByPredefinedPlan(theTitle)
+                          : Api.getExercisesByPlan(theTitle),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
                           return const Center(
@@ -512,7 +548,7 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                                         data[index].image,
                                     exerciseName: data[index].name,
                                     bodyPartName: data[index].bodyPart,
-                                    nbrSer: widget.planToDo!.nbrsSeries[index],
+                                    nbrSer: nbrSeries[index],
                                   )),
                               // separatorBuilder: (context, index) => const SizedBox(
                               //       height: 0,
@@ -627,8 +663,12 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                             //seriesCompleted[1] = ["hello", "o", "f"];
                             //print(seriesCompletedChecked);
                             List? data;
-                            data = await Api.getExercisesByPlan(
-                                widget.planToDo!.planName);
+                            if (widget.planType == "2") {
+                              data = await Api.getExercisesByPredefinedPlan(
+                                  theTitle);
+                            } else {
+                              data = await Api.getExercisesByPlan(theTitle);
+                            }
                             //here
                             List<List<dynamic>> generateListOfLists(
                                 int numberOfLists,
@@ -647,18 +687,13 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
 
                             late List<List> seriesCompletedChecked = [];
                             seriesCompletedChecked = generateListOfLists(
-                              widget.planToDo!.nbrsSeries.length,
+                              nbrSeries.length,
                               1,
                               false,
                             );
-                            for (int i = 0;
-                                i < widget.planToDo!.nbrsSeries.length;
-                                i++) {
+                            for (int i = 0; i < nbrSeries.length; i++) {
                               for (int j = 0;
-                                  j <
-                                      (int.parse(
-                                              widget.planToDo!.nbrsSeries[i]) -
-                                          1);
+                                  j < (int.parse(nbrSeries[i]) - 1);
                                   j++) {
                                 seriesCompletedChecked[i].add(false);
                               }
@@ -679,73 +714,113 @@ class _OnGoingPlanScreenState extends State<OnGoingPlanScreen> {
                             context
                                 .read<CheckedProvider>()
                                 .updateSeriesChecked(ab);
-                            Navigator.push(
+                            if (widget.planType == "1") {
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => doingThePlanScreen(
-                                          data: data!,
-                                          planDoing: widget.planToDo!,
-                                          theuser: widget.theUser,
-                                          // seriesCompleted: list,
-                                          // seriesCompletedChecked:
-                                          //     seriesCompletedChecked,
-                                        )));
+                                  builder: (context) => doingThePlanScreen(
+                                    planType: widget.planType,
+                                    data: data!,
+                                    planDoing: widget.planToDo!,
+                                    theuser: widget.theUser,
+                                    //friendplan: widget.friendplan,
+                                    // seriesCompleted: list,
+                                    // seriesCompletedChecked:
+                                    //     seriesCompletedChecked,
+                                  ),
+                                ),
+                              );
+                            } else if (widget.planType == "3") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => doingThePlanScreen(
+                                    planType: widget.planType,
+                                    data: data!,
+                                    //planDoing: widget.planToDo!,
+                                    theuser: widget.theUser,
+                                    friendplan: widget.friendplan,
+                                    // seriesCompleted: list,
+                                    // seriesCompletedChecked:
+                                    //     seriesCompletedChecked,
+                                  ),
+                                ),
+                              );
+                            } else if (widget.planType == "2") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => doingThePlanScreen(
+                                    planType: widget.planType,
+                                    data: data!,
+                                    //planDoing: widget.planToDo!,
+                                    theuser: widget.theUser,
+                                    predefinedPlan: widget.predefinedPlan,
+                                    // seriesCompleted: list,
+                                    // seriesCompletedChecked:
+                                    //     seriesCompletedChecked,
+                                  ),
+                                ),
+                              );
+                            }
                           },
                         ),
                         const SizedBox(
                           height: 8,
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            fixedSize: Size(
-                                (MediaQuery.of(context).size.width * 0.8),
-                                MediaQuery.of(context).size.height * 0.057),
-                          ),
-                          onPressed: () async {
-                            late List<dynamic>? exercisesData;
-                            Map chosed = {};
-                            exercisesData = await Api.getExercises();
+                        if (widget.planType == "1")
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              fixedSize: Size(
+                                  (MediaQuery.of(context).size.width * 0.8),
+                                  MediaQuery.of(context).size.height * 0.057),
+                            ),
+                            onPressed: () async {
+                              late List<dynamic>? exercisesData;
+                              Map chosed = {};
+                              exercisesData = await Api.getExercises();
 
-                            exercisesData!.forEach((key) {
-                              chosed[key.name] = [false, 1];
-                            });
+                              exercisesData!.forEach((key) {
+                                chosed[key.name] = [false, 1];
+                              });
 
-                            // widget.planToDo.exercises.forEach((element) {
-                            //   chosed[element][0] = true;
-                            // });
+                              // widget.planToDo.exercises.forEach((element) {
+                              //   chosed[element][0] = true;
+                              // });
 
-                            for (int i = 0;
-                                i < (widget.planToDo!.exercises.length);
-                                i++) {
-                              chosed[widget.planToDo!.exercises[i]][0] = true;
-                              chosed[widget.planToDo!.exercises[i]][1] =
-                                  widget.planToDo!.nbrsSeries[i];
-                            }
-                            // widget.planToDo.nbrsSeries.forEach((element) {
-                            //   chosed[element][1] = element;
-                            // });
-                            //String ch = widget.planToDo.planName;
-                            //await Api.deletePlan(widget.planToDo.id);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UpdatePlanScreen(
-                                  PlanID: widget.planToDo!.id,
-                                  chosed: chosed,
-                                  PlanName: widget.planToDo!.planName,
-                                  theuser: widget.theUser,
+                              for (int i = 0;
+                                  i < (widget.planToDo!.exercises.length);
+                                  i++) {
+                                chosed[widget.planToDo!.exercises[i]][0] = true;
+                                chosed[widget.planToDo!.exercises[i]][1] =
+                                    widget.planToDo!.nbrsSeries[i];
+                              }
+                              // widget.planToDo.nbrsSeries.forEach((element) {
+                              //   chosed[element][1] = element;
+                              // });
+                              //String ch = widget.planToDo.planName;
+                              //await Api.deletePlan(widget.planToDo.id);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpdatePlanScreen(
+                                    PlanID: widget.planToDo!.id,
+                                    chosed: chosed,
+                                    PlanName: widget.planToDo!.planName,
+                                    theuser: widget.theUser,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          child: const Text(
-                            "MODIFIER",
-                            style: TextStyle(fontSize: 20, color: Colors.black),
+                              );
+                            },
+                            child: const Text(
+                              "MODIFIER",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black),
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),

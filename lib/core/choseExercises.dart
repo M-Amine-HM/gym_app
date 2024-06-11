@@ -397,7 +397,7 @@ class _ExerciceWidgetState extends State<ExerciceWidget> {
                 title: Text(
                   widget.exerciseName,
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w600),
+                      fontSize: 12, fontWeight: FontWeight.w600),
                 ),
                 subtitle: Text(
                   widget.bodyPartName,

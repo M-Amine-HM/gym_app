@@ -69,16 +69,12 @@ class _chatScreenState extends State<chatScreen> {
                       sender(
                         message: "hello",
                       ),
-                      reciever(
-                          message:
-                              "Hi how are youjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj"),
+                      reciever(message: "Hi how are you"),
                       reciever(message: "can yous send me a plan"),
                       sender(
                         message: "yes sure how many exercises do you want",
                       ),
-                      reciever(
-                          message:
-                              "5 exercisesllllllllllllllllllllllllllllhhhhhhhhhhhhllllllllllllllllllllllllllllllll"),
+                      reciever(message: "5 exercises"),
                     ],
                   ),
                 ),
