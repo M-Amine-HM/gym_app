@@ -93,8 +93,8 @@ class _chatScreenState extends State<chatScreen> {
                     //width: MediaQuery.sizeOf(context).width * 0.85,
                     child: TextFormField(
                       style: TextStyle(fontSize: 20),
-                      controller: _message,
-                      onChanged: (value) {},
+                      //controller: _message,
+                      //onChanged: (value) {},
                       decoration: InputDecoration(
                           //labelText: labelText,
                           hintStyle: TextStyle(fontSize: 18),

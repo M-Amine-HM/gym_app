@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_app/core/chatPage.dart';
+import 'package:gym_app/core/chatScreen.dart';
 import 'package:gym_app/core/sendPlanPage.dart';
 import 'package:gym_app/model/userModel.dart';
 import 'package:gym_app/services/Api.dart';
@@ -113,8 +114,8 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => chatScreen(
-                                                theuser: data[0],
+                                          builder: (context) => ChatScreen(
+                                                theuser: widget.theUser,
                                               )));
                                 },
                                 label: const Text(
