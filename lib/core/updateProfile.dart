@@ -236,6 +236,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                   ),
                                   // const SizedBox(height: 10),
                                   TextFormField(
+                                    keyboardType: TextInputType.streetAddress,
                                     controller: _adress,
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,

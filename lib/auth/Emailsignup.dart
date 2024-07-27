@@ -16,10 +16,19 @@ class EmailSignupScreen extends StatefulWidget {
 
 class _EmailSignupScreenState extends State<EmailSignupScreen> {
   User oneUser = User();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _codeIsSent = true;
+  }
 
+  late bool? _codeIsSent;
+  int _thecode = 1;
   bool? _ischecked = false;
   bool _secureText = true;
   TextEditingController _email = TextEditingController();
+  TextEditingController _verificationCode = TextEditingController();
   bool _textVerifyEmail = true;
   String _errorTextEmail = "Email forme non valide";
 
@@ -61,6 +70,8 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                     style: TextStyle(color: Colors.black, fontSize: 17),
                   ),
                   TextFormField(
+                    enabled: _codeIsSent,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText: "exemple@gmail.com",
                       enabledBorder: const UnderlineInputBorder(
@@ -101,56 +112,34 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                               MediaQuery.of(context).size.width * 0.8),
                         ),
                         onPressed: () async {
-                          if (_textVerifyEmail &&
-                              _textVerifyPassword &&
-                              _password.text.isNotEmpty &&
-                              _email.text.isNotEmpty &&
-                              _ischecked == true) {
-                            String email = _email.text;
-                            String password = _password.text;
-                            oneUser.email = email;
-                            oneUser.password = password;
-
-                            _userdata = await Api.getUserByEmail((email));
-                            if (_userdata == null) {
-                              print("no connection with server");
-                              return;
-                            }
-                            if (_userdata!.isEmpty) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => user(
-                                          oneUser: oneUser,
-                                        )),
-                              );
-                            } else {
-                              if (_userdata![0].email == (_email.text)) {
-                                //case : there no user
-                                //setState(() {
-                                _erreurText = "Le compte est déja utilisé ";
-                                showToast(_erreurText,
-                                    context: context,
-                                    animation: StyledToastAnimation.fade,
-                                    duration: Duration(seconds: 3),
-                                    reverseAnimation: StyledToastAnimation.fade,
-                                    alignment: Alignment.center,
-                                    position: StyledToastPosition(
-                                        align: Alignment.center, offset: 100));
-                                //});
-                              }
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => Home(
-                              //       oneUser: _userdata[0],
-                              //     ),
-                              //   ),
-                              // );
-                            }
+                          if (isValidEmail(_email.text)) {
+                            setState(() {
+                              _codeIsSent = false;
+                            });
+                            _thecode =
+                                await Api.getVerificationCode(_email.text);
+                            print(_thecode);
+                            showToast(
+                                "Code de verification est envoyé a votre email",
+                                context: context,
+                                backgroundColor: Colors.green,
+                                animation: StyledToastAnimation.fade,
+                                duration: Duration(seconds: 3),
+                                reverseAnimation: StyledToastAnimation.fade,
+                                alignment: Alignment.center,
+                                position: StyledToastPosition(
+                                    align: Alignment.center, offset: 100));
+                          } else {
+                            showToast("l'email n'est pas valide",
+                                context: context,
+                                backgroundColor: Colors.red,
+                                animation: StyledToastAnimation.fade,
+                                duration: Duration(seconds: 3),
+                                reverseAnimation: StyledToastAnimation.fade,
+                                alignment: Alignment.center,
+                                position: StyledToastPosition(
+                                    align: Alignment.center, offset: 100));
                           }
-
-                          //TODO : badll esm user screen
                         },
                         //amine@gmail.com
                         child: const Text(
@@ -168,6 +157,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                     style: TextStyle(color: Colors.black, fontSize: 17),
                   ),
                   TextFormField(
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: "Entrer code de vérification",
                       enabledBorder: const UnderlineInputBorder(
@@ -195,7 +185,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                       //     : "Mot de passe doit contenir au plus 6 caractéres",
                     ),
                     //obscureText: _secureText,
-                    controller: _password,
+                    controller: _verificationCode,
                     onTap: () {
                       _textVerifyPassword = false;
                     },
@@ -271,10 +261,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                       Size.fromWidth(MediaQuery.of(context).size.width * 0.8),
                 ),
                 onPressed: () async {
-                  if (_textVerifyEmail &&
-                      _textVerifyPassword &&
-                      _password.text.isNotEmpty &&
-                      _email.text.isNotEmpty) {
+                  if (_textVerifyEmail && _email.text.isNotEmpty) {
                     String email = _email.text;
                     String password = _password.text;
                     oneUser.email = email;
@@ -282,17 +269,37 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
 
                     _userdata = await Api.getUserByEmail((email));
                     if (_userdata == null) {
-                      print("no connection with server");
+                      showToast("Pas de connection avec le serveur",
+                          context: context,
+                          backgroundColor: Colors.red,
+                          animation: StyledToastAnimation.fade,
+                          duration: Duration(seconds: 3),
+                          reverseAnimation: StyledToastAnimation.fade,
+                          alignment: Alignment.center,
+                          position: StyledToastPosition(
+                              align: Alignment.center, offset: 100));
                       return;
                     }
                     if (_userdata!.isEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => user(
-                                  oneUser: oneUser,
-                                )),
-                      );
+                      if (_verificationCode.text != _thecode.toString()) {
+                        showToast("le code de verification est incorrecte",
+                            context: context,
+                            backgroundColor: Colors.red,
+                            animation: StyledToastAnimation.fade,
+                            duration: Duration(seconds: 3),
+                            reverseAnimation: StyledToastAnimation.fade,
+                            alignment: Alignment.center,
+                            position: StyledToastPosition(
+                                align: Alignment.center, offset: 100));
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => user(
+                                    oneUser: oneUser,
+                                  )),
+                        );
+                      }
                     } else {
                       if (_userdata![0].email == (_email.text)) {
                         //case : there no user
@@ -300,6 +307,7 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                         _erreurText = "Le compte est déja utilisé ";
                         showToast(_erreurText,
                             context: context,
+                            backgroundColor: Colors.red,
                             animation: StyledToastAnimation.fade,
                             duration: Duration(seconds: 3),
                             reverseAnimation: StyledToastAnimation.fade,
@@ -317,6 +325,16 @@ class _EmailSignupScreenState extends State<EmailSignupScreen> {
                       //   ),
                       // );
                     }
+                  } else {
+                    showToast("Veuillez remplir les champs",
+                        context: context,
+                        backgroundColor: Colors.red,
+                        animation: StyledToastAnimation.fade,
+                        duration: Duration(seconds: 3),
+                        reverseAnimation: StyledToastAnimation.fade,
+                        alignment: Alignment.center,
+                        position: StyledToastPosition(
+                            align: Alignment.center, offset: 100));
                   }
 
                   //TODO : badll esm user screen

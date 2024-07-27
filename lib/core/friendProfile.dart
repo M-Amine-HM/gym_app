@@ -35,18 +35,19 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: Center(
-          child: FutureBuilder(
-            future: Api.getUserByEmail(widget.email),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                //TODO: if it return null , must handle the error
-                List<User> data = snapshot.data;
-                return Column(
+        child: FutureBuilder(
+          future: Api.getUserByEmail(widget.email),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              //TODO: if it return null , must handle the error
+              List<User> data = snapshot.data;
+              return SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
@@ -115,7 +116,7 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ChatScreen(
-                                                theuser: widget.theUser,
+                                                theuser: data[0],
                                               )));
                                 },
                                 label: const Text(
@@ -180,10 +181,10 @@ class _friendProfileScreenState extends State<friendProfileScreen> {
                       ),
                     )
                   ],
-                );
-              }
-            },
-          ),
+                ),
+              );
+            }
+          },
         ),
       ),
     );

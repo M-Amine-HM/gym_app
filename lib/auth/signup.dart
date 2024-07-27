@@ -26,7 +26,7 @@ class _MyWidgetState extends State<user> {
   bool? _ischecked = false;
   bool _secureText = true;
   TextEditingController _email = TextEditingController();
-  bool _textVerifyEmail = true;
+  bool _textVerifyName = true;
   String _errorTextEmail = "Email forme non valide";
 
   TextEditingController _password = TextEditingController();
@@ -83,7 +83,19 @@ class _MyWidgetState extends State<user> {
                 ),
                 TextField(
                   controller: _userName,
+                  onChanged: (value) {
+                    setState(() {
+                      if (isOnlyLetters(_userName.text)) {
+                        _textVerifyName = true;
+                      } else {
+                        _textVerifyName = false;
+                      }
+                    });
+                  },
                   decoration: InputDecoration(
+                    errorText: _textVerifyName
+                        ? null
+                        : "nom contient uniquement des lettres",
                     hintText: "Entrez votre nom d'utilisateur",
                     prefixIcon: Icon(
                       Icons.person,
@@ -118,9 +130,21 @@ class _MyWidgetState extends State<user> {
                   height: 10,
                 ),
                 TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      if (_password.text.toString().length >= 6) {
+                        _textVerifyPassword = true;
+                      } else {
+                        _textVerifyPassword = false;
+                      }
+                    });
+                  },
                   obscureText: _secureText,
                   controller: _password,
                   decoration: InputDecoration(
+                    errorText: _textVerifyPassword
+                        ? null
+                        : "Mot de passe doit contenir au plus 6 caractéres",
                     suffixIcon: IconButton(
                       icon: Icon(_secureText
                           ? CupertinoIcons.eye_fill
@@ -240,10 +264,12 @@ class _MyWidgetState extends State<user> {
                     ],
                   ),
                   onPressed: () {
-                    if (isOnlyLetters(_userName.text)) {
+                    if (isOnlyLetters(_userName.text) &&
+                        (_textVerifyPassword)) {
                       String username = _userName.text;
                       widget.oneUser.name = username;
-                      //send the user name with other attirbutes
+                      widget.oneUser.password = _password
+                          .text; //send the user name with other attirbutes
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -256,7 +282,8 @@ class _MyWidgetState extends State<user> {
                         widget.oneUser.sexe,
                       );
                     } else {
-                      showToast("Le nom n'est pas valide",
+                      showToast("Les champs ne sont pas valides",
+                          backgroundColor: Colors.red,
                           context: context,
                           animation: StyledToastAnimation.fade,
                           duration: Duration(seconds: 3),

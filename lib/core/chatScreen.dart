@@ -27,7 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void initSocket() {
     socket = IO.io(
-      'http://192.168.1.14:2000',
+      'http://${Api.ipAdress}:2000',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .enableAutoConnect() // Enable auto connection

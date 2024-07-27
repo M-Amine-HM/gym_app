@@ -16,7 +16,7 @@ import 'package:gym_app/model/userSubscription.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String ipAdress = "192.168.1.14";
+  static const String ipAdress = "192.168.231.218";
   static const baseUrl = "http://$ipAdress:2000/api/";
 
   //static String ipAdress = "192.168.81.218";
@@ -746,6 +746,33 @@ class Api {
         //
       } else {
         return [];
+        //
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static getVerificationCode(email) async {
+    //List<Product> products = [];
+    //List<User> user = [];
+    //print(pdata);
+    //ali mawjouda fl get fl nodeJS
+    var url = Uri.parse(baseUrl + "getverficationcode/$email");
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        //data ali bch tji ml serveur
+        var data = jsonDecode(res.body.toString());
+        //print(data);
+        //n7b ali donnne bch tjini ml serer n7otha fi lista bch najm naffichaha fl app
+        int thecode = data['code'];
+        //tretruni l lista bch nafffichah
+        return thecode;
+        //
+      } else {
+        return 0;
         //
       }
     } catch (e) {

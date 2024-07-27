@@ -183,10 +183,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     } else {
                       if (_userdata![0].password != (_password.text)) {
                         // setState(() {
-                        _erreurText =
-                            "Le mot de passe ${_userdata![0].password} est incorrect";
+                        _erreurText = "Le mot de passe est incorrect";
                         showToast(_erreurText,
                             context: context,
+                            backgroundColor: Colors.red,
                             animation: StyledToastAnimation.fade,
                             duration: Duration(seconds: 5),
                             reverseAnimation: StyledToastAnimation.fade,

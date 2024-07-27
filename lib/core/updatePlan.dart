@@ -147,7 +147,7 @@ class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
                                     Container(
                                       height:
                                           MediaQuery.sizeOf(context).height *
-                                              0.25,
+                                              0.28,
                                       width: MediaQuery.sizeOf(context).width *
                                           0.65,
                                       padding: const EdgeInsets.fromLTRB(
@@ -437,6 +437,60 @@ class _UpdatePlanScreenState extends State<UpdatePlanScreen> {
                                   List<Plan>? planToDo;
                                   planToDo =
                                       await Api.getPlanByName(changedName);
+                                  showToastWidget(
+                                    reverseAnimation: StyledToastAnimation.fade,
+                                    //dismissOtherToast: false,
+                                    //animDuration: Duration(seconds: 1),
+                                    context: context,
+                                    animation: StyledToastAnimation.fade,
+                                    isIgnoring: false,
+                                    duration: Duration(seconds: 5),
+                                    position: const StyledToastPosition(
+                                        align: Alignment.center),
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        ModalBarrier(
+                                          color: Colors.black.withOpacity(0.1),
+                                          dismissible:
+                                              false, // Prevents dismissing the toast by tapping outside
+                                        ),
+                                        // Container(
+                                        //   color: Colors.black,
+                                        //   height: 50,
+                                        //   width: 50,
+                                        // ),
+                                        Container(
+                                            // height:
+                                            //     MediaQuery.sizeOf(context).height * 0.25,
+                                            // width:
+                                            //     MediaQuery.sizeOf(context).width * 0.78,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 30, vertical: 20),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color: Colors.green,
+                                              // boxShadow: [
+                                              //   BoxShadow(
+                                              //     color: Colors.grey.withOpacity(0.5),
+                                              //     spreadRadius: 2,
+                                              //     blurRadius: 7,
+                                              //     offset: Offset(0, 3),
+                                              //   ),
+                                              // ],
+                                            ),
+                                            child: Text(
+                                              "Plan Modifié avec succés",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            )),
+                                      ],
+                                    ),
+                                  );
+                                  await Future.delayed(Duration(seconds: 5));
+                                  //Navigator.pop(context);
 
                                   Navigator.pushAndRemoveUntil(
                                       context,
@@ -538,7 +592,7 @@ class _ExerciceWidgetState extends State<ExerciceWidget> {
                 title: Text(
                   widget.exerciseName,
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w600),
+                      fontSize: 12, fontWeight: FontWeight.w600),
                 ),
                 subtitle: Text(
                   widget.bodyPartName,

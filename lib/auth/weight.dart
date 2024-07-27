@@ -187,7 +187,7 @@ class _weightScreenState extends State<weightScreen> {
                         "phoneNumber": widget.oneUser.phoneNumber,
                         "adress": widget.oneUser.adress,
                         "image": widget.oneUser.image,
-                        "id": widget.oneUser.id
+                        //"id": widget.oneUser.id
                       };
 
                       await Api.addUser(data);
@@ -199,12 +199,13 @@ class _weightScreenState extends State<weightScreen> {
                       //             oneUser: widget.oneUser,
                       //           )),
                       // );
-
+                      List? _userdata =
+                          await Api.getUserByEmail((widget.oneUser.email));
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                             builder: (context) => Home(
-                              oneUser: widget.oneUser,
+                              oneUser: _userdata![0],
                             ),
                           ),
                           (route) => false);
