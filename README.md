@@ -25,7 +25,7 @@
 <img src="assets\readmeFilesScreenshoots\nometmotdepasse.png" align="left" width="200px" alt="">
 <img src="assets\readmeFilesScreenshoots\pagepoids.png" align="left" width="200px" alt="">
 <img src="assets\readmeFilesScreenshoots\seconnecter.png" align="left" width="200px" alt="">
-<img src="assets\readmeFilesScreenshoots\sinscrire.png" align="left" width="200px" alt="">
+<img src="assets\readmeFilesScreenshoots\sinscrire.png"  width="200px" alt="">
 
 ### 🏋️ Workout plan creation and management  
 <img src="assets\readmeFilesScreenshoots\pageexercices.png" align="left" width="200px" alt="">
@@ -35,7 +35,7 @@
 <img src="assets\readmeFilesScreenshoots\pagecreationPlan.png" align="left" width="200px" alt="">
 <img src="assets\readmeFilesScreenshoots\pagePlan.png" align="left" width="200px" alt="">
 <img src="assets\readmeFilesScreenshoots\pagePlan2.png" align="left" width="200px" alt="">
-<img src="assets\readmeFilesScreenshoots\pagemodificationPlan.png" align="left" width="200px" alt="">
+<img src="assets\readmeFilesScreenshoots\pagemodificationPlan.png"  width="200px" alt="">
 
 ### ⏱️ Real-time workout execution with timers and feedback  
 <img src="assets\readmeFilesScreenshoots\pagePlan.png" align="left" width="200px" alt="">
@@ -44,19 +44,19 @@
 <img src="assets\readmeFilesScreenshoots\pageFairePlansucces.png" align="left" width="200px" alt="">
 <img src="assets\readmeFilesScreenshoots\pageEnvoyerPlan.png" align="left" width="200px" alt="">
 <img src="assets\readmeFilesScreenshoots\pageEnvoyerPlansucces.png" align="left" width="200px" alt="">
-<img src="assets\readmeFilesScreenshoots\pageFairePlan.png" align="left" width="200px" alt="">
+<img src="assets\readmeFilesScreenshoots\pageFairePlan.png"  width="200px" alt="">
 
 ### 📊 Performance tracking with detailed statistics and reports  
 <img src="assets\readmeFilesScreenshoots\pageabonnement.png" align="left" width="200px" alt="">
-<img src="assets\readmeFilesScreenshoots\pageRapport.png" align="left" width="200px" alt="">
+<img src="assets\readmeFilesScreenshoots\pageRapport.png"  width="200px" alt="">
 
 ### 👤 User profile management with editable fitness and personal information  
 <img src="assets\readmeFilesScreenshoots\pageprofil.png" align="left" width="200px" alt="">
-<img src="assets\readmeFilesScreenshoots\pageModificationProfil.png" align="left" width="200px" alt="">
+<img src="assets\readmeFilesScreenshoots\pageModificationProfil.png"  width="200px" alt="">
 
 ### 💬 Real-time messaging between users using Socket.io  
 <img src="assets\readmeFilesScreenshoots\pageProfilAmi.png" align="left" width="200px" alt="">
-<img src="assets\readmeFilesScreenshoots\pagemessage.png" align="left" width="200px" alt="">
+<img src="assets\readmeFilesScreenshoots\pagemessage.png"  width="200px" alt="">
 
 ---
 
