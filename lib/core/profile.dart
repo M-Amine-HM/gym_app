@@ -453,8 +453,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   (userdata![0].name),
                 ),
                 //email field
-                Text("Email: ${(userdata![0].name).toString()}",
-                    style: Theme.of(context).textTheme.bodyText2),
+                Text(
+                  "Email: ${(userdata![0].name).toString()}",
+                ),
               ],
             );
           }
