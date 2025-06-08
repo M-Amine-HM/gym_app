@@ -1,6 +1,7 @@
 # 🏋️ Gym Connect App
 
 **Gym Connect** is a cross-platform mobile application developed using **Flutter** to help users manage and track their gym workouts and routines. The app is designed to provide an intuitive and engaging experience for fitness enthusiasts, with a clean, modular architecture and real-time performance capabilities.
+📽 [Download demo video](assets\demo\gymappDemoVideo.mp4)
 
 ---
 
